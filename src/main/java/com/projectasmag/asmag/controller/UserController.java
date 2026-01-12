@@ -1,7 +1,9 @@
 package com.projectasmag.asmag.controller;
 
+import com.projectasmag.asmag.dto.CreateResponseDTO;
 import com.projectasmag.asmag.dto.DeleteResponseDTO;
 import com.projectasmag.asmag.dto.UpdateResponseDTO;
+import com.projectasmag.asmag.dto.auth.RegisterRequestDTO;
 import com.projectasmag.asmag.dto.user.ChangePasswordRequestDTO;
 import com.projectasmag.asmag.dto.user.RoleResponseDTO;
 import com.projectasmag.asmag.dto.user.UpdateUserRequestDTO;
@@ -26,6 +28,11 @@ public class UserController {
     @PutMapping("{id}")
     public UpdateResponseDTO updateUser(@PathVariable String id,
                                         @RequestBody UpdateUserRequestDTO updateUserRequest) {
+        return null;
+    }
+
+    @PostMapping("register")
+    public CreateResponseDTO register(@RequestBody RegisterRequestDTO request) {
         return null;
     }
 

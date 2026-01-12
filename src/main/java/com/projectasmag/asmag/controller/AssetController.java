@@ -36,24 +36,4 @@ public class AssetController {
     public DeleteResponseDTO deleteAsset(@PathVariable String id) {
         return null;
     }
-
-    @GetMapping("status")
-    public List<AssetStatusResponseDTO> getAssetStatus() {
-        return null;
-    }
-
-    @GetMapping("status/{id}")
-    public AssetStatusResponseDTO getAssetStatus(@PathVariable String id) {
-        return null;
-    }
-
-    @GetMapping("types")
-    public List<AssetTypeResponseDTO> getAssetTypes() {
-        return null;
-    }
-
-    @GetMapping("types/{id}")
-    public AssetTypeResponseDTO getAssetType(@PathVariable String id) {
-        return null;
-    }
 }

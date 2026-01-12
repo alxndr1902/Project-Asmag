@@ -14,8 +14,5 @@ public class AuthController {
         return null;
     }
 
-    @PostMapping("register")
-    public CreateResponseDTO register(@RequestBody RegisterRequestDTO request) {
-        return null;
-    }
+
 }
