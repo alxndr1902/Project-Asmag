@@ -6,13 +6,11 @@ import com.projectasmag.asmag.dto.user.ChangePasswordRequestDTO;
 import com.projectasmag.asmag.dto.user.RoleResponseDTO;
 import com.projectasmag.asmag.dto.user.UpdateUserRequestDTO;
 import com.projectasmag.asmag.dto.user.UserResponseDTO;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
     @GetMapping
