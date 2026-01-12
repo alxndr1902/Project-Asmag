@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("auth")
 public class AuthController {
-    @GetMapping("login")
+    @PostMapping("login")
     public LoginResponseDTO login(@RequestBody LoginRequestDTO request) {
         return null;
     }
