@@ -1,10 +1,10 @@
 package com.projectasmag.asmag.controller;
 
-import com.projectasmag.asmag.dto.CreateResponse;
-import com.projectasmag.asmag.dto.DeleteResponse;
-import com.projectasmag.asmag.dto.UpdateResponse;
-import com.projectasmag.asmag.dto.location.LocationResponse;
-import com.projectasmag.asmag.dto.location.CreateLocationRequest;
+import com.projectasmag.asmag.dto.CreateResponseDTO;
+import com.projectasmag.asmag.dto.DeleteResponseDTO;
+import com.projectasmag.asmag.dto.UpdateResponseDTO;
+import com.projectasmag.asmag.dto.location.LocationResponseDTO;
+import com.projectasmag.asmag.dto.location.CreateLocationRequestDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,28 +13,28 @@ import java.util.List;
 @RequestMapping("api/locations")
 public class LocationController {
     @GetMapping
-    public List<LocationResponse> getLocations() {
+    public List<LocationResponseDTO> getLocations() {
         return null;
     }
 
     @GetMapping("{id}")
-    public LocationResponse getLocation(@PathVariable String id) {
+    public LocationResponseDTO getLocation(@PathVariable String id) {
         return null;
     }
 
     @PostMapping
-    public CreateResponse createLocation(@RequestBody CreateLocationRequest request) {
+    public CreateResponseDTO createLocation(@RequestBody CreateLocationRequestDTO request) {
         return null;
     }
 
     @PutMapping("{id}")
-    public UpdateResponse updateLocation(@PathVariable String id,
-                                         @RequestBody CreateLocationRequest request) {
+    public UpdateResponseDTO updateLocation(@PathVariable String id,
+                                            @RequestBody CreateLocationRequestDTO request) {
         return null;
     }
 
     @DeleteMapping("{id}")
-    public DeleteResponse deleteLocation(@PathVariable String id) {
+    public DeleteResponseDTO deleteLocation(@PathVariable String id) {
         return null;
     }
 }

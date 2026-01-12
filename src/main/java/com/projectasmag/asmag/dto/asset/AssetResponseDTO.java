@@ -1,6 +1,6 @@
 package com.projectasmag.asmag.dto.asset;
 
-public class AssetResponse {
+public class AssetResponseDTO {
     private String id;
     private String code;
     private String name;
@@ -10,7 +10,7 @@ public class AssetResponse {
     private String expiredDate;
     private String createdAt;
 
-    public AssetResponse(String id, String code, String name, String typeName, String statusName, String companyName, String expiredDate, String createdAt) {
+    public AssetResponseDTO(String id, String code, String name, String typeName, String statusName, String companyName, String expiredDate, String createdAt) {
         this.id = id;
         this.code = code;
         this.name = name;

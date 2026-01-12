@@ -1,10 +1,10 @@
 package com.projectasmag.asmag.dto.asset;
 
-public class AssetStatusResponse {
+public class AssetStatusResponseDTO {
     private String id;
     private String name;
 
-    public AssetStatusResponse(String id, String name) {
+    public AssetStatusResponseDTO(String id, String name) {
         this.id = id;
         this.name = name;
     }

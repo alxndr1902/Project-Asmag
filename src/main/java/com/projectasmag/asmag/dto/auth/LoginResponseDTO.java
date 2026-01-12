@@ -1,11 +1,11 @@
 package com.projectasmag.asmag.dto.auth;
 
-public class LoginResponse {
+public class LoginResponseDTO {
     private String fullName;
     private String roleCode;
     private String token;
 
-    public LoginResponse(String fullName, String roleCode, String token) {
+    public LoginResponseDTO(String fullName, String roleCode, String token) {
         this.fullName = fullName;
         this.roleCode = roleCode;
         this.token = token;

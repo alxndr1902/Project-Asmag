@@ -1,10 +1,10 @@
 package com.projectasmag.asmag.dto;
 
-public class CreateResponse {
+public class CreateResponseDTO {
     private String id;
     private String message;
 
-    public CreateResponse(String id, String message) {
+    public CreateResponseDTO(String id, String message) {
         this.id = id;
         this.message = message;
     }

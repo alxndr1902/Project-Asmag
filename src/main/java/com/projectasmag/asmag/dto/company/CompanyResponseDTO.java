@@ -1,11 +1,11 @@
 package com.projectasmag.asmag.dto.company;
 
-public class CompanyResponse {
+public class CompanyResponseDTO {
     private String id;
     private String name;
     private String phoneNumber;
 
-    public CompanyResponse(String id, String name, String phoneNumber) {
+    public CompanyResponseDTO(String id, String name, String phoneNumber) {
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;

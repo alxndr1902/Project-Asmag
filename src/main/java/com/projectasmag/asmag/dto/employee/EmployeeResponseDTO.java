@@ -1,12 +1,12 @@
 package com.projectasmag.asmag.dto.employee;
 
-public class EmployeeResponse {
+public class EmployeeResponseDTO {
     private String id;
     private String fullName;
     private String phoneNumber;
     private String companyName;
 
-    public EmployeeResponse(String id, String fullName, String phoneNumber, String companyName) {
+    public EmployeeResponseDTO(String id, String fullName, String phoneNumber, String companyName) {
         this.id = id;
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;

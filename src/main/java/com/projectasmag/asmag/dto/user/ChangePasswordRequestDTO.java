@@ -1,11 +1,11 @@
 package com.projectasmag.asmag.dto.user;
 
-public class ChangePasswordRequest {
+public class ChangePasswordRequestDTO {
     private String oldPassword;
     private String newPassword;
     private String confirmPassword;
 
-    public ChangePasswordRequest() {
+    public ChangePasswordRequestDTO() {
     }
 
     public String getOldPassword() {

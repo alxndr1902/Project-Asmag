@@ -1,13 +1,13 @@
 package com.projectasmag.asmag.dto.user;
 
-public class UserResponse {
+public class UserResponseDTO {
     private String id;
     private String email;
     private String fullName;
     private String phoneNumber;
     private String roleName;
 
-    public UserResponse(String id, String email, String fullName, String phoneNumber, String roleName) {
+    public UserResponseDTO(String id, String email, String fullName, String phoneNumber, String roleName) {
         this.id = id;
         this.email = email;
         this.fullName = fullName;

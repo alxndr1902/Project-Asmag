@@ -1,13 +1,13 @@
 package com.projectasmag.asmag.dto.auth;
 
-public class RegisterRequest {
+public class RegisterRequestDTO {
     private String employeeId;
     private String email;
     private String password;
     private String confirmPassword;
     private String roleId;
 
-    public RegisterRequest() {
+    public RegisterRequestDTO() {
     }
 
     public String getEmployeeId() {

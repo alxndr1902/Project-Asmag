@@ -1,14 +1,13 @@
 package com.projectasmag.asmag.dto.asset;
 
-public class CreateAssetRequest {
+public class UpdateAssetRequestDTO {
     private String code;
     private String name;
-    private String typeId;
     private String statusId;
-    private String companyId;
     private String expiredDate;
+    private Integer version;
 
-    public CreateAssetRequest() {
+    public UpdateAssetRequestDTO() {
     }
 
     public String getCode() {
@@ -27,14 +26,6 @@ public class CreateAssetRequest {
         this.name = name;
     }
 
-    public String getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(String typeId) {
-        this.typeId = typeId;
-    }
-
     public String getStatusId() {
         return statusId;
     }
@@ -43,19 +34,19 @@ public class CreateAssetRequest {
         this.statusId = statusId;
     }
 
-    public String getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(String companyId) {
-        this.companyId = companyId;
-    }
-
     public String getExpiredDate() {
         return expiredDate;
     }
 
     public void setExpiredDate(String expiredDate) {
         this.expiredDate = expiredDate;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }

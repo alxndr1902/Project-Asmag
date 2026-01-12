@@ -1,10 +1,10 @@
 package com.projectasmag.asmag.dto.user;
 
-public class UpdateUserRequest {
+public class UpdateUserRequestDTO {
     private String email;
     private Integer version;
 
-    public UpdateUserRequest() {
+    public UpdateUserRequestDTO() {
     }
 
     public String getEmail() {

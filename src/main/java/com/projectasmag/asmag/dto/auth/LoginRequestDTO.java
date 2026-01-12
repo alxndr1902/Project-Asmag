@@ -1,10 +1,10 @@
 package com.projectasmag.asmag.dto.auth;
 
-public class LoginRequest {
+public class LoginRequestDTO {
     private String email;
     private String password;
 
-    public LoginRequest() {
+    public LoginRequestDTO() {
     }
 
     public String getEmail() {

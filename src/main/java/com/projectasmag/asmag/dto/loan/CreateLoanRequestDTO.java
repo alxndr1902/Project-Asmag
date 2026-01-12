@@ -2,13 +2,13 @@ package com.projectasmag.asmag.dto.loan;
 
 import java.util.List;
 
-public class CreateLoanRequest {
+public class CreateLoanRequestDTO {
     private String assetTargetId;
     private String locationTargetId;
     private String employeeTargetId;
     private List<String> assetIdList;
 
-    public CreateLoanRequest() {
+    public CreateLoanRequestDTO() {
     }
 
     public String getAssetTargetId() {

@@ -1,10 +1,10 @@
 package com.projectasmag.asmag.dto.company;
 
-public class CreateCompanyRequest {
+public class CreateCompanyRequestDTO {
     private String name;
     private String phoneNumber;
 
-    public CreateCompanyRequest() {
+    public CreateCompanyRequestDTO() {
     }
 
     public String getName() {

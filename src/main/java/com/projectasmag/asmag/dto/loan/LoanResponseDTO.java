@@ -1,14 +1,14 @@
 package com.projectasmag.asmag.dto.loan;
 
-public class CreateLoanResponse {
+public class LoanResponseDTO {
     private String id;
     private String code;
-    private String message;
+    private String targetName;
 
-    public CreateLoanResponse(String id, String code, String message) {
+    public LoanResponseDTO(String id, String code, String targetName) {
         this.id = id;
         this.code = code;
-        this.message = message;
+        this.targetName = targetName;
     }
 
     public String getId() {
@@ -19,7 +19,7 @@ public class CreateLoanResponse {
         return code;
     }
 
-    public String getMessage() {
-        return message;
+    public String getTargetName() {
+        return targetName;
     }
 }

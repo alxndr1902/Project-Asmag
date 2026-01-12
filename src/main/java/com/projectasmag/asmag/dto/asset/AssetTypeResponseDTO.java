@@ -1,10 +1,10 @@
-package com.projectasmag.asmag.dto.user;
+package com.projectasmag.asmag.dto.asset;
 
-public class RoleResponse {
+public class AssetTypeResponseDTO {
     private String id;
     private String name;
 
-    public RoleResponse(String id, String name) {
+    public AssetTypeResponseDTO(String id, String name) {
         this.id = id;
         this.name = name;
     }

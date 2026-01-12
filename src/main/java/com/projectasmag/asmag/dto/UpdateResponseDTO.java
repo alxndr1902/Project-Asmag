@@ -1,10 +1,10 @@
 package com.projectasmag.asmag.dto;
 
-public class UpdateResponse {
+public class UpdateResponseDTO {
     private String id;
     private Integer version;
 
-    public UpdateResponse(String id, Integer version) {
+    public UpdateResponseDTO(String id, Integer version) {
         this.id = id;
         this.version = version;
     }

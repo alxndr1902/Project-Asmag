@@ -1,10 +1,14 @@
 package com.projectasmag.asmag.dto.location;
 
-public class CreateLocationRequest {
+public class UpdateLocationRequestDTO {
     private String companyId;
     private String name;
+    private Integer version;
 
-    public CreateLocationRequest() {
+    public UpdateLocationRequestDTO(String companyId, String name, Integer version) {
+        this.companyId = companyId;
+        this.name = name;
+        this.version = version;
     }
 
     public String getCompanyId() {
@@ -21,5 +25,13 @@ public class CreateLocationRequest {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }

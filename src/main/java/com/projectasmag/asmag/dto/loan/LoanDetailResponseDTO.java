@@ -1,10 +1,10 @@
 package com.projectasmag.asmag.dto.loan;
 
-public class LoanDetailResponse {
+public class LoanDetailResponseDTO {
     private String assetName;
     private String returnDate;
 
-    public LoanDetailResponse(String assetName, String returnDate) {
+    public LoanDetailResponseDTO(String assetName, String returnDate) {
         this.assetName = assetName;
         this.returnDate = returnDate;
     }

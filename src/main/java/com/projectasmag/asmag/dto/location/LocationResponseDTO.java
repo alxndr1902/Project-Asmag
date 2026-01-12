@@ -1,11 +1,11 @@
 package com.projectasmag.asmag.dto.location;
 
-public class LocationResponse {
+public class LocationResponseDTO {
     private String id;
     private String name;
     private String companyName;
 
-    public LocationResponse(String id, String name, String companyName) {
+    public LocationResponseDTO(String id, String name, String companyName) {
         this.id = id;
         this.name = name;
         this.companyName = companyName;

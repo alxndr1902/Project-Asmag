@@ -1,10 +1,10 @@
 package com.projectasmag.asmag.controller;
 
-import com.projectasmag.asmag.dto.CreateResponse;
-import com.projectasmag.asmag.dto.DeleteResponse;
-import com.projectasmag.asmag.dto.UpdateResponse;
-import com.projectasmag.asmag.dto.employee.EmployeeResponse;
-import com.projectasmag.asmag.dto.employee.UpdateEmployeeRequest;
+import com.projectasmag.asmag.dto.CreateResponseDTO;
+import com.projectasmag.asmag.dto.DeleteResponseDTO;
+import com.projectasmag.asmag.dto.UpdateResponseDTO;
+import com.projectasmag.asmag.dto.employee.EmployeeResponseDTO;
+import com.projectasmag.asmag.dto.employee.UpdateEmployeeRequestDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,28 +13,28 @@ import java.util.List;
 @RequestMapping("api/employees")
 public class EmployeeController {
     @GetMapping
-    public List<EmployeeResponse> getEmployees() {
+    public List<EmployeeResponseDTO> getEmployees() {
         return null;
     }
 
     @GetMapping("{id}")
-    public EmployeeResponse getEmployee(@PathVariable String id) {
+    public EmployeeResponseDTO getEmployee(@PathVariable String id) {
         return null;
     }
 
     @PostMapping
-    public CreateResponse createEmployee(@RequestBody EmployeeResponse employeeResponse) {
+    public CreateResponseDTO createEmployee(@RequestBody EmployeeResponseDTO employeeResponse) {
         return null;
     }
 
     @PutMapping("{id}")
-    public UpdateResponse updateEmployee(@PathVariable String id,
-                                         @RequestBody UpdateEmployeeRequest updateEmployeeRequest) {
+    public UpdateResponseDTO updateEmployee(@PathVariable String id,
+                                            @RequestBody UpdateEmployeeRequestDTO updateEmployeeRequest) {
         return null;
     }
 
     @DeleteMapping("{id}")
-    public DeleteResponse deleteEmployee(@PathVariable String id) {
+    public DeleteResponseDTO deleteEmployee(@PathVariable String id) {
         return null;
     }
 }

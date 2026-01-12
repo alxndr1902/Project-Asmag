@@ -1,10 +1,10 @@
 package com.projectasmag.asmag.controller;
 
-import com.projectasmag.asmag.dto.UpdateResponse;
-import com.projectasmag.asmag.dto.loan.CreateLoanRequest;
-import com.projectasmag.asmag.dto.loan.CreateLoanResponse;
-import com.projectasmag.asmag.dto.loan.LoanDetailResponse;
-import com.projectasmag.asmag.dto.loan.LoanResponse;
+import com.projectasmag.asmag.dto.UpdateResponseDTO;
+import com.projectasmag.asmag.dto.loan.CreateLoanRequestDTO;
+import com.projectasmag.asmag.dto.loan.CreateLoanResponseDTO;
+import com.projectasmag.asmag.dto.loan.LoanDetailResponseDTO;
+import com.projectasmag.asmag.dto.loan.LoanResponseDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,23 +13,23 @@ import java.util.List;
 @RequestMapping("api/loans")
 public class LoanController {
     @GetMapping
-    public List<LoanResponse> getLoans() {
+    public List<LoanResponseDTO> getLoans() {
         return null;
     }
 
     @GetMapping("{id}")
-    public List<LoanDetailResponse> getLoanById(@PathVariable String id) {
+    public List<LoanDetailResponseDTO> getLoanById(@PathVariable String id) {
         return null;
     }
 
     @PostMapping
-    public CreateLoanResponse createLoan(@RequestBody CreateLoanRequest createLoanRequest) {
+    public CreateLoanResponseDTO createLoan(@RequestBody CreateLoanRequestDTO createLoanRequest) {
         return null;
     }
 
     @PutMapping("{id}/return")
-    public UpdateResponse returnAsset(@PathVariable String id,
-                                      @RequestBody List<String> assetIdList) {
+    public UpdateResponseDTO returnAsset(@PathVariable String id,
+                                         @RequestBody List<String> assetIdList) {
         return null;
     }
 }

@@ -1,9 +1,9 @@
 package com.projectasmag.asmag.controller;
 
-import com.projectasmag.asmag.dto.CreateResponse;
-import com.projectasmag.asmag.dto.UpdateResponse;
-import com.projectasmag.asmag.dto.company.CompanyResponse;
-import com.projectasmag.asmag.dto.company.CreateCompanyRequest;
+import com.projectasmag.asmag.dto.CreateResponseDTO;
+import com.projectasmag.asmag.dto.UpdateResponseDTO;
+import com.projectasmag.asmag.dto.company.CompanyResponseDTO;
+import com.projectasmag.asmag.dto.company.CreateCompanyRequestDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,23 +12,23 @@ import java.util.List;
 @RequestMapping("api/companies")
 public class CompanyController {
     @GetMapping
-    public List<CompanyResponse> getCompanies() {
+    public List<CompanyResponseDTO> getCompanies() {
         return null;
     }
 
     @GetMapping("{id}")
-    public CompanyResponse getCompany(@PathVariable String id) {
+    public CompanyResponseDTO getCompany(@PathVariable String id) {
         return null;
     }
 
     @PostMapping
-    public CreateResponse createCompany(@RequestBody CreateCompanyRequest request) {
+    public CreateResponseDTO createCompany(@RequestBody CreateCompanyRequestDTO request) {
         return null;
     }
 
     @PutMapping("{id}")
-    public UpdateResponse updateCompany(@PathVariable String id,
-                                        @RequestBody CreateCompanyRequest request) {
+    public UpdateResponseDTO updateCompany(@PathVariable String id,
+                                           @RequestBody CreateCompanyRequestDTO request) {
         return null;
     }
 }

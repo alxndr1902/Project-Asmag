@@ -1,11 +1,11 @@
 package com.projectasmag.asmag.controller;
 
-import com.projectasmag.asmag.dto.DeleteResponse;
-import com.projectasmag.asmag.dto.UpdateResponse;
-import com.projectasmag.asmag.dto.user.ChangePasswordRequest;
-import com.projectasmag.asmag.dto.user.RoleResponse;
-import com.projectasmag.asmag.dto.user.UpdateUserRequest;
-import com.projectasmag.asmag.dto.user.UserResponse;
+import com.projectasmag.asmag.dto.DeleteResponseDTO;
+import com.projectasmag.asmag.dto.UpdateResponseDTO;
+import com.projectasmag.asmag.dto.user.ChangePasswordRequestDTO;
+import com.projectasmag.asmag.dto.user.RoleResponseDTO;
+import com.projectasmag.asmag.dto.user.UpdateUserRequestDTO;
+import com.projectasmag.asmag.dto.user.UserResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,38 +16,38 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
     @GetMapping
-    public List<UserResponse> getUsers() {
+    public List<UserResponseDTO> getUsers() {
         return null;
     }
 
     @GetMapping("{id}")
-    public UserResponse getUser(@PathVariable String id) {
+    public UserResponseDTO getUser(@PathVariable String id) {
         return null;
     }
 
     @PutMapping("{id}")
-    public UpdateResponse updateUser(@PathVariable String id,
-                                     @RequestBody UpdateUserRequest updateUserRequest) {
+    public UpdateResponseDTO updateUser(@PathVariable String id,
+                                        @RequestBody UpdateUserRequestDTO updateUserRequest) {
         return null;
     }
 
     @DeleteMapping("{id}")
-    public DeleteResponse deleteUser(@PathVariable String id) {
+    public DeleteResponseDTO deleteUser(@PathVariable String id) {
         return null;
     }
 
     @PatchMapping("change-password")
-    public UpdateResponse changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
+    public UpdateResponseDTO changePassword(@RequestBody ChangePasswordRequestDTO changePasswordRequest) {
         return null;
     }
 
     @GetMapping("roles")
-    public List<RoleResponse> getRoles() {
+    public List<RoleResponseDTO> getRoles() {
         return null;
     }
 
     @GetMapping("roles/{id}")
-    public RoleResponse getRole(@PathVariable String id) {
+    public RoleResponseDTO getRole(@PathVariable String id) {
         return null;
     }
 }

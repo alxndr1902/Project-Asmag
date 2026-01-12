@@ -1,19 +1,19 @@
-package com.projectasmag.asmag.dto.company;
+package com.projectasmag.asmag.dto.employee;
 
-public class UpdateCompanyRequest {
-    private String name;
+public class UpdateEmployeeRequestDTO {
+    private String fullName;
     private String phoneNumber;
     private Integer version;
 
-    public UpdateCompanyRequest() {
+    public UpdateEmployeeRequestDTO() {
     }
 
-    public String getName() {
-        return name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getPhoneNumber() {
