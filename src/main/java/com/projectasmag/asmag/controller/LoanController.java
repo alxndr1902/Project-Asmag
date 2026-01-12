@@ -27,7 +27,7 @@ public class LoanController {
         return null;
     }
 
-    @PatchMapping("{id}/return")
+    @PatchMapping("{id}")
     public UpdateResponseDTO returnAsset(@PathVariable String id,
                                          @RequestBody List<String> assetIdList) {
         return null;
