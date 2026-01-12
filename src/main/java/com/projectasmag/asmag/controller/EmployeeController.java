@@ -23,7 +23,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public CreateResponseDTO createEmployee(@RequestBody EmployeeResponseDTO employeeResponse) {
+    public CreateResponseDTO createEmployee(@RequestBody CreateEmployeeRequestDTO request) {
         return null;
     }
 
