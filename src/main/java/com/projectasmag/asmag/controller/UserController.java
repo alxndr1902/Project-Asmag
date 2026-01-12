@@ -1,39 +1,58 @@
 package com.projectasmag.asmag.controller;
 
-import com.projectasmag.asmag.dto.UserRequest;
-import com.projectasmag.asmag.dto.UserResponse;
-import com.projectasmag.asmag.service.UserService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import com.projectasmag.asmag.dto.CreateResponseDTO;
+import com.projectasmag.asmag.dto.DeleteResponseDTO;
+import com.projectasmag.asmag.dto.UpdateResponseDTO;
+import com.projectasmag.asmag.dto.auth.RegisterRequestDTO;
+import com.projectasmag.asmag.dto.user.ChangePasswordRequestDTO;
+import com.projectasmag.asmag.dto.user.RoleResponseDTO;
+import com.projectasmag.asmag.dto.user.UpdateUserRequestDTO;
+import com.projectasmag.asmag.dto.user.UserResponseDTO;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
-    private final UserService userService;
-
-    @GetMapping("{id}")
-    @ResponseStatus(HttpStatus.OK)
-    private UserResponse getUser(@PathVariable Integer id) {
-        return userService.getUser(id);
+    @GetMapping
+    public List<UserResponseDTO> getUsers() {
+        return null;
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    private UserResponse createUser(@RequestBody UserRequest userRequest) {
-        return userService.createUser(userRequest);
+    @GetMapping("{id}")
+    public UserResponseDTO getUser(@PathVariable String id) {
+        return null;
     }
 
     @PutMapping("{id}")
-    @ResponseStatus(HttpStatus.OK)
-    private UserResponse updateUser(@PathVariable Integer id, @RequestBody UserRequest userRequest) {
-        return userService.updateUser(id, userRequest);
+    public UpdateResponseDTO updateUser(@PathVariable String id,
+                                        @RequestBody UpdateUserRequestDTO updateUserRequest) {
+        return null;
+    }
+
+    @PostMapping("register")
+    public CreateResponseDTO register(@RequestBody RegisterRequestDTO request) {
+        return null;
     }
 
     @DeleteMapping("{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    private void deleteUser(@PathVariable Integer id) {
-        userService.deleteUser(id);
+    public DeleteResponseDTO deleteUser(@PathVariable String id) {
+        return null;
+    }
+
+    @PatchMapping("change-password")
+    public UpdateResponseDTO changePassword(@RequestBody ChangePasswordRequestDTO changePasswordRequest) {
+        return null;
+    }
+
+    @GetMapping("roles")
+    public List<RoleResponseDTO> getRoles() {
+        return null;
+    }
+
+    @GetMapping("roles/{id}")
+    public RoleResponseDTO getRole(@PathVariable String id) {
+        return null;
     }
 }
