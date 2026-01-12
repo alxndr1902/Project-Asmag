@@ -1,39 +1,53 @@
 package com.projectasmag.asmag.controller;
 
-import com.projectasmag.asmag.dto.UserRequest;
-import com.projectasmag.asmag.dto.UserResponse;
-import com.projectasmag.asmag.service.UserService;
+import com.projectasmag.asmag.dto.DeleteResponse;
+import com.projectasmag.asmag.dto.UpdateResponse;
+import com.projectasmag.asmag.dto.user.ChangePasswordRequest;
+import com.projectasmag.asmag.dto.user.RoleResponse;
+import com.projectasmag.asmag.dto.user.UpdateUserRequest;
+import com.projectasmag.asmag.dto.user.UserResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
-    private final UserService userService;
-
-    @GetMapping("{id}")
-    @ResponseStatus(HttpStatus.OK)
-    private UserResponse getUser(@PathVariable Integer id) {
-        return userService.getUser(id);
+    @GetMapping
+    public List<UserResponse> getUsers() {
+        return null;
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    private UserResponse createUser(@RequestBody UserRequest userRequest) {
-        return userService.createUser(userRequest);
+    @GetMapping("{id}")
+    public UserResponse getUser(@PathVariable String id) {
+        return null;
     }
 
     @PutMapping("{id}")
-    @ResponseStatus(HttpStatus.OK)
-    private UserResponse updateUser(@PathVariable Integer id, @RequestBody UserRequest userRequest) {
-        return userService.updateUser(id, userRequest);
+    public UpdateResponse updateUser(@PathVariable String id,
+                                     @RequestBody UpdateUserRequest updateUserRequest) {
+        return null;
     }
 
     @DeleteMapping("{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    private void deleteUser(@PathVariable Integer id) {
-        userService.deleteUser(id);
+    public DeleteResponse deleteUser(@PathVariable String id) {
+        return null;
+    }
+
+    @PatchMapping("change-password")
+    public UpdateResponse changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
+        return null;
+    }
+
+    @GetMapping("roles")
+    public List<RoleResponse> getRoles() {
+        return null;
+    }
+
+    @GetMapping("roles/{id}")
+    public RoleResponse getRole(@PathVariable String id) {
+        return null;
     }
 }
