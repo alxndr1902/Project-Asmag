@@ -1,17 +1,26 @@
 package com.projectasmag.asmag.model.company;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
+import com.projectasmag.asmag.model.BaseModel;
+import jakarta.persistence.*;
 
-public class Employee {
-    private UUID id;
-    private String companyId;
+import java.util.List;
+
+@Entity
+@Table(name = "employees")
+public class Employee extends BaseModel {
+    @ManyToOne
+    @JoinColumn(name = "company_id",nullable = false)
+    private Company company;
+
+    @Column(name = "full_name", length = 50, nullable = false)
     private String fullName;
+
+    @Column(name = "phone_number", length = 20, nullable = false, unique = true)
     private String phoneNumber;
+
+    @Column(name = "identification_number", length = 20, nullable = false, unique = true)
     private String identificationNumber;
-    private LocalDateTime createdAt;
-    private String createdBy;
-    private LocalDateTime updatedAt;
-    private String updatedBy;
-    private Integer version;
+
+    @OneToOne
+    private User user;
 }

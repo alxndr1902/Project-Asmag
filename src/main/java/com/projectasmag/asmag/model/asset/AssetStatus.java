@@ -1,15 +1,49 @@
 package com.projectasmag.asmag.model.asset;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
+import com.projectasmag.asmag.model.BaseModel;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
-public class AssetStatus {
-    private UUID id;
+import java.util.List;
+
+@Entity
+@Table(name = "asset_status")
+public class AssetStatus extends BaseModel {
+    @Column(length = 20, nullable = false)
     private String name;
+
+    @Column(length = 20, nullable = false, unique = true)
     private String code;
-    private LocalDateTime createdAt;
-    private String createdBy;
-    private LocalDateTime updatedAt;
-    private String updatedBy;
-    private Integer version;
+
+    @OneToMany
+    private List<Asset> assets;
+
+    public AssetStatus() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public List<Asset> getAssets() {
+        return assets;
+    }
+
+    public void setAssets(List<Asset> assets) {
+        this.assets = assets;
+    }
 }

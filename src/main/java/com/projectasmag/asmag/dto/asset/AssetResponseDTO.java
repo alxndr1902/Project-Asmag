@@ -1,7 +1,9 @@
 package com.projectasmag.asmag.dto.asset;
 
+import java.util.UUID;
+
 public class AssetResponseDTO {
-    private String id;
+    private UUID id;
     private String code;
     private String name;
     private String typeName;
@@ -10,7 +12,7 @@ public class AssetResponseDTO {
     private String expiredDate;
     private String createdAt;
 
-    public AssetResponseDTO(String id, String code, String name, String typeName, String statusName, String companyName, String expiredDate, String createdAt) {
+    public AssetResponseDTO(UUID id, String code, String name, String typeName, String statusName, String companyName, String expiredDate, String createdAt) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -21,7 +23,7 @@ public class AssetResponseDTO {
         this.createdAt = createdAt;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 

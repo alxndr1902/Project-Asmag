@@ -1,13 +1,15 @@
 package com.projectasmag.asmag.dto.user;
 
+import java.util.UUID;
+
 public class UserResponseDTO {
-    private String id;
+    private UUID id;
     private String email;
     private String fullName;
     private String phoneNumber;
     private String roleName;
 
-    public UserResponseDTO(String id, String email, String fullName, String phoneNumber, String roleName) {
+    public UserResponseDTO(UUID id, String email, String fullName, String phoneNumber, String roleName) {
         this.id = id;
         this.email = email;
         this.fullName = fullName;
@@ -15,7 +17,7 @@ public class UserResponseDTO {
         this.roleName = roleName;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
