@@ -11,7 +11,7 @@ public class AssetStatusResponseDTO {
         this.name = name;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
