@@ -21,9 +21,6 @@ public class Employee extends BaseModel {
     @Column(name = "identification_number", length = 20, nullable = false, unique = true)
     private String identificationNumber;
 
-    @OneToOne
-    private User user;
-
     public Employee() {
     }
 
@@ -57,13 +54,5 @@ public class Employee extends BaseModel {
 
     public void setIdentificationNumber(String identificationNumber) {
         this.identificationNumber = identificationNumber;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

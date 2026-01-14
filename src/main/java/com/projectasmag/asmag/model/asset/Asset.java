@@ -76,8 +76,4 @@ public class Asset extends BaseModel {
     public LocalDateTime getExpiredDate() {
         return expiredDate;
     }
-
-    public void setExpiredDate(LocalDateTime expiredDate) {
-        this.expiredDate = expiredDate;
-    }
 }

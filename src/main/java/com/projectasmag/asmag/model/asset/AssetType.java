@@ -19,9 +19,6 @@ public class AssetType extends BaseModel {
     @Column(length = 20, nullable = false, unique = true)
     private String code;
 
-    @OneToMany
-    private List<Asset> assets;
-
     public AssetType() {
     }
 
@@ -39,13 +36,5 @@ public class AssetType extends BaseModel {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public List<Asset> getAssets() {
-        return assets;
-    }
-
-    public void setAssets(List<Asset> assets) {
-        this.assets = assets;
     }
 }

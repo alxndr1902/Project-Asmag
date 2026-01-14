@@ -14,18 +14,11 @@ public class Role extends BaseModel {
     @Column(name = "name", length = 20, unique = true, nullable = false)
     private String name;
 
-    @OneToMany
-    private List<User> users;
-
     public Role() {
     }
 
     public String getCode() {
         return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public String getName() {
