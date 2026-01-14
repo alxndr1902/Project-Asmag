@@ -20,13 +20,13 @@ public class AssetTypeController {
         this.assetTypeService = assetTypeService;
     }
 
-    @GetMapping("types")
+    @GetMapping
     public ResponseEntity<List<AssetTypeResponseDTO>> getAssetTypes() {
         List<AssetTypeResponseDTO> response = assetTypeService.getAssetStatus();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("types/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<AssetTypeResponseDTO> getAssetType(@PathVariable String id) {
         AssetTypeResponseDTO response = assetTypeService.getAssetStatus(id);
         return new ResponseEntity<>(response, HttpStatus.OK);

@@ -103,7 +103,7 @@ public class LoanServiceImpl extends BaseService implements LoanService {
     }
 
     private LoanDetailResponseDTO mapToLoanDetailsResponseDto(LoanDetail loanDetail) {
-        return new LoanDetailResponseDTO(loanDetail.getAsset().getName(), loanDetail.getReturnDate(),
+        return new LoanDetailResponseDTO(loanDetail.getId(), loanDetail.getAsset().getName(), loanDetail.getReturnDate(),
                 loanDetail.getVersion());
     }
 

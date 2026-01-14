@@ -30,7 +30,7 @@ public class Loan extends BaseModel {
     @JoinColumn(name = "employee_target_id")
     private Employee employeeTarget;
 
-    @OneToMany
+    @OneToMany(mappedBy = "loan", cascade = CascadeType.ALL)
     private List<LoanDetail> loanDetails;
 
     public Loan() {

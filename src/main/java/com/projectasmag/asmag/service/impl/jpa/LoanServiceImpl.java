@@ -19,6 +19,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -69,7 +70,8 @@ public class LoanServiceImpl extends BaseService implements LoanService {
             createBaseModel(loan);
             createLoanDetails(request, loan);
             loanRepository.save(loan);
-            return new CreateLoanResponseDTO(loan.getId(), loan.getCode(), Message.CREATED.name());
+            loanDetailRepository.saveAll(loan.getLoanDetails());
+            return new CreateLoanResponseDTO(loan.getId(), loan.getCode(), Message.CREATED.getName());
         } else {
             throw new RuntimeException("Only one target allowed");
         }
@@ -105,7 +107,7 @@ public class LoanServiceImpl extends BaseService implements LoanService {
     }
 
     private LoanDetailResponseDTO mapToLoanDetailsResponseDto(LoanDetail loanDetail) {
-        return new LoanDetailResponseDTO(loanDetail.getAsset().getName(), loanDetail.getReturnDate(),
+        return new LoanDetailResponseDTO(loanDetail.getId(), loanDetail.getAsset().getName(), loanDetail.getReturnDate(),
                 loanDetail.getVersion());
     }
 
@@ -165,6 +167,7 @@ public class LoanServiceImpl extends BaseService implements LoanService {
     }
 
     private void createLoanDetails(CreateLoanRequestDTO request, Loan loan) {
+        loan.setLoanDetails(new ArrayList<>());
         for (String id : request.getAssetIdList()) {
             Asset asset = assetRepository.findById(UUID.fromString(id)).orElseThrow(
                     () -> new RuntimeException("No Asset Found")
@@ -172,7 +175,8 @@ public class LoanServiceImpl extends BaseService implements LoanService {
             LoanDetail loanDetail = new LoanDetail();
             loanDetail.setAsset(asset);
             loanDetail.setLoan(loan);
-            loanDetailRepository.saveAndFlush(loanDetail);
+            createBaseModel(loanDetail);
+            loan.getLoanDetails().add(loanDetail);
         }
     }
 }
