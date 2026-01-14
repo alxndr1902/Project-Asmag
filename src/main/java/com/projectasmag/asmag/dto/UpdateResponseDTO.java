@@ -1,8 +1,8 @@
 package com.projectasmag.asmag.dto;
 
 public class UpdateResponseDTO {
-    private Integer version;
-    private String message;
+    private final Integer version;
+    private final String message;
 
     public UpdateResponseDTO(Integer version, String message) {
         this.version = version;

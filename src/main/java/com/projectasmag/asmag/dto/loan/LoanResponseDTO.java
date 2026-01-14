@@ -3,12 +3,9 @@ package com.projectasmag.asmag.dto.loan;
 import java.util.UUID;
 
 public class LoanResponseDTO {
-    private UUID id;
-    private String code;
-    private String targetName;
-
-    public LoanResponseDTO() {
-    }
+    private final UUID id;
+    private final String code;
+    private final String targetName;
 
     public LoanResponseDTO(UUID id, String code, String targetName) {
         this.id = id;

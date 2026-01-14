@@ -1,7 +1,7 @@
 package com.projectasmag.asmag.dto;
 
 public class DeleteResponseDTO {
-    private String message;
+    private final String message;
 
     public DeleteResponseDTO(String message) {
         this.message = message;

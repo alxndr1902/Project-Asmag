@@ -3,9 +3,9 @@ package com.projectasmag.asmag.dto.company;
 import java.util.UUID;
 
 public class CompanyResponseDTO {
-    private UUID id;
-    private String name;
-    private String phoneNumber;
+    private final UUID id;
+    private final String name;
+    private final String phoneNumber;
 
     public CompanyResponseDTO(UUID id, String name, String phoneNumber) {
         this.id = id;

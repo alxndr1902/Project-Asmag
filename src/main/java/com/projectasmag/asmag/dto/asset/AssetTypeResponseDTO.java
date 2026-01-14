@@ -3,8 +3,8 @@ package com.projectasmag.asmag.dto.asset;
 import java.util.UUID;
 
 public class AssetTypeResponseDTO {
-    private UUID id;
-    private String name;
+    private final UUID id;
+    private final String name;
 
     public AssetTypeResponseDTO(UUID id, String name) {
         this.id = id;

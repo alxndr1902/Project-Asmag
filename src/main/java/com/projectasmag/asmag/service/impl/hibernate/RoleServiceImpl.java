@@ -1,10 +1,9 @@
 package com.projectasmag.asmag.service.impl.hibernate;
 
 import com.projectasmag.asmag.dao.RoleDao;
-import com.projectasmag.asmag.dto.user.RoleResponseDTO;
+import com.projectasmag.asmag.dto.role.RoleResponseDTO;
 import com.projectasmag.asmag.model.company.Role;
 import com.projectasmag.asmag.service.RoleService;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;

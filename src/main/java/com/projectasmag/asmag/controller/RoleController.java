@@ -1,6 +1,6 @@
 package com.projectasmag.asmag.controller;
 
-import com.projectasmag.asmag.dto.user.RoleResponseDTO;
+import com.projectasmag.asmag.dto.role.RoleResponseDTO;
 import com.projectasmag.asmag.service.RoleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

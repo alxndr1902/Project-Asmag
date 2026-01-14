@@ -4,7 +4,7 @@ import com.projectasmag.asmag.constant.Message;
 import com.projectasmag.asmag.dto.CreateResponseDTO;
 import com.projectasmag.asmag.dto.DeleteResponseDTO;
 import com.projectasmag.asmag.dto.UpdateResponseDTO;
-import com.projectasmag.asmag.dto.auth.RegisterRequestDTO;
+import com.projectasmag.asmag.dto.user.RegisterRequestDTO;
 import com.projectasmag.asmag.dto.user.ChangePasswordRequestDTO;
 import com.projectasmag.asmag.dto.user.UpdateUserRequestDTO;
 import com.projectasmag.asmag.dto.user.UserResponseDTO;

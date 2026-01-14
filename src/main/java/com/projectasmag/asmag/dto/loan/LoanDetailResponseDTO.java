@@ -3,8 +3,8 @@ package com.projectasmag.asmag.dto.loan;
 import java.time.LocalDateTime;
 
 public class LoanDetailResponseDTO {
-    private String assetName;
-    private LocalDateTime returnDate;
+    private final String assetName;
+    private final LocalDateTime returnDate;
 
     public LoanDetailResponseDTO(String assetName, LocalDateTime returnDate) {
         this.assetName = assetName;

@@ -3,8 +3,8 @@ package com.projectasmag.asmag.dto;
 import java.util.UUID;
 
 public class CreateResponseDTO {
-    private UUID id;
-    private String message;
+    private final UUID id;
+    private final String message;
 
     public CreateResponseDTO(UUID id, String message) {
         this.id = id;

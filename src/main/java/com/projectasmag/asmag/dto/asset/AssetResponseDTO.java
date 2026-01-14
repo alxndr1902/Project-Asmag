@@ -4,14 +4,14 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class AssetResponseDTO {
-    private UUID id;
-    private String code;
-    private String name;
-    private String typeName;
-    private String statusName;
-    private String companyName;
-    private LocalDateTime expiredDate;
-    private LocalDateTime createdAt;
+    private final UUID id;
+    private final String code;
+    private final String name;
+    private final String typeName;
+    private final String statusName;
+    private final String companyName;
+    private final LocalDateTime expiredDate;
+    private final LocalDateTime createdAt;
 
     public AssetResponseDTO(UUID id, String code, String name, String typeName, String statusName, String companyName, LocalDateTime expiredDate, LocalDateTime createdAt) {
         this.id = id;

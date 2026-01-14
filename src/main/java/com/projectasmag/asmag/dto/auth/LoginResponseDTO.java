@@ -1,9 +1,9 @@
 package com.projectasmag.asmag.dto.auth;
 
 public class LoginResponseDTO {
-    private String fullName;
-    private String roleCode;
-    private String token;
+    private final String fullName;
+    private final String roleCode;
+    private final String token;
 
     public LoginResponseDTO(String fullName, String roleCode, String token) {
         this.fullName = fullName;

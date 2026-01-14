@@ -3,10 +3,10 @@ package com.projectasmag.asmag.dto.employee;
 import java.util.UUID;
 
 public class EmployeeResponseDTO {
-    private UUID id;
-    private String fullName;
-    private String phoneNumber;
-    private String companyName;
+    private final UUID id;
+    private final String fullName;
+    private final String phoneNumber;
+    private final String companyName;
 
     public EmployeeResponseDTO(UUID id, String fullName, String phoneNumber, String companyName) {
         this.id = id;

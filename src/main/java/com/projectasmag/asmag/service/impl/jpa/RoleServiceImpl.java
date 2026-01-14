@@ -1,6 +1,6 @@
 package com.projectasmag.asmag.service.impl.jpa;
 
-import com.projectasmag.asmag.dto.user.RoleResponseDTO;
+import com.projectasmag.asmag.dto.role.RoleResponseDTO;
 import com.projectasmag.asmag.model.company.Role;
 import com.projectasmag.asmag.repository.RoleRepository;
 import com.projectasmag.asmag.service.RoleService;

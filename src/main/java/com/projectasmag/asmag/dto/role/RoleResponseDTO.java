@@ -1,10 +1,10 @@
-package com.projectasmag.asmag.dto.user;
+package com.projectasmag.asmag.dto.role;
 
 import java.util.UUID;
 
 public class RoleResponseDTO {
-    private UUID id;
-    private String name;
+    private final UUID id;
+    private final String name;
 
     public RoleResponseDTO(UUID id, String name) {
         this.id = id;

@@ -3,9 +3,9 @@ package com.projectasmag.asmag.dto.location;
 import java.util.UUID;
 
 public class LocationResponseDTO {
-    private UUID id;
-    private String name;
-    private String companyName;
+    private final UUID id;
+    private final String name;
+    private final String companyName;
 
     public LocationResponseDTO(UUID id, String name, String companyName) {
         this.id = id;

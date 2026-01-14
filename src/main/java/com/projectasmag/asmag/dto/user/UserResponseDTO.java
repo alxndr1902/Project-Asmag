@@ -3,11 +3,11 @@ package com.projectasmag.asmag.dto.user;
 import java.util.UUID;
 
 public class UserResponseDTO {
-    private UUID id;
-    private String email;
-    private String fullName;
-    private String phoneNumber;
-    private String roleName;
+    private final UUID id;
+    private final String email;
+    private final String fullName;
+    private final String phoneNumber;
+    private final String roleName;
 
     public UserResponseDTO(UUID id, String email, String fullName, String phoneNumber, String roleName) {
         this.id = id;

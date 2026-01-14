@@ -1,4 +1,4 @@
-package com.projectasmag.asmag.dto.auth;
+package com.projectasmag.asmag.dto.user;
 
 public class RegisterRequestDTO {
     private String employeeId;
