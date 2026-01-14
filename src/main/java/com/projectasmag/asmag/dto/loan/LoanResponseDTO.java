@@ -6,11 +6,13 @@ public class LoanResponseDTO {
     private final UUID id;
     private final String code;
     private final String targetName;
+    private final Integer version;
 
-    public LoanResponseDTO(UUID id, String code, String targetName) {
+    public LoanResponseDTO(UUID id, String code, String targetName, Integer version) {
         this.id = id;
         this.code = code;
         this.targetName = targetName;
+        this.version = version;
     }
 
     public UUID getId() {
@@ -23,5 +25,9 @@ public class LoanResponseDTO {
 
     public String getTargetName() {
         return targetName;
+    }
+
+    public Integer getVersion() {
+        return version;
     }
 }

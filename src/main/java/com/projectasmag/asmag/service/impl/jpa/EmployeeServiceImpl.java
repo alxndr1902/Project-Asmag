@@ -45,7 +45,6 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
     }
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
     public CreateResponseDTO createEmployee(CreateEmployeeRequestDTO request) {
         Company company = companyRepository.findById(UUID.fromString(request.getCompanyId()))
                 .orElseThrow(() -> new RuntimeException("No Employee Found"));
@@ -54,12 +53,12 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
         employee.setCompany(company);
         employee.setPhoneNumber(request.getPhoneNumber());
         employee.setIdentificationNumber(request.getIdentificationNumber());
+        createBaseModel(employee);
         employeeRepository.save(employee);
         return new CreateResponseDTO(employee.getId(), Message.CREATED.name());
     }
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
     public UpdateResponseDTO updateEmployee(String id, UpdateEmployeeRequestDTO request) {
         Employee employee = employeeRepository.findById(UUID.fromString(id))
                 .orElseThrow(() -> new RuntimeException("No Employee Found"));
@@ -75,7 +74,6 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
     }
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
     public DeleteResponseDTO deleteEmployee(String id) {
         Employee employee = employeeRepository.findById(UUID.fromString(id))
                 .orElseThrow(() -> new RuntimeException("No Employee Found"));
@@ -86,7 +84,7 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
     private EmployeeResponseDTO mapToEmployeeResponseDTO(Employee employee) {
         return new EmployeeResponseDTO(
                 employee.getId(), employee.getFullName(), employee.getPhoneNumber(),
-                employee.getIdentificationNumber()
+                employee.getIdentificationNumber(), employee.getVersion()
         );
     }
 }

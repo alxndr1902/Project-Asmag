@@ -95,7 +95,7 @@ public class UserServiceImpl extends BaseService implements UserService{
                 user.getEmail(),
                 user.getEmployee().getFullName(),
                 user.getEmployee().getPhoneNumber(),
-                user.getRole().getName());
+                user.getRole().getName(), user.getVersion());
     }
 
     private User mapToUser(RegisterRequestDTO registerRequestDTO) {

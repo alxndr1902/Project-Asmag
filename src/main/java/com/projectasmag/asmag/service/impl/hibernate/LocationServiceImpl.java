@@ -86,6 +86,7 @@ public class LocationServiceImpl extends BaseService implements LocationService 
     }
 
     private LocationResponseDTO mapToLocationResponseDTO(Location location) {
-        return new LocationResponseDTO(location.getId(), location.getName(), location.getCompany().getName());
+        return new LocationResponseDTO(location.getId(), location.getName(), location.getCompany().getName(),
+                location.getVersion());
     }
 }

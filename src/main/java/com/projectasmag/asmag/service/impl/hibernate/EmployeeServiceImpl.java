@@ -88,7 +88,7 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
     private EmployeeResponseDTO mapToEmployeeResponseDTO(Employee employee) {
         return new EmployeeResponseDTO(
                 employee.getId(), employee.getFullName(), employee.getPhoneNumber(),
-                employee.getIdentificationNumber()
+                employee.getIdentificationNumber(), employee.getVersion()
         );
     }
 }

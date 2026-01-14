@@ -7,12 +7,14 @@ public class EmployeeResponseDTO {
     private final String fullName;
     private final String phoneNumber;
     private final String companyName;
+    private final Integer version;
 
-    public EmployeeResponseDTO(UUID id, String fullName, String phoneNumber, String companyName) {
+    public EmployeeResponseDTO(UUID id, String fullName, String phoneNumber, String companyName, Integer version) {
         this.id = id;
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.companyName = companyName;
+        this.version = version;
     }
 
     public UUID getId() {
@@ -29,5 +31,9 @@ public class EmployeeResponseDTO {
 
     public String getCompanyName() {
         return companyName;
+    }
+
+    public Integer getVersion() {
+        return version;
     }
 }

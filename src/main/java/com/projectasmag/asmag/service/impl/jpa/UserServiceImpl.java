@@ -49,7 +49,6 @@ public class UserServiceImpl extends BaseService implements UserService{
         return mapToUserResponseDto(user);
     }
 
-    @Transactional(rollbackOn = Exception.class)
     @Override
     public UpdateResponseDTO updateUser(String id, UpdateUserRequestDTO request) {
         User user = userRepository.findById(UUID.fromString(id))
@@ -61,7 +60,6 @@ public class UserServiceImpl extends BaseService implements UserService{
         return new UpdateResponseDTO(user.getVersion(), Message.UPDATED.getName());
     }
 
-    @Transactional(rollbackOn = Exception.class)
     @Override
     public CreateResponseDTO register(RegisterRequestDTO request) {
         User user = mapToUser(request);
@@ -70,13 +68,11 @@ public class UserServiceImpl extends BaseService implements UserService{
         return new CreateResponseDTO(user.getId(), Message.CREATED.getName());
     }
 
-    @Transactional(rollbackOn = Exception.class)
     @Override
     public UpdateResponseDTO changePassword(ChangePasswordRequestDTO request) {
         return null;
     }
 
-    @Transactional(rollbackOn = Exception.class)
     @Override
     public DeleteResponseDTO deleteUser(String id) {
         User user = userRepository.findById(UUID.fromString(id))
@@ -90,7 +86,7 @@ public class UserServiceImpl extends BaseService implements UserService{
                 user.getEmail(),
                 user.getEmployee().getFullName(),
                 user.getEmployee().getPhoneNumber(),
-                user.getRole().getName());
+                user.getRole().getName(), user.getVersion());
     }
 
     private User mapToUser(RegisterRequestDTO registerRequestDTO) {

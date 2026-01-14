@@ -40,7 +40,6 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
     }
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
     public CreateResponseDTO createCompany(CreateCompanyRequestDTO request) {
         Company company =  new Company();
         company.setName(request.getName());
@@ -51,7 +50,6 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
     }
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
     public UpdateResponseDTO updateCompany(String id, UpdateCompanyRequestDTO request) {
         Company company = companyRepository.findById(UUID.fromString(id))
                 .orElseThrow(() -> new RuntimeException("No Company Found"));
@@ -63,7 +61,7 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
     }
 
     private CompanyResponseDTO mapToCompanyResponseDTO(Company company) {
-        return new CompanyResponseDTO(company.getId(), company.getName(), company.getPhoneNumber()
-        );
+        return new CompanyResponseDTO(company.getId(), company.getName(), company.getPhoneNumber(),
+                company.getVersion());
     }
 }

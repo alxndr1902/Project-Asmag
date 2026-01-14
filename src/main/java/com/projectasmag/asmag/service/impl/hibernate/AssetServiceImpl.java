@@ -98,7 +98,7 @@ public class AssetServiceImpl extends BaseService implements AssetService {
                 asset.getId(), asset.getCode(), asset.getName(),
                 asset.getType().getName(), asset.getStatus().getName(),
                 asset.getCompany().getName(), asset.getExpiredDate(),
-                asset.getCreatedAt()
+                asset.getCreatedAt(), asset.getVersion()
         );
     }
 

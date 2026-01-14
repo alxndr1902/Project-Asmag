@@ -52,7 +52,6 @@ public class AssetServiceImpl extends BaseService implements AssetService {
         return mapToAssetResponseDTO(asset);
     }
 
-    @Transactional(rollbackOn = Exception.class)
     @Override
     public CreateResponseDTO createAsset(CreateAssetRequestDTO request) {
         Asset asset = mapToAsset(request);
@@ -61,7 +60,6 @@ public class AssetServiceImpl extends BaseService implements AssetService {
         return new CreateResponseDTO(asset.getId(), Message.CREATED.getName());
     }
 
-    @Transactional(rollbackOn = Exception.class)
     @Override
     public UpdateResponseDTO updateAsset(String id, UpdateAssetRequestDTO request) {
         Asset asset = assetRepository.findById(UUID.fromString(id))
@@ -77,7 +75,6 @@ public class AssetServiceImpl extends BaseService implements AssetService {
         throw new RuntimeException("Request version does not match data version");
     }
 
-    @Transactional(rollbackOn = Exception.class)
     @Override
     public DeleteResponseDTO deleteAsset(String id) {
         Asset asset = assetRepository.findById(UUID.fromString(id))
@@ -92,7 +89,7 @@ public class AssetServiceImpl extends BaseService implements AssetService {
                 asset.getId(), asset.getCode(), asset.getName(),
                 asset.getType().getName(), asset.getStatus().getName(),
                 asset.getCompany().getName(), asset.getExpiredDate(),
-                asset.getCreatedAt()
+                asset.getCreatedAt(), asset.getVersion()
         );
     }
 

@@ -44,7 +44,6 @@ public class LocationServiceImpl extends BaseService implements LocationService 
     }
 
     @Override
-    @Transactional(rollbackOn =  Exception.class)
     public CreateResponseDTO createLocation(CreateLocationRequestDTO request) {
         Company company = companyRepository.findById(UUID.fromString(request.getCompanyId()))
                 .orElseThrow(() -> new RuntimeException("No Company Found"));
@@ -57,7 +56,6 @@ public class LocationServiceImpl extends BaseService implements LocationService 
     }
 
     @Override
-    @Transactional(rollbackOn =  Exception.class)
     public UpdateResponseDTO updateLocation(String id, UpdateLocationRequestDTO request) {
         Location location = locationRepository.findById(UUID.fromString(id))
                 .orElseThrow(() -> new RuntimeException("No Location Found"));
@@ -72,7 +70,6 @@ public class LocationServiceImpl extends BaseService implements LocationService 
     }
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
     public DeleteResponseDTO deleteLocation(String id) {
         Location location = locationRepository.findById(UUID.fromString(id))
                 .orElseThrow(() -> new RuntimeException("No Location Found"));
@@ -81,6 +78,7 @@ public class LocationServiceImpl extends BaseService implements LocationService 
     }
 
     private LocationResponseDTO mapToLocationResponseDTO(Location location) {
-        return new LocationResponseDTO(location.getId(), location.getName(), location.getCompany().getName());
+        return new LocationResponseDTO(location.getId(), location.getName(), location.getCompany().getName(),
+                location.getVersion());
     }
 }

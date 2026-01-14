@@ -12,8 +12,9 @@ public class AssetResponseDTO {
     private final String companyName;
     private final LocalDateTime expiredDate;
     private final LocalDateTime createdAt;
+    private final Integer version;
 
-    public AssetResponseDTO(UUID id, String code, String name, String typeName, String statusName, String companyName, LocalDateTime expiredDate, LocalDateTime createdAt) {
+    public AssetResponseDTO(UUID id, String code, String name, String typeName, String statusName, String companyName, LocalDateTime expiredDate, LocalDateTime createdAt, Integer version) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -22,6 +23,7 @@ public class AssetResponseDTO {
         this.companyName = companyName;
         this.expiredDate = expiredDate;
         this.createdAt = createdAt;
+        this.version = version;
     }
 
     public UUID getId() {
@@ -54,5 +56,9 @@ public class AssetResponseDTO {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public Integer getVersion() {
+        return version;
     }
 }

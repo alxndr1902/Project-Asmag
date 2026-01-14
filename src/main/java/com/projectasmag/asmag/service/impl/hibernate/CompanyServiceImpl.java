@@ -65,7 +65,8 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
     }
 
     private CompanyResponseDTO mapToCompanyResponseDTO(Company company) {
-        return new CompanyResponseDTO(company.getId(), company.getName(), company.getPhoneNumber()
+        return new CompanyResponseDTO(company.getId(), company.getName(),
+                company.getPhoneNumber(), company.getVersion()
         );
     }
 }
