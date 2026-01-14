@@ -40,7 +40,7 @@ public class CompanyController {
 
     @PutMapping("{id}")
     public ResponseEntity<UpdateResponseDTO> updateCompany(@PathVariable String id,
-                                                           @RequestBody CreateCompanyRequestDTO request) {
+                                                           @RequestBody UpdateCompanyRequestDTO request) {
         UpdateResponseDTO response = companyService.updateCompany(id, request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
