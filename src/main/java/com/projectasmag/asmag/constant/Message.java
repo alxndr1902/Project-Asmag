@@ -3,7 +3,7 @@ package com.projectasmag.asmag.constant;
 public enum Message {
     CREATED("Created"), UPDATED("Updated"), DELETED("Updated");
 
-    private String name;
+    private final String name;
 
     Message(String name) {
         this.name = name;
