@@ -6,6 +6,9 @@ import com.projectasmag.asmag.dto.UpdateResponseDTO;
 import com.projectasmag.asmag.dto.employee.CreateEmployeeRequestDTO;
 import com.projectasmag.asmag.dto.employee.EmployeeResponseDTO;
 import com.projectasmag.asmag.dto.employee.UpdateEmployeeRequestDTO;
+import com.projectasmag.asmag.service.EmployeeService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,29 +16,40 @@ import java.util.List;
 @RestController
 @RequestMapping("api/employees")
 public class EmployeeController {
+    private final EmployeeService employeeService;
+
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
+
     @GetMapping
-    public List<EmployeeResponseDTO> getEmployees() {
-        return null;
+    public ResponseEntity<List<EmployeeResponseDTO>> getEmployees() {
+        List<EmployeeResponseDTO> response = employeeService.getEmployees();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    public EmployeeResponseDTO getEmployee(@PathVariable String id) {
-        return null;
+    public ResponseEntity<EmployeeResponseDTO> getEmployee(@PathVariable String id) {
+        EmployeeResponseDTO response = employeeService.getEmployee(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping
-    public CreateResponseDTO createEmployee(@RequestBody CreateEmployeeRequestDTO request) {
-        return null;
+    public ResponseEntity<CreateResponseDTO> createEmployee(@RequestBody CreateEmployeeRequestDTO request) {
+        CreateResponseDTO response = employeeService.createEmployee(request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
-    public UpdateResponseDTO updateEmployee(@PathVariable String id,
-                                            @RequestBody UpdateEmployeeRequestDTO updateEmployeeRequest) {
-        return null;
+    public ResponseEntity<UpdateResponseDTO> updateEmployee(@PathVariable String id,
+                                                            @RequestBody UpdateEmployeeRequestDTO updateEmployeeRequest) {
+        UpdateResponseDTO response = employeeService.updateEmployee(id, updateEmployeeRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
-    public DeleteResponseDTO deleteEmployee(@PathVariable String id) {
-        return null;
+    public ResponseEntity<DeleteResponseDTO> deleteEmployee(@PathVariable String id) {
+        DeleteResponseDTO response = employeeService.deleteEmployee(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

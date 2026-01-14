@@ -1,5 +1,6 @@
 package com.projectasmag.asmag.dto.asset;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class AssetResponseDTO {
@@ -9,10 +10,10 @@ public class AssetResponseDTO {
     private String typeName;
     private String statusName;
     private String companyName;
-    private String expiredDate;
-    private String createdAt;
+    private LocalDateTime expiredDate;
+    private LocalDateTime createdAt;
 
-    public AssetResponseDTO(UUID id, String code, String name, String typeName, String statusName, String companyName, String expiredDate, String createdAt) {
+    public AssetResponseDTO(UUID id, String code, String name, String typeName, String statusName, String companyName, LocalDateTime expiredDate, LocalDateTime createdAt) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -47,11 +48,11 @@ public class AssetResponseDTO {
         return companyName;
     }
 
-    public String getExpiredDate() {
+    public LocalDateTime getExpiredDate() {
         return expiredDate;
     }
 
-    public String getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 }

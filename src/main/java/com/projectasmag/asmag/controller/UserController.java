@@ -7,6 +7,9 @@ import com.projectasmag.asmag.dto.auth.RegisterRequestDTO;
 import com.projectasmag.asmag.dto.user.ChangePasswordRequestDTO;
 import com.projectasmag.asmag.dto.user.UpdateUserRequestDTO;
 import com.projectasmag.asmag.dto.user.UserResponseDTO;
+import com.projectasmag.asmag.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,30 +17,41 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     @GetMapping
-    public List<UserResponseDTO> getUsers() {
-        return null;
+    public ResponseEntity<List<UserResponseDTO>> getUsers() {
+        List<UserResponseDTO> response = userService.getUsers();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    public UserResponseDTO getUser(@PathVariable String id) {
-        return null;
+    public ResponseEntity<UserResponseDTO> getUser(@PathVariable String id) {
+        UserResponseDTO response = userService.getUser(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("{id}")
-    public UpdateResponseDTO updateUser(@PathVariable String id,
+    public ResponseEntity<UpdateResponseDTO> updateUser(@PathVariable String id,
                                         @RequestBody UpdateUserRequestDTO updateUserRequest) {
-        return null;
+        UpdateResponseDTO response = userService.updateUser(id, updateUserRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("register")
-    public CreateResponseDTO register(@RequestBody RegisterRequestDTO request) {
-        return null;
+    public ResponseEntity<CreateResponseDTO> register(@RequestBody RegisterRequestDTO request) {
+        CreateResponseDTO response = userService.register(request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @DeleteMapping("{id}")
-    public DeleteResponseDTO deleteUser(@PathVariable String id) {
-        return null;
+    public ResponseEntity<DeleteResponseDTO> deleteUser(@PathVariable String id) {
+        DeleteResponseDTO response = userService.deleteUser(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PatchMapping("change-password")

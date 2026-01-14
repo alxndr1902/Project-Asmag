@@ -1,11 +1,11 @@
 package com.projectasmag.asmag.service;
 
-import com.projectasmag.asmag.dto.asset.AssetStatusResponseDTO;
+import com.projectasmag.asmag.dto.asset.AssetTypeResponseDTO;
 
 import java.util.List;
 
 public interface AssetTypeService {
-    List<AssetStatusResponseDTO> getAssetStatus();
+    List<AssetTypeResponseDTO> getAssetStatus();
 
-    AssetStatusResponseDTO getAssetStatus(String assetId);
+    AssetTypeResponseDTO getAssetStatus(String assetId);
 }

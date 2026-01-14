@@ -1,21 +1,19 @@
 package com.projectasmag.asmag.dto;
 
-import java.util.UUID;
-
 public class UpdateResponseDTO {
-    private UUID id;
     private Integer version;
+    private String message;
 
-    public UpdateResponseDTO(UUID id, Integer version) {
-        this.id = id;
+    public UpdateResponseDTO(Integer version, String message) {
         this.version = version;
-    }
-
-    public UUID getId() {
-        return id;
+        this.message = message;
     }
 
     public Integer getVersion() {
         return version;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }

@@ -7,6 +7,9 @@ public class LoanResponseDTO {
     private String code;
     private String targetName;
 
+    public LoanResponseDTO() {
+    }
+
     public LoanResponseDTO(UUID id, String code, String targetName) {
         this.id = id;
         this.code = code;

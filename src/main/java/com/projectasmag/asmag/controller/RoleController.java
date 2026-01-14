@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("roles")
+@RequestMapping("api/roles")
 public class RoleController {
     private final RoleService roleService;
 
@@ -27,6 +27,7 @@ public class RoleController {
 
     @GetMapping("{id}")
     public ResponseEntity<RoleResponseDTO> getRole(@PathVariable String id) {
-        return null;
+        RoleResponseDTO response = roleService.getRole(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

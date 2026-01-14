@@ -1,19 +1,21 @@
 package com.projectasmag.asmag.dto.employee;
 
+import java.util.UUID;
+
 public class EmployeeResponseDTO {
-    private String id;
+    private UUID id;
     private String fullName;
     private String phoneNumber;
     private String companyName;
 
-    public EmployeeResponseDTO(String id, String fullName, String phoneNumber, String companyName) {
+    public EmployeeResponseDTO(UUID id, String fullName, String phoneNumber, String companyName) {
         this.id = id;
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.companyName = companyName;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 

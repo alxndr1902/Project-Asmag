@@ -9,6 +9,7 @@ import com.projectasmag.asmag.dto.user.UpdateUserRequestDTO;
 import com.projectasmag.asmag.dto.user.UserResponseDTO;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface UserService {
     List<UserResponseDTO> getUsers();

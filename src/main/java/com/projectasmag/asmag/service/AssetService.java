@@ -16,7 +16,7 @@ public interface AssetService {
 
     CreateResponseDTO createAsset(CreateAssetRequestDTO request);
 
-    UpdateResponseDTO updateAsset(UpdateAssetRequestDTO request);
+    UpdateResponseDTO updateAsset(String id, UpdateAssetRequestDTO request);
 
     DeleteResponseDTO deleteAsset(String id);
 }

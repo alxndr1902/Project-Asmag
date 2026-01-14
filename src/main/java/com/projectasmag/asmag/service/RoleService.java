@@ -8,5 +8,5 @@ import java.util.UUID;
 public interface RoleService {
     List<RoleResponseDTO> getRoles();
 
-    RoleResponseDTO getRole(UUID id);
+    RoleResponseDTO getRole(String id);
 }

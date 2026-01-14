@@ -1,10 +1,12 @@
 package com.projectasmag.asmag.dto.loan;
 
+import java.time.LocalDateTime;
+
 public class LoanDetailResponseDTO {
     private String assetName;
-    private String returnDate;
+    private LocalDateTime returnDate;
 
-    public LoanDetailResponseDTO(String assetName, String returnDate) {
+    public LoanDetailResponseDTO(String assetName, LocalDateTime returnDate) {
         this.assetName = assetName;
         this.returnDate = returnDate;
     }
@@ -13,7 +15,7 @@ public class LoanDetailResponseDTO {
         return assetName;
     }
 
-    public String getReturnDate() {
+    public LocalDateTime getReturnDate() {
         return returnDate;
     }
 }
