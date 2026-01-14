@@ -21,9 +21,6 @@ public class LoanDetail extends BaseModel {
     @Column(name = "return_date")
     private LocalDateTime returnDate;
 
-    public LoanDetail() {
-    }
-
     public Loan getLoan() {
         return loan;
     }

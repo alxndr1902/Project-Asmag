@@ -14,9 +14,6 @@ public class Role extends BaseModel {
     @Column(name = "name", length = 20, unique = true, nullable = false)
     private String name;
 
-    public Role() {
-    }
-
     public String getCode() {
         return code;
     }

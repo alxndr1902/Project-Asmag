@@ -19,9 +19,6 @@ public class Employee extends BaseModel {
     @Column(length = 20, nullable = false, unique = true)
     private String identificationNumber;
 
-    public Employee() {
-    }
-
     public Company getCompany() {
         return company;
     }

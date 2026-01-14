@@ -14,9 +14,6 @@ public class AssetType extends BaseModel {
     @Column(length = 20, nullable = false, unique = true)
     private String code;
 
-    public AssetType() {
-    }
-
     public String getName() {
         return name;
     }

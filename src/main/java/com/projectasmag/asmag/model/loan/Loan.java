@@ -33,9 +33,6 @@ public class Loan extends BaseModel {
     @OneToMany(mappedBy = "loan", cascade = CascadeType.ALL)
     private List<LoanDetail> loanDetails;
 
-    public Loan() {
-    }
-
     public String getCode() {
         return code;
     }

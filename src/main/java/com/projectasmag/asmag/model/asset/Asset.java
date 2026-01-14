@@ -30,9 +30,6 @@ public class Asset extends BaseModel {
     @Column
     private LocalDateTime expiredDate;
 
-    public Asset() {
-    }
-
     public String getCode() {
         return code;
     }

@@ -14,9 +14,6 @@ public class Location extends BaseModel {
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
-    public Location() {
-    }
-
     public String getName() {
         return name;
     }

@@ -16,9 +16,6 @@ public class AssetStatus extends BaseModel {
     @Column(length = 20, nullable = false, unique = true)
     private String code;
 
-    public AssetStatus() {
-    }
-
     public String getName() {
         return name;
     }
