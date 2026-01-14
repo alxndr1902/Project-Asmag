@@ -5,10 +5,10 @@ import com.projectasmag.asmag.model.asset.Asset;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
-@Table(name = "loan_details")
+@Table(name = "loan_details",
+    uniqueConstraints = @UniqueConstraint(columnNames = {"asset_id", "loan_id"}))
 public class LoanDetail extends BaseModel {
     @ManyToOne
     @JoinColumn(name = "loan_id", nullable = false)
@@ -20,9 +20,6 @@ public class LoanDetail extends BaseModel {
 
     @Column(name = "return_date")
     private LocalDateTime returnDate;
-
-    public LoanDetail() {
-    }
 
     public Loan getLoan() {
         return loan;

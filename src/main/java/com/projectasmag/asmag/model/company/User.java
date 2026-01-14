@@ -20,9 +20,6 @@ public class User extends BaseModel {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    public User() {
-    }
-
     public Employee getEmployee() {
         return employee;
     }

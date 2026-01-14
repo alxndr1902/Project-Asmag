@@ -27,11 +27,8 @@ public class Asset extends BaseModel {
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
-    @Column(name = "expired_date")
+    @Column
     private LocalDateTime expiredDate;
-
-    public Asset() {
-    }
 
     public String getCode() {
         return code;
@@ -75,9 +72,5 @@ public class Asset extends BaseModel {
 
     public LocalDateTime getExpiredDate() {
         return expiredDate;
-    }
-
-    public void setExpiredDate(LocalDateTime expiredDate) {
-        this.expiredDate = expiredDate;
     }
 }

@@ -4,6 +4,7 @@ import com.projectasmag.asmag.dto.CreateResponseDTO;
 import com.projectasmag.asmag.dto.UpdateResponseDTO;
 import com.projectasmag.asmag.dto.company.CompanyResponseDTO;
 import com.projectasmag.asmag.dto.company.CreateCompanyRequestDTO;
+import com.projectasmag.asmag.dto.company.UpdateCompanyRequestDTO;
 import com.projectasmag.asmag.service.CompanyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class CompanyController {
 
     @PutMapping("{id}")
     public ResponseEntity<UpdateResponseDTO> updateCompany(@PathVariable String id,
-                                                           @RequestBody CreateCompanyRequestDTO request) {
+                                                           @RequestBody UpdateCompanyRequestDTO request) {
         UpdateResponseDTO response = companyService.updateCompany(id, request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

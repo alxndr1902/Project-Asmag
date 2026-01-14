@@ -1,9 +1,9 @@
 package com.projectasmag.asmag.model.company;
 
 import com.projectasmag.asmag.model.BaseModel;
-import jakarta.persistence.*;
-
-import java.util.List;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "roles")
@@ -14,18 +14,8 @@ public class Role extends BaseModel {
     @Column(name = "name", length = 20, unique = true, nullable = false)
     private String name;
 
-    @OneToMany
-    private List<User> users;
-
-    public Role() {
-    }
-
     public String getCode() {
         return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public String getName() {

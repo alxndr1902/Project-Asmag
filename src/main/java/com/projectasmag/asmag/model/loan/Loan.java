@@ -8,7 +8,6 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "loans")
@@ -16,7 +15,7 @@ public class Loan extends BaseModel {
     @Column(length = 20, nullable = false, unique = true)
     private String code;
 
-    @Column(name = "loan_date", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime loanDate;
 
     @ManyToOne
@@ -31,11 +30,8 @@ public class Loan extends BaseModel {
     @JoinColumn(name = "employee_target_id")
     private Employee employeeTarget;
 
-    @OneToMany
+    @OneToMany(mappedBy = "loan", cascade = CascadeType.ALL)
     private List<LoanDetail> loanDetails;
-
-    public Loan() {
-    }
 
     public String getCode() {
         return code;

@@ -2,32 +2,5 @@ package com.projectasmag.asmag.dto.employee;
 
 import java.util.UUID;
 
-public class EmployeeResponseDTO {
-    private UUID id;
-    private String fullName;
-    private String phoneNumber;
-    private String companyName;
-
-    public EmployeeResponseDTO(UUID id, String fullName, String phoneNumber, String companyName) {
-        this.id = id;
-        this.fullName = fullName;
-        this.phoneNumber = phoneNumber;
-        this.companyName = companyName;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
+public record EmployeeResponseDTO(UUID id, String fullName, String phoneNumber, String companyName, Integer version) {
 }

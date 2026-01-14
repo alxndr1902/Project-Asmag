@@ -3,7 +3,6 @@ package com.projectasmag.asmag.model.asset;
 import com.projectasmag.asmag.model.BaseModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import java.util.List;
@@ -16,12 +15,6 @@ public class AssetStatus extends BaseModel {
 
     @Column(length = 20, nullable = false, unique = true)
     private String code;
-
-    @OneToMany
-    private List<Asset> assets;
-
-    public AssetStatus() {
-    }
 
     public String getName() {
         return name;
@@ -37,13 +30,5 @@ public class AssetStatus extends BaseModel {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public List<Asset> getAssets() {
-        return assets;
-    }
-
-    public void setAssets(List<Asset> assets) {
-        this.assets = assets;
     }
 }

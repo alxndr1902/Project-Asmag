@@ -1,21 +1,7 @@
 package com.projectasmag.asmag.dto.loan;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-public class LoanDetailResponseDTO {
-    private String assetName;
-    private LocalDateTime returnDate;
-
-    public LoanDetailResponseDTO(String assetName, LocalDateTime returnDate) {
-        this.assetName = assetName;
-        this.returnDate = returnDate;
-    }
-
-    public String getAssetName() {
-        return assetName;
-    }
-
-    public LocalDateTime getReturnDate() {
-        return returnDate;
-    }
+public record LoanDetailResponseDTO(UUID id, String assetName, LocalDateTime returnDate, Integer version) {
 }

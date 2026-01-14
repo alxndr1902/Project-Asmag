@@ -13,16 +13,16 @@ public abstract class BaseModel {
     @Id
     private UUID id;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "created_by", nullable = false)
+    @Column(nullable = false)
     private UUID createdBy;
 
-    @Column(name = "updated_at")
+    @Column
     private LocalDateTime updatedAt;
 
-    @Column(name = "updated_by")
+    @Column
     private UUID updatedBy;
 
     @Version
