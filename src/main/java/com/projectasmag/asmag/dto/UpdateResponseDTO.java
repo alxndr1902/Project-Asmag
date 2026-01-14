@@ -1,19 +1,4 @@
 package com.projectasmag.asmag.dto;
 
-public class UpdateResponseDTO {
-    private final Integer version;
-    private final String message;
-
-    public UpdateResponseDTO(Integer version, String message) {
-        this.version = version;
-        this.message = message;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public String getMessage() {
-        return message;
-    }
+public record UpdateResponseDTO(Integer version, String message) {
 }
