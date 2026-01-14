@@ -11,13 +11,13 @@ public abstract class BaseService {
     @PersistenceContext
     protected EntityManager em;
 
-    public <T extends BaseModel> void createBaseModel(T model) {
+    protected <T extends BaseModel> void createBaseModel(T model) {
         model.setId(UUID.randomUUID());
         model.setCreatedAt(LocalDateTime.now());
         model.setCreatedBy(UUID.randomUUID());
     }
 
-    public <T extends BaseModel> void update(T model) {
+    protected <T extends BaseModel> void update(T model) {
         model.setUpdatedAt(LocalDateTime.now());
         model.setUpdatedBy(UUID.randomUUID());
     }
