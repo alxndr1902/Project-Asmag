@@ -4,6 +4,9 @@ import com.projectasmag.asmag.dto.CreateResponseDTO;
 import com.projectasmag.asmag.dto.DeleteResponseDTO;
 import com.projectasmag.asmag.dto.UpdateResponseDTO;
 import com.projectasmag.asmag.dto.asset.*;
+import com.projectasmag.asmag.service.AssetService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,29 +14,40 @@ import java.util.List;
 @RestController
 @RequestMapping("api/assets")
 public class AssetController {
+    private final AssetService assetService;
+
+    public AssetController(AssetService assetService) {
+        this.assetService = assetService;
+    }
+
     @GetMapping
-    public List<AssetResponseDTO> getAssets() {
-        return null;
+    public ResponseEntity<List<AssetResponseDTO>> getAssets() {
+        List<AssetResponseDTO> response = assetService.getAssets();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    public AssetResponseDTO getAsset(@PathVariable String id) {
-        return null;
+    public ResponseEntity<AssetResponseDTO> getAsset(@PathVariable String id) {
+        AssetResponseDTO response = assetService.getAsset(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping
-    public CreateResponseDTO createAsset(@RequestBody CreateAssetRequestDTO request) {
-        return null;
+    public ResponseEntity<CreateResponseDTO> createAsset(@RequestBody CreateAssetRequestDTO request) {
+        CreateResponseDTO response = assetService.createAsset(request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
-    public UpdateResponseDTO updateAsset(@PathVariable String id,
+    public ResponseEntity<UpdateResponseDTO> updateAsset(@PathVariable String id,
                                          @RequestBody UpdateAssetRequestDTO request) {
-        return null;
+        UpdateResponseDTO response = assetService.updateAsset(id, request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
-    public DeleteResponseDTO deleteAsset(@PathVariable String id) {
-        return null;
+    public ResponseEntity<DeleteResponseDTO> deleteAsset(@PathVariable String id) {
+        DeleteResponseDTO response = assetService.deleteAsset(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

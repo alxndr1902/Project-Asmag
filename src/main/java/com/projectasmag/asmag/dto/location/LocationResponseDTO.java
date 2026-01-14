@@ -1,17 +1,19 @@
 package com.projectasmag.asmag.dto.location;
 
+import java.util.UUID;
+
 public class LocationResponseDTO {
-    private String id;
+    private UUID id;
     private String name;
     private String companyName;
 
-    public LocationResponseDTO(String id, String name, String companyName) {
+    public LocationResponseDTO(UUID id, String name, String companyName) {
         this.id = id;
         this.name = name;
         this.companyName = companyName;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 

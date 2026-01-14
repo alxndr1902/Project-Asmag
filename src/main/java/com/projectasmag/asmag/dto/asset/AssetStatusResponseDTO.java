@@ -1,15 +1,17 @@
 package com.projectasmag.asmag.dto.asset;
 
+import java.util.UUID;
+
 public class AssetStatusResponseDTO {
-    private String id;
+    private UUID id;
     private String name;
 
-    public AssetStatusResponseDTO(String id, String name) {
+    public AssetStatusResponseDTO(UUID id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
