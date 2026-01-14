@@ -55,7 +55,7 @@ public class LocationServiceImpl extends BaseService implements LocationService 
         location.setCompany(company);
         createBaseModel(location);
         locationDao.save(location);
-        return new CreateResponseDTO(company.getId(), Message.CREATED.name());
+        return new CreateResponseDTO(company.getId(), Message.CREATED.getName());
     }
 
     @Override
@@ -69,7 +69,8 @@ public class LocationServiceImpl extends BaseService implements LocationService 
             location.setName(request.getName());
             update(location);
             locationDao.update(location);
-            return new UpdateResponseDTO(location.getVersion(), Message.CREATED.name());
+            em.flush();
+            return new UpdateResponseDTO(location.getVersion(), Message.CREATED.getName());
         }
         throw new RuntimeException("Request version does not match data version");
     }

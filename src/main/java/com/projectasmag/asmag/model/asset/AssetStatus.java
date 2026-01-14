@@ -3,7 +3,6 @@ package com.projectasmag.asmag.model.asset;
 import com.projectasmag.asmag.model.BaseModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import java.util.List;

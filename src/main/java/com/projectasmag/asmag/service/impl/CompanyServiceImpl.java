@@ -6,6 +6,7 @@ import com.projectasmag.asmag.dto.CreateResponseDTO;
 import com.projectasmag.asmag.dto.UpdateResponseDTO;
 import com.projectasmag.asmag.dto.company.CompanyResponseDTO;
 import com.projectasmag.asmag.dto.company.CreateCompanyRequestDTO;
+import com.projectasmag.asmag.dto.company.UpdateCompanyRequestDTO;
 import com.projectasmag.asmag.model.company.Company;
 import com.projectasmag.asmag.service.BaseService;
 import com.projectasmag.asmag.service.CompanyService;
@@ -46,12 +47,12 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
         company.setPhoneNumber(request.getPhoneNumber());
         createBaseModel(company);
         companyDao.save(company);
-        return new CreateResponseDTO(company.getId(), Message.CREATED.name());
+        return new CreateResponseDTO(company.getId(), Message.CREATED.getName());
     }
 
     @Override
     @Transactional
-    public UpdateResponseDTO updateCompany(String id, CreateCompanyRequestDTO request) {
+    public UpdateResponseDTO updateCompany(String id, UpdateCompanyRequestDTO request) {
         Company company = companyDao.findById(UUID.fromString(id)).orElseThrow(
                 () -> new RuntimeException("No Company Found")
         );
@@ -59,7 +60,8 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
         company.setPhoneNumber(request.getPhoneNumber());
         update(company);
         companyDao.update(company);
-        return new UpdateResponseDTO(company.getVersion(), Message.UPDATED.name());
+        em.flush();
+        return new UpdateResponseDTO(company.getVersion(), Message.UPDATED.getName());
     }
 
     private CompanyResponseDTO mapToCompanyResponseDTO(Company company) {

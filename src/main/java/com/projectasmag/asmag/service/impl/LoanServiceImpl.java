@@ -93,7 +93,7 @@ public class LoanServiceImpl extends BaseService implements LoanService {
             update(loanDetail);
             loanDetailDao.update(loanDetail);
         }
-
+        em.flush();
         return new UpdateResponseDTO(loan.getVersion(), Message.UPDATED.name());
     }
 
@@ -163,16 +163,14 @@ public class LoanServiceImpl extends BaseService implements LoanService {
     }
 
     private void createLoanDetails(CreateLoanRequestDTO request, Loan loan) {
-        request.getAssetIdList().stream()
-                .map(id -> {
-                    LoanDetail loanDetail = new LoanDetail();
-                    loanDetail.setLoan(loan);
-                    Asset asset = assetDao.findById(UUID.fromString(id)).orElseThrow(
-                            () -> new RuntimeException("No Asset Found")
-                    );
-                    loanDetail.setAsset(asset);
-                    loanDetailDao.save(loanDetail);
-                    return loanDetail;
-                });
+        for (String id : request.getAssetIdList()) {
+            Asset asset = assetDao.findById(UUID.fromString(id)).orElseThrow(
+                    () -> new RuntimeException("No Asset Found")
+            );
+            LoanDetail loanDetail = new LoanDetail();
+            loanDetail.setAsset(asset);
+            loanDetail.setLoan(loan);
+            loanDetailDao.save(loanDetail);
+        }
     }
 }

@@ -4,6 +4,7 @@ import com.projectasmag.asmag.dto.CreateResponseDTO;
 import com.projectasmag.asmag.dto.UpdateResponseDTO;
 import com.projectasmag.asmag.dto.company.CompanyResponseDTO;
 import com.projectasmag.asmag.dto.company.CreateCompanyRequestDTO;
+import com.projectasmag.asmag.dto.company.UpdateCompanyRequestDTO;
 
 import java.util.List;
 
@@ -14,5 +15,5 @@ public interface CompanyService {
 
     CreateResponseDTO createCompany(CreateCompanyRequestDTO request);
 
-    UpdateResponseDTO updateCompany(String id, CreateCompanyRequestDTO request);
+    UpdateResponseDTO updateCompany(String id, UpdateCompanyRequestDTO request);
 }

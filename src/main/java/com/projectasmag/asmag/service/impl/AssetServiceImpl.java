@@ -61,7 +61,7 @@ public class AssetServiceImpl extends BaseService implements AssetService {
         Asset asset = mapToAsset(request);
         createBaseModel(asset);
         assetDao.save(asset);
-        return new CreateResponseDTO(asset.getId(), Message.CREATED.name());
+        return new CreateResponseDTO(asset.getId(), Message.CREATED.getName());
     }
 
     @Transactional
@@ -76,7 +76,8 @@ public class AssetServiceImpl extends BaseService implements AssetService {
             asset.setName(request.getName());
             update(asset);
             assetDao.update(asset);
-            return new UpdateResponseDTO(asset.getVersion(), Message.UPDATED.name());
+            em.flush();
+            return new UpdateResponseDTO(asset.getVersion(), Message.UPDATED.getName());
         }
         throw new RuntimeException("Request version does not match data version");
     }

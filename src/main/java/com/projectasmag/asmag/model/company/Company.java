@@ -1,12 +1,9 @@
 package com.projectasmag.asmag.model.company;
 
 import com.projectasmag.asmag.model.BaseModel;
-import com.projectasmag.asmag.model.asset.Asset;
-import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "companies")

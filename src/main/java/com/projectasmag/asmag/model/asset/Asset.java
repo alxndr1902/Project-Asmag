@@ -27,7 +27,7 @@ public class Asset extends BaseModel {
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
-    @Column(name = "expired_date")
+    @Column
     private LocalDateTime expiredDate;
 
     public Asset() {

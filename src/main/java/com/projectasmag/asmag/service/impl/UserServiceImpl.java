@@ -62,7 +62,8 @@ public class UserServiceImpl extends BaseService implements UserService{
         user.setEmail(request.getEmail());
         update(user);
         userDao.update(user);
-        return new UpdateResponseDTO(user.getVersion(), Message.UPDATED.name());
+        em.flush();
+        return new UpdateResponseDTO(user.getVersion(), Message.UPDATED.getName());
     }
 
     @Transactional
@@ -71,7 +72,7 @@ public class UserServiceImpl extends BaseService implements UserService{
         User user = mapToUser(request);
         createBaseModel(user);
         userDao.insert(user);
-        return new CreateResponseDTO(user.getId(), "created");
+        return new CreateResponseDTO(user.getId(), Message.CREATED.getName());
     }
 
     @Transactional

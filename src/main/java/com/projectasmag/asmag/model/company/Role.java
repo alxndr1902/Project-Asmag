@@ -1,9 +1,9 @@
 package com.projectasmag.asmag.model.company;
 
 import com.projectasmag.asmag.model.BaseModel;
-import jakarta.persistence.*;
-
-import java.util.List;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "roles")

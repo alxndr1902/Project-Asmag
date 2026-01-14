@@ -70,6 +70,7 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
             employee.setPhoneNumber(request.getPhoneNumber());
             update(employee);
             employeeDao.update(employee);
+            em.flush();
             return new UpdateResponseDTO(employee.getVersion(), Message.UPDATED.name());
         } else {
         throw new RuntimeException("Version Mismatch");
