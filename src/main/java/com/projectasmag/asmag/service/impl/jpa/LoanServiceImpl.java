@@ -44,8 +44,7 @@ public class LoanServiceImpl extends BaseService implements LoanService {
     @Override
     public List<LoanResponseDTO> getLoans() {
         return loanRepository.findAll().stream()
-                .map(
-                        this::mapToLoanResponseDTO)
+                .map(this::mapToLoanResponseDTO)
                 .toList();
     }
 
@@ -62,30 +61,44 @@ public class LoanServiceImpl extends BaseService implements LoanService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public CreateLoanResponseDTO createLoan(CreateLoanRequestDTO request) {
-        if (isTargetNotMultiple(request)) {
-            Loan loan = new Loan();
-            loan.setLoanDate(LocalDateTime.now());
-            loan.setCode(generateRandomAlphaNumeric(20));
-            setTarget(request, loan);
-            createBaseModel(loan);
-            createLoanDetails(request, loan);
-            loanRepository.save(loan);
-            loanDetailRepository.saveAll(loan.getLoanDetails());
-            return new CreateLoanResponseDTO(loan.getId(), loan.getCode(), Message.CREATED.getName());
-        } else {
-            throw new RuntimeException("Only one target allowed");
+        if (!hasSingleTarget(request)) {
+            throw new RuntimeException("Only One Target Allowed");
         }
+
+        Loan loan = new Loan();
+        loan.setLoanDate(LocalDateTime.now());
+        loan.setCode(generateRandomAlphaNumeric(20));
+        setTarget(request, loan);
+        createBaseModel(loan);
+        createLoanDetails(request, loan);
+        loanRepository.save(loan);
+        loanDetailRepository.saveAll(loan.getLoanDetails());
+        return new CreateLoanResponseDTO(loan.getId(), loan.getCode(), Message.CREATED.getName());
     }
 
     @Override
     @Transactional(rollbackOn = Exception.class)
     public UpdateResponseDTO returnAsset(String id, List<String> loanDetailIdList) {
-        Loan loan = loanRepository.findById(UUID.fromString(id))
+        UUID loanUUID = UUID.fromString(id);
+        List<UUID> loanDetailUUIDs = loanDetailIdList.stream()
+                .map(UUID::fromString)
+                .toList();
+
+        Loan loan = loanRepository.findById(loanUUID)
                 .orElseThrow(() -> new RuntimeException("No Loan Found"));
         update(loan);
 
-        loanRepository.saveAndFlush(loan);
+        List<LoanDetail> loanDetails = loanDetailRepository.findAllById(loanDetailUUIDs);
+
+        validateLoanDetails(loan, loanDetails, loanDetailUUIDs);
+
         LocalDateTime now = LocalDateTime.now();
+        loanDetails.forEach(loanDetail -> {
+            loanDetail.setReturnDate(now);
+            update(loanDetail);
+        });
+
+        loanRepository.saveAndFlush(loan);
         for (String loanDetailId : loanDetailIdList) {
             LoanDetail loanDetail = loanDetailRepository.findById(UUID.fromString(loanDetailId)).orElseThrow(
                     () -> new RuntimeException("No Loan Detail Found")
@@ -98,6 +111,23 @@ public class LoanServiceImpl extends BaseService implements LoanService {
             loanDetailRepository.saveAndFlush(loanDetail);
         }
         return new UpdateResponseDTO(loan.getVersion(), Message.UPDATED.name());
+    }
+
+    private void validateLoanDetails(Loan loan, List<LoanDetail> loanDetails, List<UUID> loanDetailUUIDs) {
+        if (loanDetails.size() != loanDetailUUIDs.size()) {
+            throw new LoanDetailNotFoundException(
+                    loanDetailUUIDs.stream().filter(
+                            id -> loanDetails.stream().noneMatch(d -> d.getId().equals(id))
+                    ).findFirst().orElse(null)
+            );
+        }
+
+        boolean mismatch = loanDetails.stream()
+                .anyMatch(loanDetail -> !loanDetail.getLoan().getId().equals(loan.getId()));
+
+        if (mismatch) {
+            throw new RuntimeException("Loan Detail Id does not match Loan ID");
+        }
     }
 
     private LoanResponseDTO mapToLoanResponseDTO(Loan loan) {
@@ -135,7 +165,7 @@ public class LoanServiceImpl extends BaseService implements LoanService {
         return result.toString();
     }
 
-    private boolean isTargetNotMultiple(CreateLoanRequestDTO request) {
+    private boolean hasSingleTarget(CreateLoanRequestDTO request) {
         int filledCount = 0;
         if (request.getAssetTargetId() != null) filledCount++;
         if (request.getEmployeeTargetId() != null) filledCount++;
