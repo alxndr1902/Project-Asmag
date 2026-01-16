@@ -7,6 +7,7 @@ import com.projectasmag.asmag.dto.loan.CreateLoanRequestDTO;
 import com.projectasmag.asmag.dto.loan.CreateLoanResponseDTO;
 import com.projectasmag.asmag.dto.loan.LoanDetailResponseDTO;
 import com.projectasmag.asmag.dto.loan.LoanResponseDTO;
+import com.projectasmag.asmag.exceptiohandler.exception.DataNotFoundException;
 import com.projectasmag.asmag.model.asset.Asset;
 import com.projectasmag.asmag.model.company.Employee;
 import com.projectasmag.asmag.model.company.Location;
@@ -52,7 +53,7 @@ public class LoanServiceImpl extends BaseService implements LoanService {
     @Override
     public List<LoanDetailResponseDTO> getLoanById(String id) {
         Loan loan = loanRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new RuntimeException("No Loan Found"));
+                .orElseThrow(() -> new DataNotFoundException("Loan", id));
 
         return loan.getLoanDetails().stream()
                 .map(this::mapToLoanDetailsResponseDto)
@@ -81,7 +82,7 @@ public class LoanServiceImpl extends BaseService implements LoanService {
     @Transactional(rollbackOn = Exception.class)
     public UpdateResponseDTO returnAsset(String id, List<String> loanDetailIdList) {
         Loan loan = loanRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new RuntimeException("No Loan Found"));
+                .orElseThrow(() -> new DataNotFoundException("Loan", id));
         update(loan);
 
         loanRepository.saveAndFlush(loan);

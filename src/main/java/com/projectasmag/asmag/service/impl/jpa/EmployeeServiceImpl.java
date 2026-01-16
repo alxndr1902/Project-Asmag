@@ -7,6 +7,7 @@ import com.projectasmag.asmag.dto.UpdateResponseDTO;
 import com.projectasmag.asmag.dto.employee.CreateEmployeeRequestDTO;
 import com.projectasmag.asmag.dto.employee.EmployeeResponseDTO;
 import com.projectasmag.asmag.dto.employee.UpdateEmployeeRequestDTO;
+import com.projectasmag.asmag.exceptiohandler.exception.DataNotFoundException;
 import com.projectasmag.asmag.model.company.Company;
 import com.projectasmag.asmag.model.company.Employee;
 import com.projectasmag.asmag.repository.CompanyRepository;
@@ -40,14 +41,14 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
     @Override
     public EmployeeResponseDTO getEmployee(String id) {
         Employee employee = employeeRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new RuntimeException("No Employee Found"));
+                .orElseThrow(() -> new DataNotFoundException("Employee", id));
         return mapToEmployeeResponseDTO(employee);
     }
 
     @Override
     public CreateResponseDTO createEmployee(CreateEmployeeRequestDTO request) {
         Company company = companyRepository.findById(UUID.fromString(request.getCompanyId()))
-                .orElseThrow(() -> new RuntimeException("No Employee Found"));
+                .orElseThrow(() -> new DataNotFoundException("Company", request.getCompanyId()));
         Employee employee = new Employee();
         employee.setFullName(request.getFullName());
         employee.setCompany(company);
@@ -61,7 +62,7 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
     @Override
     public UpdateResponseDTO updateEmployee(String id, UpdateEmployeeRequestDTO request) {
         Employee employee = employeeRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new RuntimeException("No Employee Found"));
+                .orElseThrow(() -> new DataNotFoundException("Employee", id));
         if (employee.getVersion().equals(request.getVersion())) {
             employee.setFullName(request.getFullName());
             employee.setPhoneNumber(request.getPhoneNumber());
@@ -76,7 +77,7 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
     @Override
     public DeleteResponseDTO deleteEmployee(String id) {
         Employee employee = employeeRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new RuntimeException("No Employee Found"));
+                .orElseThrow(() -> new DataNotFoundException("Employee", id));
         employeeRepository.deleteById(employee.getId());
         return new DeleteResponseDTO(Message.DELETED.name());
     }

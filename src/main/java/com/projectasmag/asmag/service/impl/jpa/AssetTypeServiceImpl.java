@@ -1,6 +1,7 @@
 package com.projectasmag.asmag.service.impl.jpa;
 
 import com.projectasmag.asmag.dto.asset.AssetTypeResponseDTO;
+import com.projectasmag.asmag.exceptiohandler.exception.DataNotFoundException;
 import com.projectasmag.asmag.model.asset.AssetType;
 import com.projectasmag.asmag.repository.AssetTypeRepository;
 import com.projectasmag.asmag.service.AssetTypeService;
@@ -27,9 +28,9 @@ public class AssetTypeServiceImpl implements AssetTypeService {
     }
 
     @Override
-    public AssetTypeResponseDTO getAssetStatus(String assetId) {
-        AssetType assetType = assetTypeRepository.findById(UUID.fromString(assetId))
-                .orElseThrow(() -> new RuntimeException("No Asset Type Found"));
+    public AssetTypeResponseDTO getAssetStatus(String id) {
+        AssetType assetType = assetTypeRepository.findById(UUID.fromString(id))
+                .orElseThrow(() -> new DataNotFoundException("Asset Type", id));
         return mapToAssetTypeResponseDTO(assetType);
     }
 

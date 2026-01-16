@@ -7,6 +7,7 @@ import com.projectasmag.asmag.dto.UpdateResponseDTO;
 import com.projectasmag.asmag.dto.asset.AssetResponseDTO;
 import com.projectasmag.asmag.dto.asset.CreateAssetRequestDTO;
 import com.projectasmag.asmag.dto.asset.UpdateAssetRequestDTO;
+import com.projectasmag.asmag.exceptiohandler.exception.DataNotFoundException;
 import com.projectasmag.asmag.model.asset.Asset;
 import com.projectasmag.asmag.model.asset.AssetStatus;
 import com.projectasmag.asmag.model.asset.AssetType;
@@ -48,7 +49,7 @@ public class AssetServiceImpl extends BaseService implements AssetService {
     @Override
     public AssetResponseDTO getAsset(String id) {
         Asset asset = assetRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new RuntimeException("Asset not found"));
+                .orElseThrow(() -> new DataNotFoundException("Asset", id));
         return mapToAssetResponseDTO(asset);
     }
 
@@ -63,7 +64,7 @@ public class AssetServiceImpl extends BaseService implements AssetService {
     @Override
     public UpdateResponseDTO updateAsset(String id, UpdateAssetRequestDTO request) {
         Asset asset = assetRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new RuntimeException("No Asset Found"));
+                .orElseThrow(() -> new DataNotFoundException("Asset", id));
 
         if (asset.getVersion().equals(request.getVersion())) {
             asset.setCode(request.getCode());
@@ -78,7 +79,7 @@ public class AssetServiceImpl extends BaseService implements AssetService {
     @Override
     public DeleteResponseDTO deleteAsset(String id) {
         Asset asset = assetRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new RuntimeException("No Asset Found"));
+                .orElseThrow(() -> new DataNotFoundException("Asset", id));
 
         assetRepository.deleteById(asset.getId());
         return new DeleteResponseDTO(Message.DELETED.name());
@@ -95,13 +96,13 @@ public class AssetServiceImpl extends BaseService implements AssetService {
 
     private Asset mapToAsset(CreateAssetRequestDTO request) {
         AssetType assetType = assetTypeRepository.findById(UUID.fromString(request.getTypeId())).orElseThrow(
-                () -> new RuntimeException("No Asset Type Found")
+                () -> new DataNotFoundException("Asset Type", request.getTypeId())
         );
         AssetStatus assetStatus = assetStatusRepository.findById(UUID.fromString(request.getStatusId())).orElseThrow(
-                () -> new RuntimeException("No Asset Status Found")
+                () -> new DataNotFoundException("Asset Status", request.getStatusId())
         );
         Company company = companyRepository.findById(UUID.fromString(request.getCompanyId())).orElseThrow(
-                () -> new RuntimeException("No Company Found")
+                () -> new DataNotFoundException("Company", request.getCompanyId())
         );
         Asset asset = new Asset();
         asset.setType(assetType);
