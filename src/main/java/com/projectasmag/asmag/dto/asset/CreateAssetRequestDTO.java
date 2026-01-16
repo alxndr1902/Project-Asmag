@@ -1,11 +1,31 @@
 package com.projectasmag.asmag.dto.asset;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class CreateAssetRequestDTO {
+    @NotBlank
+    @Size(max = 10)
     private String code;
+
+    @NotBlank
+    @Size(max = 100)
     private String name;
+
+    @NotBlank
+    @Size(max = 36)
     private String typeId;
+
+    @NotBlank
+    @Size(max = 36)
     private String statusId;
+
+    @NotBlank
+    @Size(max = 36)
     private String companyId;
+
+    @NotBlank
+    @Size(max = 36)
     private String expiredDate;
 
     public CreateAssetRequestDTO() {

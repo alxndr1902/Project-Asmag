@@ -1,8 +1,18 @@
 package com.projectasmag.asmag.dto.user;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class ChangePasswordRequestDTO {
+    @NotBlank
     private String oldPassword;
+
+    @NotBlank
+    @Size(max = 200)
     private String newPassword;
+
+    @NotBlank
+    @Size(max = 200)
     private String confirmPassword;
 
     public ChangePasswordRequestDTO() {

@@ -1,7 +1,13 @@
 package com.projectasmag.asmag.dto.location;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class UpdateLocationRequestDTO {
+    @Size(max = 100)
     private String name;
+
+    @NotNull
     private Integer version;
 
     public UpdateLocationRequestDTO(String name, Integer version) {

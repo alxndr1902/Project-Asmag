@@ -1,7 +1,15 @@
 package com.projectasmag.asmag.dto.user;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class UpdateUserRequestDTO {
+    @NotBlank
+    @Size(max = 50)
     private String email;
+
+    @NotNull
     private Integer version;
 
     public UpdateUserRequestDTO() {

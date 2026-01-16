@@ -1,7 +1,12 @@
 package com.projectasmag.asmag.dto.auth;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class LoginRequestDTO {
+    @NotBlank
     private String email;
+
+    @NotBlank
     private String password;
 
     public LoginRequestDTO() {

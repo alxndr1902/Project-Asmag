@@ -1,10 +1,30 @@
+
 package com.projectasmag.asmag.dto.user;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class RegisterRequestDTO {
+    @NotBlank
+    @Size(max = 36)
     private String employeeId;
+
+    @Email
+    @NotBlank
+    @Size(max = 50)
     private String email;
+
+    @NotBlank
+    @Size(max = 200)
     private String password;
+
+    @NotBlank
+    @Size(max = 200)
     private String confirmPassword;
+
+    @NotBlank
+    @Size(max = 36)
     private String roleId;
 
     public RegisterRequestDTO() {
