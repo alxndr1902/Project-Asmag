@@ -11,7 +11,7 @@ public class Company extends BaseModel {
     @Column(length = 100, nullable = false)
     private String name;
 
-    @Column(length = 200, nullable = false)
+    @Column(length = 20, nullable = false)
     private String phoneNumber;
 
     public String getName() {
