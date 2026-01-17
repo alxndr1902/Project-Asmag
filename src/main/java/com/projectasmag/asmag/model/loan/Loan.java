@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "loans")
@@ -31,7 +32,7 @@ public class Loan extends BaseModel {
     private Employee employeeTarget;
 
     @OneToMany(mappedBy = "loan", cascade = CascadeType.ALL)
-    private List<LoanDetail> loanDetails;
+    private Set<LoanDetail> loanDetails;
 
     public String getCode() {
         return code;
@@ -73,11 +74,11 @@ public class Loan extends BaseModel {
         this.employeeTarget = employeeTarget;
     }
 
-    public List<LoanDetail> getLoanDetails() {
+    public Set<LoanDetail> getLoanDetails() {
         return loanDetails;
     }
 
-    public void setLoanDetails(List<LoanDetail> loanDetails) {
+    public void setLoanDetails(Set<LoanDetail> loanDetails) {
         this.loanDetails = loanDetails;
     }
 }
