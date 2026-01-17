@@ -28,8 +28,9 @@ public class AssetStatusServiceImpl implements AssetStatusService {
 
     @Override
     public AssetStatusResponseDTO getAssetStatus(String id) {
-        AssetStatus assetStatus = assetStatusRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new DataNotFoundException("Asset", id));
+        UUID assetStatusId = UUID.fromString(id);
+        AssetStatus assetStatus = assetStatusRepository.findById(assetStatusId)
+                .orElseThrow(() -> new DataNotFoundException("Asset", assetStatusId));
         return mapToAssetStatusResponseDTO(assetStatus);
     }
 

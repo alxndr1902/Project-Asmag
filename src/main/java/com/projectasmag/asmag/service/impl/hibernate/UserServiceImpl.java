@@ -59,7 +59,7 @@ public class UserServiceImpl extends BaseService implements UserService{
         );
 
         user.setEmail(request.getEmail());
-        update(user);
+        prepareUpdate(user);
         userDao.update(user);
         em.flush();
         return new UpdateResponseDTO(user.getVersion(), Message.UPDATED.getName());
@@ -69,7 +69,7 @@ public class UserServiceImpl extends BaseService implements UserService{
     @Override
     public CreateResponseDTO register(RegisterRequestDTO request) {
         User user = mapToUser(request);
-        createBaseModel(user);
+        prepareCreate(user);
         userDao.insert(user);
         return new CreateResponseDTO(user.getId(), Message.CREATED.getName());
     }

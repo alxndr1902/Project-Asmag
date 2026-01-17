@@ -14,7 +14,6 @@ import com.projectasmag.asmag.model.company.Location;
 import com.projectasmag.asmag.service.BaseService;
 import com.projectasmag.asmag.service.LocationService;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
@@ -53,7 +52,7 @@ public class LocationServiceImpl extends BaseService implements LocationService 
         Location location = new Location();
         location.setName(request.getName());
         location.setCompany(company);
-        createBaseModel(location);
+        prepareCreate(location);
         locationDao.save(location);
         return new CreateResponseDTO(company.getId(), Message.CREATED.getName());
     }
@@ -67,7 +66,7 @@ public class LocationServiceImpl extends BaseService implements LocationService 
 
         if (location.getVersion().equals(request.getVersion())) {
             location.setName(request.getName());
-            update(location);
+            prepareUpdate(location);
             locationDao.update(location);
             em.flush();
             return new UpdateResponseDTO(location.getVersion(), Message.CREATED.getName());

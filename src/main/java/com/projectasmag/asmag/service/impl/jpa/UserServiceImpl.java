@@ -55,7 +55,7 @@ public class UserServiceImpl extends BaseService implements UserService{
                 .orElseThrow(() -> new DataNotFoundException("User", id));
 
         user.setEmail(request.getEmail());
-        update(user);
+        prepareUpdate(user);
         userRepository.saveAndFlush(user);
         return new UpdateResponseDTO(user.getVersion(), Message.UPDATED.getName());
     }
@@ -63,7 +63,7 @@ public class UserServiceImpl extends BaseService implements UserService{
     @Override
     public CreateResponseDTO register(RegisterRequestDTO request) {
         User user = mapToUser(request);
-        createBaseModel(user);
+        prepareCreate(user);
         userRepository.save(user);
         return new CreateResponseDTO(user.getId(), Message.CREATED.getName());
     }

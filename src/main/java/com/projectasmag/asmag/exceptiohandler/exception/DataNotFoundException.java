@@ -1,14 +1,16 @@
 package com.projectasmag.asmag.exceptiohandler.exception;
 
-public class DataNotFoundException extends RuntimeException {
-    private final String id;
+import java.util.UUID;
 
-    public DataNotFoundException(String message, String id) {
+public class DataNotFoundException extends RuntimeException {
+    private final UUID id;
+
+    public DataNotFoundException(String message, UUID id) {
         super(message);
         this.id = id;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 }

@@ -14,7 +14,6 @@ import com.projectasmag.asmag.model.company.Employee;
 import com.projectasmag.asmag.service.BaseService;
 import com.projectasmag.asmag.service.EmployeeService;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
@@ -66,7 +65,7 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
         if (employee.getVersion().equals(request.getVersion())) {
             employee.setFullName(request.getFullName());
             employee.setPhoneNumber(request.getPhoneNumber());
-            update(employee);
+            prepareUpdate(employee);
             employeeDao.update(employee);
             em.flush();
             return new UpdateResponseDTO(employee.getVersion(), Message.UPDATED.name());

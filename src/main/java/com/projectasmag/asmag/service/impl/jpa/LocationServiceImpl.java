@@ -14,7 +14,6 @@ import com.projectasmag.asmag.repository.CompanyRepository;
 import com.projectasmag.asmag.repository.LocationRepository;
 import com.projectasmag.asmag.service.BaseService;
 import com.projectasmag.asmag.service.LocationService;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,7 +50,7 @@ public class LocationServiceImpl extends BaseService implements LocationService 
         Location location = new Location();
         location.setName(request.getName());
         location.setCompany(company);
-        createBaseModel(location);
+        prepareCreate(location);
         locationRepository.save(location);
         return new CreateResponseDTO(company.getId(), Message.CREATED.getName());
     }
@@ -63,7 +62,7 @@ public class LocationServiceImpl extends BaseService implements LocationService 
 
         if (location.getVersion().equals(request.getVersion())) {
             location.setName(request.getName());
-            update(location);
+            prepareUpdate(location);
             locationRepository.saveAndFlush(location);
             return new UpdateResponseDTO(location.getVersion(), Message.CREATED.getName());
         }

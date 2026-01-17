@@ -11,7 +11,6 @@ import com.projectasmag.asmag.model.company.Company;
 import com.projectasmag.asmag.service.BaseService;
 import com.projectasmag.asmag.service.CompanyService;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
@@ -45,7 +44,7 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
         Company company =  new Company();
         company.setName(request.getName());
         company.setPhoneNumber(request.getPhoneNumber());
-        createBaseModel(company);
+        prepareCreate(company);
         companyDao.save(company);
         return new CreateResponseDTO(company.getId(), Message.CREATED.getName());
     }
@@ -58,7 +57,7 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
         );
         company.setName(request.getName());
         company.setPhoneNumber(request.getPhoneNumber());
-        update(company);
+        prepareUpdate(company);
         companyDao.update(company);
         em.flush();
         return new UpdateResponseDTO(company.getVersion(), Message.UPDATED.getName());
