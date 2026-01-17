@@ -7,13 +7,13 @@ import com.projectasmag.asmag.dto.UpdateResponseDTO;
 import com.projectasmag.asmag.dto.location.CreateLocationRequestDTO;
 import com.projectasmag.asmag.dto.location.LocationResponseDTO;
 import com.projectasmag.asmag.dto.location.UpdateLocationRequestDTO;
+import com.projectasmag.asmag.exceptiohandler.exception.DataNotFoundException;
 import com.projectasmag.asmag.model.company.Company;
 import com.projectasmag.asmag.model.company.Location;
 import com.projectasmag.asmag.repository.CompanyRepository;
 import com.projectasmag.asmag.repository.LocationRepository;
 import com.projectasmag.asmag.service.BaseService;
 import com.projectasmag.asmag.service.LocationService;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,18 +39,18 @@ public class LocationServiceImpl extends BaseService implements LocationService 
     @Override
     public LocationResponseDTO getLocation(String id) {
         Location location = locationRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new RuntimeException("No Location Found"));
+                .orElseThrow(() -> new DataNotFoundException("Location", id));
         return mapToLocationResponseDTO(location);
     }
 
     @Override
     public CreateResponseDTO createLocation(CreateLocationRequestDTO request) {
         Company company = companyRepository.findById(UUID.fromString(request.getCompanyId()))
-                .orElseThrow(() -> new RuntimeException("No Company Found"));
+                .orElseThrow(() -> new DataNotFoundException("Company", request.getCompanyId()));
         Location location = new Location();
         location.setName(request.getName());
         location.setCompany(company);
-        createBaseModel(location);
+        prepareCreate(location);
         locationRepository.save(location);
         return new CreateResponseDTO(company.getId(), Message.CREATED.getName());
     }
@@ -58,11 +58,11 @@ public class LocationServiceImpl extends BaseService implements LocationService 
     @Override
     public UpdateResponseDTO updateLocation(String id, UpdateLocationRequestDTO request) {
         Location location = locationRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new RuntimeException("No Location Found"));
+                .orElseThrow(() -> new DataNotFoundException("Location", id));
 
         if (location.getVersion().equals(request.getVersion())) {
             location.setName(request.getName());
-            update(location);
+            prepareUpdate(location);
             locationRepository.saveAndFlush(location);
             return new UpdateResponseDTO(location.getVersion(), Message.CREATED.getName());
         }
@@ -72,7 +72,7 @@ public class LocationServiceImpl extends BaseService implements LocationService 
     @Override
     public DeleteResponseDTO deleteLocation(String id) {
         Location location = locationRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new RuntimeException("No Location Found"));
+                .orElseThrow(() -> new DataNotFoundException("Location", id));
         locationRepository.deleteById(location.getId());
         return new DeleteResponseDTO(Message.DELETED.name());
     }

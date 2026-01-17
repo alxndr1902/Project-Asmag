@@ -18,7 +18,6 @@ import com.projectasmag.asmag.model.company.Company;
 import com.projectasmag.asmag.service.AssetService;
 import com.projectasmag.asmag.service.BaseService;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -59,7 +58,7 @@ public class AssetServiceImpl extends BaseService implements AssetService {
     @Override
     public CreateResponseDTO createAsset(CreateAssetRequestDTO request) {
         Asset asset = mapToAsset(request);
-        createBaseModel(asset);
+        prepareCreate(asset);
         assetDao.save(asset);
         return new CreateResponseDTO(asset.getId(), Message.CREATED.getName());
     }
@@ -74,7 +73,7 @@ public class AssetServiceImpl extends BaseService implements AssetService {
         if (asset.getVersion().equals(request.getVersion())) {
             asset.setCode(request.getCode());
             asset.setName(request.getName());
-            update(asset);
+            prepareUpdate(asset);
             assetDao.update(asset);
             em.flush();
             return new UpdateResponseDTO(asset.getVersion(), Message.UPDATED.getName());

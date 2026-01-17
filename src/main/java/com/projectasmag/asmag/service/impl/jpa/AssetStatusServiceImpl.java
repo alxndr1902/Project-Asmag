@@ -1,6 +1,7 @@
 package com.projectasmag.asmag.service.impl.jpa;
 
 import com.projectasmag.asmag.dto.asset.AssetStatusResponseDTO;
+import com.projectasmag.asmag.exceptiohandler.exception.DataNotFoundException;
 import com.projectasmag.asmag.model.asset.AssetStatus;
 import com.projectasmag.asmag.repository.AssetStatusRepository;
 import com.projectasmag.asmag.service.AssetStatusService;
@@ -26,9 +27,10 @@ public class AssetStatusServiceImpl implements AssetStatusService {
     }
 
     @Override
-    public AssetStatusResponseDTO getAssetStatus(String assetId) {
-        AssetStatus assetStatus = assetStatusRepository.findById(UUID.fromString(assetId))
-                .orElseThrow(() -> new RuntimeException("No Asset Status Found"));
+    public AssetStatusResponseDTO getAssetStatus(String id) {
+        UUID assetStatusId = UUID.fromString(id);
+        AssetStatus assetStatus = assetStatusRepository.findById(assetStatusId)
+                .orElseThrow(() -> new DataNotFoundException("Asset", assetStatusId));
         return mapToAssetStatusResponseDTO(assetStatus);
     }
 

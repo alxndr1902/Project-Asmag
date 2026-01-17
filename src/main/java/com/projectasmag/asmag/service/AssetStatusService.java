@@ -7,5 +7,5 @@ import java.util.List;
 public interface AssetStatusService {
     List<AssetStatusResponseDTO> getAssetStatus();
 
-    AssetStatusResponseDTO getAssetStatus(String assetId);
+    AssetStatusResponseDTO getAssetStatus(String id);
 }

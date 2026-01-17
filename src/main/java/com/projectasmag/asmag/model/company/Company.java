@@ -8,10 +8,10 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "companies")
 public class Company extends BaseModel {
-    @Column(length = 100, nullable = false)
+    @Column(length = 100, nullable = false, unique = true)
     private String name;
 
-    @Column(length = 200, nullable = false)
+    @Column(length = 20, nullable = false, unique = true)
     private String phoneNumber;
 
     public String getName() {

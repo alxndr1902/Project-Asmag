@@ -7,15 +7,16 @@ import com.projectasmag.asmag.dto.UpdateResponseDTO;
 import com.projectasmag.asmag.dto.employee.CreateEmployeeRequestDTO;
 import com.projectasmag.asmag.dto.employee.EmployeeResponseDTO;
 import com.projectasmag.asmag.dto.employee.UpdateEmployeeRequestDTO;
+import com.projectasmag.asmag.exceptiohandler.exception.DataNotFoundException;
 import com.projectasmag.asmag.model.company.Company;
 import com.projectasmag.asmag.model.company.Employee;
 import com.projectasmag.asmag.repository.CompanyRepository;
 import com.projectasmag.asmag.repository.EmployeeRepository;
 import com.projectasmag.asmag.service.BaseService;
 import com.projectasmag.asmag.service.EmployeeService;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,40 +33,48 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
 
     @Override
     public List<EmployeeResponseDTO> getEmployees() {
-        return employeeRepository.findAll().stream()
+        List<Employee> employees = employeeRepository.findAll();
+        List<EmployeeResponseDTO> responseDTOs = employees.stream()
                 .map(this::mapToEmployeeResponseDTO)
                 .toList();
+        return responseDTOs;
     }
 
     @Override
     public EmployeeResponseDTO getEmployee(String id) {
-        Employee employee = employeeRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new RuntimeException("No Employee Found"));
+        UUID employeeId = UUID.fromString(id);
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new DataNotFoundException("Employee", employeeId));
         return mapToEmployeeResponseDTO(employee);
     }
 
     @Override
     public CreateResponseDTO createEmployee(CreateEmployeeRequestDTO request) {
-        Company company = companyRepository.findById(UUID.fromString(request.getCompanyId()))
-                .orElseThrow(() -> new RuntimeException("No Employee Found"));
+        UUID companyId = UUID.fromString(request.getCompanyId());
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new DataNotFoundException("Company", companyId));
+
         Employee employee = new Employee();
         employee.setFullName(request.getFullName());
         employee.setCompany(company);
         employee.setPhoneNumber(request.getPhoneNumber());
         employee.setIdentificationNumber(request.getIdentificationNumber());
-        createBaseModel(employee);
+        prepareCreate(employee);
+
         employeeRepository.save(employee);
         return new CreateResponseDTO(employee.getId(), Message.CREATED.name());
     }
 
     @Override
     public UpdateResponseDTO updateEmployee(String id, UpdateEmployeeRequestDTO request) {
-        Employee employee = employeeRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new RuntimeException("No Employee Found"));
+        UUID employeeId = UUID.fromString(id);
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new DataNotFoundException("Employee", employeeId));
+
         if (employee.getVersion().equals(request.getVersion())) {
             employee.setFullName(request.getFullName());
             employee.setPhoneNumber(request.getPhoneNumber());
-            update(employee);
+            prepareUpdate(employee);
             employeeRepository.saveAndFlush(employee);
             return new UpdateResponseDTO(employee.getVersion(), Message.UPDATED.name());
         } else {
@@ -75,16 +84,17 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
 
     @Override
     public DeleteResponseDTO deleteEmployee(String id) {
-        Employee employee = employeeRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new RuntimeException("No Employee Found"));
+        UUID employeeId = UUID.fromString(id);
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new DataNotFoundException("Employee", employeeId));
         employeeRepository.deleteById(employee.getId());
         return new DeleteResponseDTO(Message.DELETED.name());
     }
 
     private EmployeeResponseDTO mapToEmployeeResponseDTO(Employee employee) {
-        return new EmployeeResponseDTO(
+        EmployeeResponseDTO responseDTO = new EmployeeResponseDTO(
                 employee.getId(), employee.getFullName(), employee.getPhoneNumber(),
-                employee.getIdentificationNumber(), employee.getVersion()
-        );
+                employee.getIdentificationNumber(), employee.getVersion());
+        return responseDTO;
     }
 }

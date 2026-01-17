@@ -1,8 +1,16 @@
 package com.projectasmag.asmag.dto.company;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class UpdateCompanyRequestDTO {
+    @Size(max = 100)
     private String name;
+
+    @Size(max = 20)
     private String phoneNumber;
+
+    @NotNull
     private Integer version;
 
     public UpdateCompanyRequestDTO() {

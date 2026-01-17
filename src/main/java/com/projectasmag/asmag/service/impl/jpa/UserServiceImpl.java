@@ -8,6 +8,7 @@ import com.projectasmag.asmag.dto.user.RegisterRequestDTO;
 import com.projectasmag.asmag.dto.user.ChangePasswordRequestDTO;
 import com.projectasmag.asmag.dto.user.UpdateUserRequestDTO;
 import com.projectasmag.asmag.dto.user.UserResponseDTO;
+import com.projectasmag.asmag.exceptiohandler.exception.DataNotFoundException;
 import com.projectasmag.asmag.model.company.Employee;
 import com.projectasmag.asmag.model.company.Role;
 import com.projectasmag.asmag.model.company.User;
@@ -16,7 +17,6 @@ import com.projectasmag.asmag.repository.RoleRepository;
 import com.projectasmag.asmag.repository.UserRepository;
 import com.projectasmag.asmag.service.BaseService;
 import com.projectasmag.asmag.service.UserService;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,17 +45,17 @@ public class UserServiceImpl extends BaseService implements UserService{
     @Override
     public UserResponseDTO getUser(String id) {
         User user = userRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new DataNotFoundException("User", id));
         return mapToUserResponseDto(user);
     }
 
     @Override
     public UpdateResponseDTO updateUser(String id, UpdateUserRequestDTO request) {
         User user = userRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new RuntimeException("User Not Found"));
+                .orElseThrow(() -> new DataNotFoundException("User", id));
 
         user.setEmail(request.getEmail());
-        update(user);
+        prepareUpdate(user);
         userRepository.saveAndFlush(user);
         return new UpdateResponseDTO(user.getVersion(), Message.UPDATED.getName());
     }
@@ -63,7 +63,7 @@ public class UserServiceImpl extends BaseService implements UserService{
     @Override
     public CreateResponseDTO register(RegisterRequestDTO request) {
         User user = mapToUser(request);
-        createBaseModel(user);
+        prepareCreate(user);
         userRepository.save(user);
         return new CreateResponseDTO(user.getId(), Message.CREATED.getName());
     }
@@ -76,7 +76,7 @@ public class UserServiceImpl extends BaseService implements UserService{
     @Override
     public DeleteResponseDTO deleteUser(String id) {
         User user = userRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new RuntimeException("No User Found"));
+                .orElseThrow(() -> new DataNotFoundException("User", id));
         userRepository.deleteById(user.getId());
         return new DeleteResponseDTO("deleted");
     }
@@ -91,10 +91,10 @@ public class UserServiceImpl extends BaseService implements UserService{
 
     private User mapToUser(RegisterRequestDTO registerRequestDTO) {
         Employee employee = employeeRepository.findById(UUID.fromString(registerRequestDTO.getEmployeeId()))
-                .orElseThrow(() -> new RuntimeException("No Employee Found"));
+                .orElseThrow(() -> new DataNotFoundException("Employee", registerRequestDTO.getEmployeeId()));
 
         Role role = roleRepository.findById(UUID.fromString(registerRequestDTO.getRoleId()))
-                .orElseThrow(() -> new RuntimeException("No Role Found"));
+                .orElseThrow(() -> new DataNotFoundException("Role", registerRequestDTO.getRoleId()));
 
         User user = new User();
         user.setEmail(registerRequestDTO.getEmail());
