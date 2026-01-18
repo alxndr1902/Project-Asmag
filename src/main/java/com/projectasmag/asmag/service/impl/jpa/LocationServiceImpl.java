@@ -31,22 +31,27 @@ public class LocationServiceImpl extends BaseService implements LocationService 
 
     @Override
     public List<LocationResponseDTO> getLocations() {
-        return locationRepository.findAll().stream()
+        List<Location> locations = locationRepository.findAll();
+        List<LocationResponseDTO> responseDTOs = locations.stream()
                 .map(this::mapToLocationResponseDTO)
                 .toList();
+        return responseDTOs;
     }
 
     @Override
     public LocationResponseDTO getLocation(String id) {
-        Location location = locationRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new DataNotFoundException("Location", id));
+        UUID locationId = UUID.fromString(id);
+        Location location = locationRepository.findById(locationId)
+                .orElseThrow(() -> new DataNotFoundException("Location Is Not Found", locationId));
         return mapToLocationResponseDTO(location);
     }
 
     @Override
     public CreateResponseDTO createLocation(CreateLocationRequestDTO request) {
-        Company company = companyRepository.findById(UUID.fromString(request.getCompanyId()))
-                .orElseThrow(() -> new DataNotFoundException("Company", request.getCompanyId()));
+        UUID companyId = UUID.fromString(request.getCompanyId());
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new DataNotFoundException("Company", companyId));
+
         Location location = new Location();
         location.setName(request.getName());
         location.setCompany(company);
@@ -57,28 +62,34 @@ public class LocationServiceImpl extends BaseService implements LocationService 
 
     @Override
     public UpdateResponseDTO updateLocation(String id, UpdateLocationRequestDTO request) {
-        Location location = locationRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new DataNotFoundException("Location", id));
+        UUID locationId = UUID.fromString(id);
+        Location location = locationRepository.findById(locationId)
+                .orElseThrow(() -> new DataNotFoundException("Location Is Not Found", locationId));
 
-        if (location.getVersion().equals(request.getVersion())) {
-            location.setName(request.getName());
-            prepareUpdate(location);
-            locationRepository.saveAndFlush(location);
-            return new UpdateResponseDTO(location.getVersion(), Message.CREATED.getName());
+        if (!location.getVersion().equals(request.getVersion())) {
+            throw new RuntimeException("Version Does Not Match");
         }
-        throw new RuntimeException("Request version does not match data version");
+
+        location.setName(request.getName());
+        prepareUpdate(location);
+        locationRepository.saveAndFlush(location);
+        return new UpdateResponseDTO(location.getVersion(), Message.CREATED.getName());
     }
 
     @Override
     public DeleteResponseDTO deleteLocation(String id) {
-        Location location = locationRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new DataNotFoundException("Location", id));
+        UUID locationId = UUID.fromString(id);
+        Location location = locationRepository.findById(locationId)
+                .orElseThrow(() -> new DataNotFoundException("Location Is Not Found", locationId));
+
         locationRepository.deleteById(location.getId());
-        return new DeleteResponseDTO(Message.DELETED.name());
+        return new DeleteResponseDTO(Message.DELETED.getName());
     }
 
     private LocationResponseDTO mapToLocationResponseDTO(Location location) {
-        return new LocationResponseDTO(location.getId(), location.getName(), location.getCompany().getName(),
+        LocationResponseDTO response = new LocationResponseDTO(location.getId(), location.getName(),
+                location.getCompany().getName(),
                 location.getVersion());
+        return response;
     }
 }

@@ -37,22 +37,30 @@ public class UserServiceImpl extends BaseService implements UserService{
 
     @Override
     public List<UserResponseDTO> getUsers() {
-        return userRepository.findAll().stream()
+        List<User> users = userRepository.findAll();
+        List<UserResponseDTO> responseDTOs = users.stream()
                 .map(this::mapToUserResponseDto)
                 .toList();
+        return responseDTOs;
     }
 
     @Override
     public UserResponseDTO getUser(String id) {
-        User user = userRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new DataNotFoundException("User", id));
+        UUID userId = UUID.fromString(id);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new DataNotFoundException("User Is Not Found", userId));
         return mapToUserResponseDto(user);
     }
 
     @Override
     public UpdateResponseDTO updateUser(String id, UpdateUserRequestDTO request) {
-        User user = userRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new DataNotFoundException("User", id));
+        UUID userId = UUID.fromString(id);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new DataNotFoundException("User Is Not Found", userId));
+
+        if (!user.getVersion().equals(request.getVersion())) {
+            throw new RuntimeException("Version Does Not Match");
+        }
 
         user.setEmail(request.getEmail());
         prepareUpdate(user);
@@ -62,7 +70,15 @@ public class UserServiceImpl extends BaseService implements UserService{
 
     @Override
     public CreateResponseDTO register(RegisterRequestDTO request) {
-        User user = mapToUser(request);
+        UUID employeeId = UUID.fromString(request.getEmployeeId());
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new DataNotFoundException("Employee Is Not Found", employeeId));
+
+        UUID roleId = UUID.fromString(request.getRoleId());
+        Role role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new DataNotFoundException("Role Is Not Found", roleId));
+
+        User user = mapToUser(request, employee, role);
         prepareCreate(user);
         userRepository.save(user);
         return new CreateResponseDTO(user.getId(), Message.CREATED.getName());
@@ -75,30 +91,26 @@ public class UserServiceImpl extends BaseService implements UserService{
 
     @Override
     public DeleteResponseDTO deleteUser(String id) {
-        User user = userRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new DataNotFoundException("User", id));
+        UUID userId = UUID.fromString(id);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new DataNotFoundException("User Is Not Found", userId));
         userRepository.deleteById(user.getId());
         return new DeleteResponseDTO("deleted");
     }
 
     private UserResponseDTO mapToUserResponseDto(User user) {
-        return new UserResponseDTO(user.getId(),
+        UserResponseDTO response = new UserResponseDTO(user.getId(),
                 user.getEmail(),
                 user.getEmployee().getFullName(),
                 user.getEmployee().getPhoneNumber(),
                 user.getRole().getName(), user.getVersion());
+        return response;
     }
 
-    private User mapToUser(RegisterRequestDTO registerRequestDTO) {
-        Employee employee = employeeRepository.findById(UUID.fromString(registerRequestDTO.getEmployeeId()))
-                .orElseThrow(() -> new DataNotFoundException("Employee", registerRequestDTO.getEmployeeId()));
-
-        Role role = roleRepository.findById(UUID.fromString(registerRequestDTO.getRoleId()))
-                .orElseThrow(() -> new DataNotFoundException("Role", registerRequestDTO.getRoleId()));
-
+    private User mapToUser(RegisterRequestDTO request, Employee employee, Role role) {
         User user = new User();
-        user.setEmail(registerRequestDTO.getEmail());
-        user.setPassword(registerRequestDTO.getPassword());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
         user.setEmployee(employee);
         user.setRole(role);
 

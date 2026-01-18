@@ -20,15 +20,23 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<RoleResponseDTO> getRoles() {
-        return roleRepository.findAll().stream()
-                .map(v -> new RoleResponseDTO(v.getId(), v.getName()))
+        List<Role> roles = roleRepository.findAll();
+        List<RoleResponseDTO> responseDTOs = roles.stream()
+                .map(this::mapToRoleResponseDTO)
                 .toList();
+        return responseDTOs;
     }
 
     @Override
     public RoleResponseDTO getRole(String id) {
-        Role role = roleRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new DataNotFoundException("Role", id));
-        return new RoleResponseDTO(role.getId(), role.getName());
+        UUID roleId = UUID.fromString(id);
+        Role role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new DataNotFoundException("Role Is Not Found", roleId));
+        return mapToRoleResponseDTO(role);
+    }
+
+    private RoleResponseDTO mapToRoleResponseDTO(Role role) {
+        RoleResponseDTO response = new RoleResponseDTO(role.getId(), role.getName());
+        return response;
     }
 }

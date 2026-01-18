@@ -53,7 +53,6 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
             throw new RuntimeException("Company Phone Number Already Exists");
         }
 
-
         Company company =  new Company();
         company.setName(request.getName());
         company.setPhoneNumber(request.getPhoneNumber());
@@ -66,7 +65,7 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
     public UpdateResponseDTO updateCompany(String id, UpdateCompanyRequestDTO request) {
         UUID companyId = UUID.fromString(id);
         Company company = companyRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new DataNotFoundException("No Company", companyId));
+                .orElseThrow(() -> new DataNotFoundException("Company Is Not found", companyId));
 
         if (!company.getVersion().equals(request.getVersion())) {
             throw new RuntimeException("Version Does Not Match");
@@ -95,7 +94,8 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
     }
 
     private CompanyResponseDTO mapToCompanyResponseDTO(Company company) {
-        return new CompanyResponseDTO(company.getId(), company.getName(), company.getPhoneNumber(),
+        CompanyResponseDTO responseDTO = new CompanyResponseDTO(company.getId(), company.getName(), company.getPhoneNumber(),
                 company.getVersion());
+        return responseDTO;
     }
 }
