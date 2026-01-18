@@ -71,15 +71,15 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new DataNotFoundException("Employee", employeeId));
 
-        if (employee.getVersion().equals(request.getVersion())) {
-            employee.setFullName(request.getFullName());
-            employee.setPhoneNumber(request.getPhoneNumber());
-            prepareUpdate(employee);
-            employeeRepository.saveAndFlush(employee);
-            return new UpdateResponseDTO(employee.getVersion(), Message.UPDATED.name());
-        } else {
-        throw new RuntimeException("Version Mismatch");
+        if (!employee.getVersion().equals(request.getVersion())) {
+            throw new RuntimeException("Version Does Not Match");
         }
+
+        employee.setFullName(request.getFullName());
+        employee.setPhoneNumber(request.getPhoneNumber());
+        prepareUpdate(employee);
+        employeeRepository.saveAndFlush(employee);
+        return new UpdateResponseDTO(employee.getVersion(), Message.UPDATED.name());
     }
 
     @Override

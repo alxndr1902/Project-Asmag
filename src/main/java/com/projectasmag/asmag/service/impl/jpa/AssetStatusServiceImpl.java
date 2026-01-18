@@ -20,23 +20,24 @@ public class AssetStatusServiceImpl implements AssetStatusService {
 
     @Override
     public List<AssetStatusResponseDTO> getAssetStatus() {
-        return assetStatusRepository.findAll().stream()
-                .map(
-                        this::mapToAssetStatusResponseDTO)
+        List<AssetStatus> assetStatuses = assetStatusRepository.findAll();
+        List<AssetStatusResponseDTO> responses = assetStatuses.stream()
+                .map(this::mapToAssetStatusResponseDTO)
                 .toList();
+        return responses;
     }
 
     @Override
     public AssetStatusResponseDTO getAssetStatus(String id) {
         UUID assetStatusId = UUID.fromString(id);
         AssetStatus assetStatus = assetStatusRepository.findById(assetStatusId)
-                .orElseThrow(() -> new DataNotFoundException("Asset", assetStatusId));
+                .orElseThrow(() -> new DataNotFoundException("Asset Status Is Not Found", assetStatusId));
         return mapToAssetStatusResponseDTO(assetStatus);
     }
 
     private AssetStatusResponseDTO mapToAssetStatusResponseDTO(AssetStatus assetStatus) {
-        return new AssetStatusResponseDTO(
-                assetStatus.getId(), assetStatus.getName()
-        );
+        AssetStatusResponseDTO responseDTO = new AssetStatusResponseDTO(
+                assetStatus.getId(), assetStatus.getName());
+        return responseDTO;
     }
 }

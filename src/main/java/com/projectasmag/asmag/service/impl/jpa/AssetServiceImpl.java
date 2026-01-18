@@ -76,7 +76,7 @@ public class AssetServiceImpl extends BaseService implements AssetService {
     public UpdateResponseDTO updateAsset(String id, UpdateAssetRequestDTO request) {
         UUID assetId = UUID.fromString(id);
         Asset asset = assetRepository.findById(assetId)
-                .orElseThrow(() -> new DataNotFoundException("Asset Not Found", assetId));
+                .orElseThrow(() -> new DataNotFoundException("Asset Is Not Found", assetId));
 
         if (!asset.getVersion().equals(request.getVersion())) {
             return null;
