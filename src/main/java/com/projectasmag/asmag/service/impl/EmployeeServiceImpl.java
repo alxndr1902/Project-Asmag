@@ -73,7 +73,7 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
                 .orElseThrow(() -> new DataNotFoundException("Employee Is Not Found"));
 
         if (!employee.getVersion().equals(request.getVersion())) {
-            throw new DataIntegrationException("Version Does Not Match");
+            throw new DataIntegrationException("Please Refresh The Page");
         }
 
         if (!employee.getPhoneNumber().equals(request.getPhoneNumber())) {
