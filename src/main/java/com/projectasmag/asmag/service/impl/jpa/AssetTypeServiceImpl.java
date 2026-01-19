@@ -5,13 +5,14 @@ import com.projectasmag.asmag.exceptiohandler.exception.DataNotFoundException;
 import com.projectasmag.asmag.model.asset.AssetType;
 import com.projectasmag.asmag.repository.AssetTypeRepository;
 import com.projectasmag.asmag.service.AssetTypeService;
+import com.projectasmag.asmag.service.BaseService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
-public class AssetTypeServiceImpl implements AssetTypeService {
+public class AssetTypeServiceImpl extends BaseService implements AssetTypeService {
     private final AssetTypeRepository assetTypeRepository;
 
     public AssetTypeServiceImpl(AssetTypeRepository assetTypeRepository) {
@@ -30,9 +31,9 @@ public class AssetTypeServiceImpl implements AssetTypeService {
 
     @Override
     public AssetTypeResponseDTO getAssetStatus(String id) {
-        UUID assetTypeId = UUID.fromString(id);
+        UUID assetTypeId = getId(id);
         AssetType assetType = assetTypeRepository.findById(assetTypeId)
-                .orElseThrow(() -> new DataNotFoundException("Asset Type Is Not Found", assetTypeId));
+                .orElseThrow(() -> new DataNotFoundException("Asset Type Is Not Found"));
         return mapToAssetTypeResponseDTO(assetType);
     }
 

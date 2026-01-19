@@ -1,12 +1,15 @@
 package com.projectasmag.asmag.dto.location;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class UpdateLocationRequestDTO {
+    @NotBlank(message = "Name Is Required")
     @Size(max = 100)
     private String name;
 
+    @NotBlank(message = "Please Refresh The Page")
     @NotNull
     private Integer version;
 

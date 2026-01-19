@@ -31,7 +31,7 @@ public class RoleServiceImpl implements RoleService {
     public RoleResponseDTO getRole(String id) {
         UUID roleId = UUID.fromString(id);
         Role role = roleRepository.findById(roleId)
-                .orElseThrow(() -> new DataNotFoundException("Role Is Not Found", roleId));
+                .orElseThrow(() -> new DataNotFoundException("Role Is Not Found"));
         return mapToRoleResponseDTO(role);
     }
 

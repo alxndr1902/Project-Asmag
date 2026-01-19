@@ -5,10 +5,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class UpdateUserRequestDTO {
-    @NotBlank
+    @NotBlank(message = "Email Is Required")
     @Size(max = 50)
     private String email;
 
+    @NotBlank(message = "Please Refresh The Page")
     @NotNull
     private Integer version;
 

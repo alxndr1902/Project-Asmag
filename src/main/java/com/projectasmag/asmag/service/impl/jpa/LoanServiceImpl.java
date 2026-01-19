@@ -8,7 +8,6 @@ import com.projectasmag.asmag.dto.loan.LoanDetailResponseDTO;
 import com.projectasmag.asmag.dto.loan.LoanResponseDTO;
 import com.projectasmag.asmag.exceptiohandler.exception.DataNotFoundException;
 import com.projectasmag.asmag.exceptiohandler.exception.InvalidLoanOwnershipException;
-import com.projectasmag.asmag.exceptiohandler.exception.MultipleDataNotFoundException;
 import com.projectasmag.asmag.exceptiohandler.exception.MultipleLoanTargetException;
 import com.projectasmag.asmag.model.asset.Asset;
 import com.projectasmag.asmag.model.company.Employee;
@@ -52,9 +51,9 @@ public class LoanServiceImpl extends BaseService implements LoanService {
 
     @Override
     public List<LoanDetailResponseDTO> getLoanById(String id) {
-        UUID loanId = UUID.fromString(id);
-        Loan loan = loanRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new DataNotFoundException("Loan Is Not Found", loanId));
+        UUID loanId = getId(id);
+        Loan loan = loanRepository.findById(getId(id))
+                .orElseThrow(() -> new DataNotFoundException("Loan Is Not Found"));
 
         List<LoanDetailResponseDTO> responseList = loan.getLoanDetails().stream()
                 .map(this::mapToLoanDetailsResponseDto)
@@ -67,10 +66,7 @@ public class LoanServiceImpl extends BaseService implements LoanService {
     @Transactional(rollbackOn = Exception.class)
     public CreateLoanResponseDTO createLoan(CreateLoanRequestDTO request) {
         if (!hasSingleTarget(request)) {
-            throw new MultipleLoanTargetException("Asset Cannot be Loaned To Multiple Target",
-                    UUID.fromString(request.getAssetTargetId()),
-                    UUID.fromString(request.getLocationTargetId()),
-                    UUID.fromString(request.getEmployeeTargetId()));
+            throw new MultipleLoanTargetException("Asset Cannot be Loaned To Multiple Target");
         }
 
         Loan loan = new Loan();
@@ -89,9 +85,9 @@ public class LoanServiceImpl extends BaseService implements LoanService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public UpdateResponseDTO returnAsset(String id, List<String> request) {
-        UUID loanId = UUID.fromString(id);
+        UUID loanId = getId(id);
         Loan loan = loanRepository.findById(loanId)
-                .orElseThrow(() -> new DataNotFoundException("Loan Is Not Found", loanId));
+                .orElseThrow(() -> new DataNotFoundException("Loan Is Not Found"));
 
         List<UUID> loanDetailIds = request.stream()
                 .map(UUID::fromString)
@@ -100,12 +96,12 @@ public class LoanServiceImpl extends BaseService implements LoanService {
 
         Set<UUID> notFoundLoanDetailIds = getNotFoundLoanDetailIds(existingLoanDetails, loanDetailIds);
         if (!notFoundLoanDetailIds.isEmpty()) {
-            throw new MultipleDataNotFoundException("Loan Details Are Not Found", notFoundLoanDetailIds);
+            throw new DataNotFoundException("Loan Details Are Not Found");
         }
 
         Set<UUID> loanDetailFromOtherLoans = getLoanDetailIdFromOtherLoans(existingLoanDetails, loan);
         if (!loanDetailFromOtherLoans.isEmpty()) {
-            throw new InvalidLoanOwnershipException("Loan Detail", loan.getId(), loanDetailFromOtherLoans);
+            throw new InvalidLoanOwnershipException("Invalid Loan Details");
         }
 
         prepareUpdate(loan);
@@ -187,34 +183,36 @@ public class LoanServiceImpl extends BaseService implements LoanService {
 
     private Loan setTarget(CreateLoanRequestDTO request, Loan loan) {
         if (request.getEmployeeTargetId() != null) {
-            UUID employeeId = UUID.fromString(request.getEmployeeTargetId());
+            UUID employeeId = getId(request.getEmployeeTargetId());
             Employee employee = employeeRepository.findById(employeeId)
-                    .orElseThrow(() -> new DataNotFoundException("Employee", employeeId));
+                    .orElseThrow(() -> new DataNotFoundException("Employee Is Not Found"));
             loan.setEmployeeTarget(employee);
+            return loan;
         }
 
         if (request.getLocationTargetId() != null) {
-            UUID locationId = UUID.fromString(request.getLocationTargetId());
+            UUID locationId = getId(request.getLocationTargetId());
             Location location = locationRepository.findById(locationId)
-                    .orElseThrow(() -> new DataNotFoundException("Location", locationId));
+                    .orElseThrow(() -> new DataNotFoundException("Location Is Not Found"));
             loan.setLocationTarget(location);
+            return loan;
         }
 
         if (request.getAssetTargetId() != null) {
-            UUID assetId = UUID.fromString(request.getAssetTargetId());
+            UUID assetId = getId(request.getAssetTargetId());
             Asset asset = assetRepository.findById(assetId)
-                    .orElseThrow(() -> new DataNotFoundException("Asset", assetId));
+                    .orElseThrow(() -> new DataNotFoundException("Asset Is Not Found"));
             loan.setAssetTarget(asset);
+            return loan;
         }
-
         return loan;
     }
 
     private Set<LoanDetail> createLoanDetails(CreateLoanRequestDTO request, Loan loan) {
         loan.setLoanDetails(new HashSet<>());
         for (String id : request.getAssetIdList()) {
-            Asset asset = assetRepository.findById(UUID.fromString(id)).orElseThrow(
-                    () -> new RuntimeException("No Asset Found")
+            Asset asset = assetRepository.findById(getId(id)).orElseThrow(
+                    () -> new DataNotFoundException("Asset Is Not Found")
             );
             LoanDetail loanDetail = new LoanDetail();
             loanDetail.setAsset(asset);

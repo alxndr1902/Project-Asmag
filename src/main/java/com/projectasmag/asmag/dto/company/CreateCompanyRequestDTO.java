@@ -4,11 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class CreateCompanyRequestDTO {
-    @NotBlank
+    @NotBlank(message = "Name Is Required")
     @Size(max = 100)
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "Phone Number Is Required")
     @Size(max = 20)
     private String phoneNumber;
 

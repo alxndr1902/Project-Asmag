@@ -4,27 +4,25 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class CreateAssetRequestDTO {
-    @NotBlank
+    @NotBlank(message = "Code Is Required")
     @Size(max = 10)
     private String code;
 
-    @NotBlank
+    @NotBlank(message = "Name Is Required")
     @Size(max = 100)
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "Asset Type Is Required")
     @Size(max = 36)
     private String typeId;
 
-    @NotBlank
+    @NotBlank(message = "Asset Status Is Required")
     @Size(max = 36)
     private String statusId;
 
-    @NotBlank
+    @NotBlank(message = "Asset Company Is Required")
     @Size(max = 36)
     private String companyId;
-
-    @NotBlank
     @Size(max = 36)
     private String expiredDate;
 

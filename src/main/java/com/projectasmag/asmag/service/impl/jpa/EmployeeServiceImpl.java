@@ -7,6 +7,8 @@ import com.projectasmag.asmag.dto.UpdateResponseDTO;
 import com.projectasmag.asmag.dto.employee.CreateEmployeeRequestDTO;
 import com.projectasmag.asmag.dto.employee.EmployeeResponseDTO;
 import com.projectasmag.asmag.dto.employee.UpdateEmployeeRequestDTO;
+import com.projectasmag.asmag.exceptiohandler.exception.DataIntegrationException;
+import com.projectasmag.asmag.exceptiohandler.exception.DataIsNotUniqueException;
 import com.projectasmag.asmag.exceptiohandler.exception.DataNotFoundException;
 import com.projectasmag.asmag.model.company.Company;
 import com.projectasmag.asmag.model.company.Employee;
@@ -16,7 +18,6 @@ import com.projectasmag.asmag.service.BaseService;
 import com.projectasmag.asmag.service.EmployeeService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,7 +45,7 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
     public EmployeeResponseDTO getEmployee(String id) {
         UUID employeeId = UUID.fromString(id);
         Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new DataNotFoundException("Employee", employeeId));
+                .orElseThrow(() -> new DataNotFoundException("Employee Is Not Found"));
         return mapToEmployeeResponseDTO(employee);
     }
 
@@ -52,7 +53,7 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
     public CreateResponseDTO createEmployee(CreateEmployeeRequestDTO request) {
         UUID companyId = UUID.fromString(request.getCompanyId());
         Company company = companyRepository.findById(companyId)
-                .orElseThrow(() -> new DataNotFoundException("Company", companyId));
+                .orElseThrow(() -> new DataNotFoundException("Company Is Not Found"));
 
         Employee employee = new Employee();
         employee.setFullName(request.getFullName());
@@ -69,10 +70,18 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
     public UpdateResponseDTO updateEmployee(String id, UpdateEmployeeRequestDTO request) {
         UUID employeeId = UUID.fromString(id);
         Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new DataNotFoundException("Employee", employeeId));
+                .orElseThrow(() -> new DataNotFoundException("Employee Is Not Found"));
 
         if (!employee.getVersion().equals(request.getVersion())) {
-            throw new RuntimeException("Version Does Not Match");
+            throw new DataIntegrationException("Version Does Not Match");
+        }
+
+        if (!employee.getPhoneNumber().equals(request.getPhoneNumber())) {
+            employeeRepository.findByPhoneNumber(request.getPhoneNumber())
+                    .filter(existingEmployee -> !existingEmployee.getId().equals(employeeId))
+                    .ifPresent(e -> {
+                        throw new DataIsNotUniqueException("Phone Number Is Not Available");
+                    });
         }
 
         employee.setFullName(request.getFullName());
@@ -84,9 +93,9 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
 
     @Override
     public DeleteResponseDTO deleteEmployee(String id) {
-        UUID employeeId = UUID.fromString(id);
+        UUID employeeId = getId(id);
         Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new DataNotFoundException("Employee", employeeId));
+                .orElseThrow(() -> new DataNotFoundException("Employee Is Not Found"));
         employeeRepository.deleteById(employee.getId());
         return new DeleteResponseDTO(Message.DELETED.name());
     }

@@ -5,6 +5,7 @@ import com.projectasmag.asmag.dto.DeleteResponseDTO;
 import com.projectasmag.asmag.dto.UpdateResponseDTO;
 import com.projectasmag.asmag.dto.asset.*;
 import com.projectasmag.asmag.service.AssetService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,14 +34,14 @@ public class AssetController {
     }
 
     @PostMapping
-    public ResponseEntity<CreateResponseDTO> createAsset(@RequestBody CreateAssetRequestDTO request) {
+    public ResponseEntity<CreateResponseDTO> createAsset(@RequestBody @Valid CreateAssetRequestDTO request) {
         CreateResponseDTO response = assetService.createAsset(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
     public ResponseEntity<UpdateResponseDTO> updateAsset(@PathVariable String id,
-                                         @RequestBody UpdateAssetRequestDTO request) {
+                                         @RequestBody @Valid UpdateAssetRequestDTO request) {
         UpdateResponseDTO response = assetService.updateAsset(id, request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

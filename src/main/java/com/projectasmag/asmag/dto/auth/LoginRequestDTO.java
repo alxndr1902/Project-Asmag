@@ -3,10 +3,10 @@ package com.projectasmag.asmag.dto.auth;
 import jakarta.validation.constraints.NotBlank;
 
 public class LoginRequestDTO {
-    @NotBlank
+    @NotBlank(message = "Email Is Required")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "Password Is Required")
     private String password;
 
     public LoginRequestDTO() {

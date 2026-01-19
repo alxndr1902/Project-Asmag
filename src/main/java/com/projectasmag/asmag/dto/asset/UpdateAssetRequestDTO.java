@@ -1,16 +1,19 @@
 package com.projectasmag.asmag.dto.asset;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class UpdateAssetRequestDTO {
+    @NotBlank(message = "Code Is Required")
     @Size(max = 10)
     private String code;
 
+    @NotBlank(message = "Name Is Required")
     @Size(max = 100)
     private String name;
 
-    @NotNull
+    @NotNull(message = "Please Refresh The Page")
     private Integer version;
 
     public UpdateAssetRequestDTO() {

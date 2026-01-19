@@ -6,6 +6,7 @@ import com.projectasmag.asmag.dto.company.CompanyResponseDTO;
 import com.projectasmag.asmag.dto.company.CreateCompanyRequestDTO;
 import com.projectasmag.asmag.dto.company.UpdateCompanyRequestDTO;
 import com.projectasmag.asmag.service.CompanyService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,14 +35,14 @@ public class CompanyController {
     }
 
     @PostMapping
-    public ResponseEntity<CreateResponseDTO> createCompany(@RequestBody CreateCompanyRequestDTO request) {
+    public ResponseEntity<CreateResponseDTO> createCompany(@RequestBody @Valid CreateCompanyRequestDTO request) {
         CreateResponseDTO response = companyService.createCompany(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
     public ResponseEntity<UpdateResponseDTO> updateCompany(@PathVariable String id,
-                                                           @RequestBody UpdateCompanyRequestDTO request) {
+                                                           @RequestBody @Valid UpdateCompanyRequestDTO request) {
         UpdateResponseDTO response = companyService.updateCompany(id, request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

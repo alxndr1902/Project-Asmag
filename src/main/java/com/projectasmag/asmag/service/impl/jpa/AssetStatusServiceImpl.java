@@ -5,13 +5,14 @@ import com.projectasmag.asmag.exceptiohandler.exception.DataNotFoundException;
 import com.projectasmag.asmag.model.asset.AssetStatus;
 import com.projectasmag.asmag.repository.AssetStatusRepository;
 import com.projectasmag.asmag.service.AssetStatusService;
+import com.projectasmag.asmag.service.BaseService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
-public class AssetStatusServiceImpl implements AssetStatusService {
+public class AssetStatusServiceImpl extends BaseService implements AssetStatusService {
     private final AssetStatusRepository assetStatusRepository;
 
     public AssetStatusServiceImpl(AssetStatusRepository assetStatusRepository) {
@@ -29,9 +30,9 @@ public class AssetStatusServiceImpl implements AssetStatusService {
 
     @Override
     public AssetStatusResponseDTO getAssetStatus(String id) {
-        UUID assetStatusId = UUID.fromString(id);
+        UUID assetStatusId = getId(id);
         AssetStatus assetStatus = assetStatusRepository.findById(assetStatusId)
-                .orElseThrow(() -> new DataNotFoundException("Asset Status Is Not Found", assetStatusId));
+                .orElseThrow(() -> new DataNotFoundException("Asset Status Is Not Found"));
         return mapToAssetStatusResponseDTO(assetStatus);
     }
 

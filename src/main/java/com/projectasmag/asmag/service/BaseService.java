@@ -1,5 +1,7 @@
 package com.projectasmag.asmag.service;
 
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import com.projectasmag.asmag.exceptiohandler.exception.UUIDNotValidException;
 import com.projectasmag.asmag.model.BaseModel;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -22,5 +24,13 @@ public abstract class BaseService {
         model.setUpdatedAt(LocalDateTime.now());
         model.setUpdatedBy(UUID.randomUUID());
         return model;
+    }
+
+    protected UUID getId(String request) {
+        try {
+            return UUID.fromString(request);
+        } catch (IllegalArgumentException e) {
+            throw new UUIDNotValidException("Invalid UUID");
+        }
     }
 }

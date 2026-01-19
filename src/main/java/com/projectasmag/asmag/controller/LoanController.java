@@ -6,6 +6,7 @@ import com.projectasmag.asmag.dto.loan.CreateLoanResponseDTO;
 import com.projectasmag.asmag.dto.loan.LoanDetailResponseDTO;
 import com.projectasmag.asmag.dto.loan.LoanResponseDTO;
 import com.projectasmag.asmag.service.LoanService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,14 +35,14 @@ public class LoanController {
     }
 
     @PostMapping
-    public ResponseEntity<CreateLoanResponseDTO> createLoan(@RequestBody CreateLoanRequestDTO createLoanRequest) {
+    public ResponseEntity<CreateLoanResponseDTO> createLoan(@RequestBody @Valid CreateLoanRequestDTO createLoanRequest) {
         CreateLoanResponseDTO response = loanService.createLoan(createLoanRequest);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PatchMapping("{id}")
     public ResponseEntity<UpdateResponseDTO> returnAsset(@PathVariable String id,
-                                                         @RequestBody List<String> assetIdList) {
+                                                         @RequestBody @Valid List<String> assetIdList) {
         UpdateResponseDTO response = loanService.returnAsset(id, assetIdList);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

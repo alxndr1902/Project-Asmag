@@ -7,6 +7,7 @@ import com.projectasmag.asmag.dto.UpdateResponseDTO;
 import com.projectasmag.asmag.dto.location.CreateLocationRequestDTO;
 import com.projectasmag.asmag.dto.location.LocationResponseDTO;
 import com.projectasmag.asmag.dto.location.UpdateLocationRequestDTO;
+import com.projectasmag.asmag.exceptiohandler.exception.DataIntegrationException;
 import com.projectasmag.asmag.exceptiohandler.exception.DataNotFoundException;
 import com.projectasmag.asmag.model.company.Company;
 import com.projectasmag.asmag.model.company.Location;
@@ -40,17 +41,17 @@ public class LocationServiceImpl extends BaseService implements LocationService 
 
     @Override
     public LocationResponseDTO getLocation(String id) {
-        UUID locationId = UUID.fromString(id);
+        UUID locationId = getId(id);
         Location location = locationRepository.findById(locationId)
-                .orElseThrow(() -> new DataNotFoundException("Location Is Not Found", locationId));
+                .orElseThrow(() -> new DataNotFoundException("Location Is Not Found"));
         return mapToLocationResponseDTO(location);
     }
 
     @Override
     public CreateResponseDTO createLocation(CreateLocationRequestDTO request) {
-        UUID companyId = UUID.fromString(request.getCompanyId());
+        UUID companyId = getId(request.getCompanyId());
         Company company = companyRepository.findById(companyId)
-                .orElseThrow(() -> new DataNotFoundException("Company", companyId));
+                .orElseThrow(() -> new DataNotFoundException("Company Is Not Found"));
 
         Location location = new Location();
         location.setName(request.getName());
@@ -62,12 +63,12 @@ public class LocationServiceImpl extends BaseService implements LocationService 
 
     @Override
     public UpdateResponseDTO updateLocation(String id, UpdateLocationRequestDTO request) {
-        UUID locationId = UUID.fromString(id);
+        UUID locationId = getId(id);
         Location location = locationRepository.findById(locationId)
-                .orElseThrow(() -> new DataNotFoundException("Location Is Not Found", locationId));
+                .orElseThrow(() -> new DataNotFoundException("Location Is Not Found"));
 
         if (!location.getVersion().equals(request.getVersion())) {
-            throw new RuntimeException("Version Does Not Match");
+            throw new DataIntegrationException("Version Does Not Match");
         }
 
         location.setName(request.getName());
@@ -78,9 +79,9 @@ public class LocationServiceImpl extends BaseService implements LocationService 
 
     @Override
     public DeleteResponseDTO deleteLocation(String id) {
-        UUID locationId = UUID.fromString(id);
+        UUID locationId = getId(id);
         Location location = locationRepository.findById(locationId)
-                .orElseThrow(() -> new DataNotFoundException("Location Is Not Found", locationId));
+                .orElseThrow(() -> new DataNotFoundException("Location Is Not Found"));
 
         locationRepository.deleteById(location.getId());
         return new DeleteResponseDTO(Message.DELETED.getName());
