@@ -73,7 +73,7 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
 
         if (!company.getName().equals(request.getName())) {
             companyRepository.findByName(request.getName())
-                    .filter(existingCompany -> !existingCompany.getId().equals(companyId))
+                    .filter(c -> !c.getId().equals(companyId))
                     .ifPresent(c -> {
                         throw new DataIsNotUniqueException("Name Is Not Available");
                     });
@@ -81,7 +81,7 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
 
         if (!company.getPhoneNumber().equals(request.getPhoneNumber())) {
             companyRepository.findByPhoneNumber(request.getPhoneNumber())
-                    .filter(existingCompany -> !existingCompany.getId().equals(companyId))
+                    .filter(c -> !c.getId().equals(companyId))
                     .ifPresent(c -> {
                         throw new RuntimeException("Phone Number Is Not Available");
                     });
