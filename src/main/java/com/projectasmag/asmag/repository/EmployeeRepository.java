@@ -8,4 +8,8 @@ import java.util.UUID;
 
 public interface EmployeeRepository extends JpaRepository<Employee, UUID> {
     Optional<Employee> findByPhoneNumber(String phoneNumber);
+
+    boolean existsByPhoneNumber(String phoneNumber);
+
+    boolean existsByIdentificationNumber(String  identificationNumber);
 }

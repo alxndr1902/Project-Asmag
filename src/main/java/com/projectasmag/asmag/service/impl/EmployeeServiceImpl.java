@@ -55,6 +55,14 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new DataNotFoundException("Company Is Not Found"));
 
+        if (!employeeRepository.existsByPhoneNumber(request.getPhoneNumber())) {
+            throw new DataIsNotUniqueException("Phone Number Is Not Available");
+        }
+
+        if (!employeeRepository.existsByIdentificationNumber(request.getIdentificationNumber())) {
+            throw new DataIsNotUniqueException("ID Is Not Available");
+        }
+
         Employee employee = new Employee();
         employee.setFullName(request.getFullName());
         employee.setCompany(company);
