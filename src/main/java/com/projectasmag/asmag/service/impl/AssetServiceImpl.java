@@ -1,4 +1,4 @@
-package com.projectasmag.asmag.service.impl.jpa;
+package com.projectasmag.asmag.service.impl;
 
 import com.projectasmag.asmag.constant.Message;
 import com.projectasmag.asmag.dto.CreateResponseDTO;

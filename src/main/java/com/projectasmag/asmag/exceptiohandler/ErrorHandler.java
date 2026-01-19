@@ -1,6 +1,6 @@
 package com.projectasmag.asmag.exceptiohandler;
 
-import com.projectasmag.asmag.dto.error.*;
+import com.projectasmag.asmag.dto.ErrorResponseDTO;
 import com.projectasmag.asmag.exceptiohandler.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

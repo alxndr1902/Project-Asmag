@@ -1,4 +1,4 @@
-package com.projectasmag.asmag.dto.error;
+package com.projectasmag.asmag.dto;
 
 public class ErrorResponseDTO<T> {
     private final T message;
