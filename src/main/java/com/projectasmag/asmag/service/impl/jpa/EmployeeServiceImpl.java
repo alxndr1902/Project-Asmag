@@ -13,12 +13,13 @@ import com.projectasmag.asmag.repository.CompanyRepository;
 import com.projectasmag.asmag.repository.EmployeeRepository;
 import com.projectasmag.asmag.service.BaseService;
 import com.projectasmag.asmag.service.EmployeeService;
-import jakarta.transaction.Transactional;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
+@Profile("jpa")
 @Service
 public class EmployeeServiceImpl extends BaseService implements EmployeeService {
     private final EmployeeRepository employeeRepository;
@@ -53,7 +54,7 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
         employee.setCompany(company);
         employee.setPhoneNumber(request.getPhoneNumber());
         employee.setIdentificationNumber(request.getIdentificationNumber());
-        createBaseModel(employee);
+        prepareCreate(employee);
         employeeRepository.save(employee);
         return new CreateResponseDTO(employee.getId(), Message.CREATED.name());
     }
@@ -65,7 +66,7 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
         if (employee.getVersion().equals(request.getVersion())) {
             employee.setFullName(request.getFullName());
             employee.setPhoneNumber(request.getPhoneNumber());
-            update(employee);
+            prepareUpdate(employee);
             employeeRepository.saveAndFlush(employee);
             return new UpdateResponseDTO(employee.getVersion(), Message.UPDATED.name());
         } else {

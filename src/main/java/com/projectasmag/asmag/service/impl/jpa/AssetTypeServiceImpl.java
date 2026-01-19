@@ -4,11 +4,13 @@ import com.projectasmag.asmag.dto.asset.AssetTypeResponseDTO;
 import com.projectasmag.asmag.model.asset.AssetType;
 import com.projectasmag.asmag.repository.AssetTypeRepository;
 import com.projectasmag.asmag.service.AssetTypeService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
+@Profile("jpa")
 @Service
 public class AssetTypeServiceImpl implements AssetTypeService {
     private final AssetTypeRepository assetTypeRepository;

@@ -16,12 +16,13 @@ import com.projectasmag.asmag.repository.RoleRepository;
 import com.projectasmag.asmag.repository.UserRepository;
 import com.projectasmag.asmag.service.BaseService;
 import com.projectasmag.asmag.service.UserService;
-import jakarta.transaction.Transactional;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
+@Profile("jpa")
 @Service
 public class UserServiceImpl extends BaseService implements UserService{
     private final UserRepository userRepository;
@@ -55,7 +56,7 @@ public class UserServiceImpl extends BaseService implements UserService{
                 .orElseThrow(() -> new RuntimeException("User Not Found"));
 
         user.setEmail(request.getEmail());
-        update(user);
+        prepareUpdate(user);
         userRepository.saveAndFlush(user);
         return new UpdateResponseDTO(user.getVersion(), Message.UPDATED.getName());
     }
@@ -63,7 +64,7 @@ public class UserServiceImpl extends BaseService implements UserService{
     @Override
     public CreateResponseDTO register(RegisterRequestDTO request) {
         User user = mapToUser(request);
-        createBaseModel(user);
+        prepareCreate(user);
         userRepository.save(user);
         return new CreateResponseDTO(user.getId(), Message.CREATED.getName());
     }

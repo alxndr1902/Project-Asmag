@@ -1,7 +1,6 @@
 package com.projectasmag.asmag.service.impl.jpa;
 
 import com.projectasmag.asmag.constant.Message;
-import com.projectasmag.asmag.dao.*;
 import com.projectasmag.asmag.dto.UpdateResponseDTO;
 import com.projectasmag.asmag.dto.loan.CreateLoanRequestDTO;
 import com.projectasmag.asmag.dto.loan.CreateLoanResponseDTO;
@@ -16,6 +15,7 @@ import com.projectasmag.asmag.repository.*;
 import com.projectasmag.asmag.service.BaseService;
 import com.projectasmag.asmag.service.LoanService;
 import jakarta.transaction.Transactional;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+@Profile("jpa")
 @Service
 public class LoanServiceImpl extends BaseService implements LoanService {
     private final LoanRepository loanRepository;
@@ -44,7 +45,8 @@ public class LoanServiceImpl extends BaseService implements LoanService {
     @Override
     public List<LoanResponseDTO> getLoans() {
         return loanRepository.findAll().stream()
-                .map(this::mapToLoanResponseDTO)
+                .map(loan -> new LoanResponseDTO(loan.getId(), loan.getCode(),
+                        getTargetName(loan), loan.getVersion()))
                 .toList();
     }
 
@@ -54,7 +56,8 @@ public class LoanServiceImpl extends BaseService implements LoanService {
                 .orElseThrow(() -> new RuntimeException("No Loan Found"));
 
         return loan.getLoanDetails().stream()
-                .map(this::mapToLoanDetailsResponseDto)
+                .map(loanDetail ->  new LoanDetailResponseDTO(loanDetail.getId(), loanDetail.getAsset().getName(), loanDetail.getReturnDate(),
+                        loanDetail.getVersion()))
                 .toList();
     }
 
@@ -69,7 +72,7 @@ public class LoanServiceImpl extends BaseService implements LoanService {
         loan.setLoanDate(LocalDateTime.now());
         loan.setCode(generateRandomAlphaNumeric(20));
         setTarget(request, loan);
-        createBaseModel(loan);
+        prepareCreate(loan);
         createLoanDetails(request, loan);
         loanRepository.save(loan);
         loanDetailRepository.saveAll(loan.getLoanDetails());
@@ -79,26 +82,12 @@ public class LoanServiceImpl extends BaseService implements LoanService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public UpdateResponseDTO returnAsset(String id, List<String> loanDetailIdList) {
-        UUID loanUUID = UUID.fromString(id);
-        List<UUID> loanDetailUUIDs = loanDetailIdList.stream()
-                .map(UUID::fromString)
-                .toList();
-
-        Loan loan = loanRepository.findById(loanUUID)
+        Loan loan = loanRepository.findById(UUID.fromString(id))
                 .orElseThrow(() -> new RuntimeException("No Loan Found"));
-        update(loan);
-
-        List<LoanDetail> loanDetails = loanDetailRepository.findAllById(loanDetailUUIDs);
-
-        validateLoanDetails(loan, loanDetails, loanDetailUUIDs);
-
-        LocalDateTime now = LocalDateTime.now();
-        loanDetails.forEach(loanDetail -> {
-            loanDetail.setReturnDate(now);
-            update(loanDetail);
-        });
+        prepareUpdate(loan);
 
         loanRepository.saveAndFlush(loan);
+        LocalDateTime now = LocalDateTime.now();
         for (String loanDetailId : loanDetailIdList) {
             LoanDetail loanDetail = loanDetailRepository.findById(UUID.fromString(loanDetailId)).orElseThrow(
                     () -> new RuntimeException("No Loan Detail Found")
@@ -107,38 +96,10 @@ public class LoanServiceImpl extends BaseService implements LoanService {
                 throw new RuntimeException("Loan Detail Id does not match Loan ID");
             }
             loanDetail.setReturnDate(now);
-            update(loanDetail);
+            prepareUpdate(loanDetail);
             loanDetailRepository.saveAndFlush(loanDetail);
         }
         return new UpdateResponseDTO(loan.getVersion(), Message.UPDATED.name());
-    }
-
-    private void validateLoanDetails(Loan loan, List<LoanDetail> loanDetails, List<UUID> loanDetailUUIDs) {
-        if (loanDetails.size() != loanDetailUUIDs.size()) {
-            throw new LoanDetailNotFoundException(
-                    loanDetailUUIDs.stream().filter(
-                            id -> loanDetails.stream().noneMatch(d -> d.getId().equals(id))
-                    ).findFirst().orElse(null)
-            );
-        }
-
-        boolean mismatch = loanDetails.stream()
-                .anyMatch(loanDetail -> !loanDetail.getLoan().getId().equals(loan.getId()));
-
-        if (mismatch) {
-            throw new RuntimeException("Loan Detail Id does not match Loan ID");
-        }
-    }
-
-    private LoanResponseDTO mapToLoanResponseDTO(Loan loan) {
-        return new LoanResponseDTO(
-                loan.getId(), loan.getCode(), getTargetName(loan), loan.getVersion()
-        );
-    }
-
-    private LoanDetailResponseDTO mapToLoanDetailsResponseDto(LoanDetail loanDetail) {
-        return new LoanDetailResponseDTO(loanDetail.getId(), loanDetail.getAsset().getName(), loanDetail.getReturnDate(),
-                loanDetail.getVersion());
     }
 
     private String getTargetName(Loan loan) {
@@ -174,21 +135,19 @@ public class LoanServiceImpl extends BaseService implements LoanService {
     }
 
     private void setTarget(CreateLoanRequestDTO request, Loan loan) {
-        if (request.getAssetTargetId() == null && request.getLocationTargetId() == null) {
+        if (request.getEmployeeTargetId() != null) {
             Employee employee = employeeRepository.findById(UUID.fromString(request.getAssetTargetId())).orElseThrow(
                     () -> new RuntimeException("No Employee Found")
             );
             loan.setEmployeeTarget(employee);
         }
-
-        if (request.getAssetTargetId() == null && request.getEmployeeTargetId() == null) {
+        if (request.getLocationTargetId() != null) {
             Location location = locationRepository.findById(UUID.fromString(request.getLocationTargetId())).orElseThrow(
                     () -> new RuntimeException(("No Location Found"))
             );
             loan.setLocationTarget(location);
         }
-
-        if (request.getEmployeeTargetId() == null && request.getLocationTargetId() == null) {
+        if (request.getAssetTargetId() != null) {
             Asset asset = assetRepository.findById(UUID.fromString(request.getAssetTargetId())).orElseThrow(
                     () -> new RuntimeException("No Asset Found")
             );
@@ -205,7 +164,7 @@ public class LoanServiceImpl extends BaseService implements LoanService {
             LoanDetail loanDetail = new LoanDetail();
             loanDetail.setAsset(asset);
             loanDetail.setLoan(loan);
-            createBaseModel(loanDetail);
+            prepareCreate(loanDetail);
             loan.getLoanDetails().add(loanDetail);
         }
     }

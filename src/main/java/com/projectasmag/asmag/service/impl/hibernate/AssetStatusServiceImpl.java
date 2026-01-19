@@ -4,12 +4,14 @@ import com.projectasmag.asmag.dao.AssetStatusDao;
 import com.projectasmag.asmag.dto.asset.AssetStatusResponseDTO;
 import com.projectasmag.asmag.model.asset.AssetStatus;
 import com.projectasmag.asmag.service.AssetStatusService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
-//@Service
+@Profile("hibernate")
+@Service
 public class AssetStatusServiceImpl implements AssetStatusService {
     private final AssetStatusDao  assetStatusDao;
 

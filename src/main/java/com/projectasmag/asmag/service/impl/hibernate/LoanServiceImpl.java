@@ -15,6 +15,7 @@ import com.projectasmag.asmag.model.loan.LoanDetail;
 import com.projectasmag.asmag.service.BaseService;
 import com.projectasmag.asmag.service.LoanService;
 import jakarta.transaction.Transactional;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,7 +23,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-//@Service
+@Profile("hibernate")
+@Service
 public class LoanServiceImpl extends BaseService implements LoanService {
     private final LoanDao loanDao;
     private final LoanDetailDao loanDetailDao;
@@ -64,7 +66,7 @@ public class LoanServiceImpl extends BaseService implements LoanService {
             loan.setLoanDate(LocalDateTime.now());
             loan.setCode(generateRandomAlphaNumeric(20));
             setTarget(request, loan);
-            createBaseModel(loan);
+            prepareCreate(loan);
             createLoanDetails(request, loan);
             loanDao.save(loan);
             return new CreateLoanResponseDTO(loan.getId(), loan.getCode(), Message.CREATED.name());
@@ -79,7 +81,7 @@ public class LoanServiceImpl extends BaseService implements LoanService {
         Loan loan = loanDao.findById(UUID.fromString(id)).orElseThrow(
                 () -> new RuntimeException("No Loan Found")
         );
-        update(loan);
+        prepareUpdate(loan);
         loanDao.update(loan);
         LocalDateTime now = LocalDateTime.now();
         for (String loanDetailId : loanDetailIdList) {
@@ -90,7 +92,7 @@ public class LoanServiceImpl extends BaseService implements LoanService {
                 throw new RuntimeException("Loan Detail Id does not match Loan ID");
             }
             loanDetail.setReturnDate(now);
-            update(loanDetail);
+            prepareUpdate(loanDetail);
             loanDetailDao.update(loanDetail);
         }
         em.flush();

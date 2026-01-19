@@ -4,11 +4,14 @@ import com.projectasmag.asmag.dao.RoleDao;
 import com.projectasmag.asmag.dto.role.RoleResponseDTO;
 import com.projectasmag.asmag.model.company.Role;
 import com.projectasmag.asmag.service.RoleService;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
-//@Service
+@Profile("hibernate")
+@Service
 public class RoleServiceImpl implements RoleService {
     private final RoleDao roleDao;
 

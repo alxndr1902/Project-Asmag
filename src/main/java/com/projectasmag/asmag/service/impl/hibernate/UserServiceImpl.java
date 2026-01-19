@@ -17,12 +17,15 @@ import com.projectasmag.asmag.model.company.User;
 import com.projectasmag.asmag.service.BaseService;
 import com.projectasmag.asmag.service.UserService;
 import jakarta.transaction.Transactional;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-//@Service
+@Profile("hibernate")
+@Service
 public class UserServiceImpl extends BaseService implements UserService{
     private final UserDao userDao;
     private final EmployeeDao employeeDao;
@@ -59,7 +62,7 @@ public class UserServiceImpl extends BaseService implements UserService{
         );
 
         user.setEmail(request.getEmail());
-        update(user);
+        prepareUpdate(user);
         userDao.update(user);
         em.flush();
         return new UpdateResponseDTO(user.getVersion(), Message.UPDATED.getName());
@@ -69,7 +72,7 @@ public class UserServiceImpl extends BaseService implements UserService{
     @Override
     public CreateResponseDTO register(RegisterRequestDTO request) {
         User user = mapToUser(request);
-        createBaseModel(user);
+        prepareCreate(user);
         userDao.insert(user);
         return new CreateResponseDTO(user.getId(), Message.CREATED.getName());
     }
