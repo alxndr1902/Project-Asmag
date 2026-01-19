@@ -86,8 +86,8 @@ public class AssetServiceImpl extends BaseService implements AssetService {
 
         if (!asset.getCode().equals(request.getCode())) {
             assetRepository.findByCode(request.getCode())
-                    .filter(existingAsset -> !existingAsset.getId().equals(assetId))
-                    .ifPresent(c -> {
+                    .filter(a -> !a.getId().equals(assetId))
+                    .ifPresent(a -> {
                         throw new DataIsNotUniqueException("Code Is Not Available");
                     });
         }
