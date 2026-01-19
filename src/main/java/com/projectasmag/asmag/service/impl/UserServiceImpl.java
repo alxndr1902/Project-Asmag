@@ -66,7 +66,7 @@ public class UserServiceImpl extends BaseService implements UserService{
 
         if (!user.getEmail().equals(request.getEmail())) {
             userRepository.findByEmail(request.getEmail())
-                    .filter(existingUser -> !existingUser.getId().equals(userId))
+                    .filter(u -> !u.getId().equals(userId))
                     .ifPresent(c -> {
                         throw new DataIsNotUniqueException("Email Is Not Available");
                     });
