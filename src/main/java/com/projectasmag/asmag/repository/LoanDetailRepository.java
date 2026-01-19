@@ -1,9 +1,12 @@
 package com.projectasmag.asmag.repository;
 
+import com.projectasmag.asmag.model.asset.Asset;
+import com.projectasmag.asmag.model.loan.Loan;
 import com.projectasmag.asmag.model.loan.LoanDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
 public interface LoanDetailRepository extends JpaRepository<LoanDetail, UUID> {
+    boolean existsByAssetAndLoan(Asset asset, Loan loan);
 }

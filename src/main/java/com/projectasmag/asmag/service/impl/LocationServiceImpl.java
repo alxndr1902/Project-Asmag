@@ -8,6 +8,7 @@ import com.projectasmag.asmag.dto.location.CreateLocationRequestDTO;
 import com.projectasmag.asmag.dto.location.LocationResponseDTO;
 import com.projectasmag.asmag.dto.location.UpdateLocationRequestDTO;
 import com.projectasmag.asmag.exceptiohandler.exception.DataIntegrationException;
+import com.projectasmag.asmag.exceptiohandler.exception.DataIsNotUniqueException;
 import com.projectasmag.asmag.exceptiohandler.exception.DataNotFoundException;
 import com.projectasmag.asmag.model.company.Company;
 import com.projectasmag.asmag.model.company.Location;
@@ -18,6 +19,7 @@ import com.projectasmag.asmag.service.LocationService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -52,6 +54,10 @@ public class LocationServiceImpl extends BaseService implements LocationService 
         UUID companyId = getId(request.getCompanyId());
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new DataNotFoundException("Company Is Not Found"));
+
+        if (locationRepository.existsByNameAndCompany(request.getName(), company)) {
+            throw new DataIsNotUniqueException("Location Already Exists");
+        }
 
         Location location = new Location();
         location.setName(request.getName());

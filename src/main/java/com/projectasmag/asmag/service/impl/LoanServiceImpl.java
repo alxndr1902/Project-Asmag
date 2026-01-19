@@ -6,6 +6,7 @@ import com.projectasmag.asmag.dto.loan.CreateLoanRequestDTO;
 import com.projectasmag.asmag.dto.loan.CreateLoanResponseDTO;
 import com.projectasmag.asmag.dto.loan.LoanDetailResponseDTO;
 import com.projectasmag.asmag.dto.loan.LoanResponseDTO;
+import com.projectasmag.asmag.exceptiohandler.exception.DataIsNotUniqueException;
 import com.projectasmag.asmag.exceptiohandler.exception.DataNotFoundException;
 import com.projectasmag.asmag.exceptiohandler.exception.InvalidLoanOwnershipException;
 import com.projectasmag.asmag.exceptiohandler.exception.MultipleLoanTargetException;
@@ -214,6 +215,11 @@ public class LoanServiceImpl extends BaseService implements LoanService {
             Asset asset = assetRepository.findById(getId(id)).orElseThrow(
                     () -> new DataNotFoundException("Asset Is Not Found")
             );
+
+            if (loanDetailRepository.existsByAssetAndLoan(asset, loan)) {
+                throw new DataIsNotUniqueException("Loan Detail Already Exists");
+            }
+
             LoanDetail loanDetail = new LoanDetail();
             loanDetail.setAsset(asset);
             loanDetail.setLoan(loan);
