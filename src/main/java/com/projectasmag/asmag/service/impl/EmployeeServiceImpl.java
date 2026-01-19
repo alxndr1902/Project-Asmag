@@ -78,7 +78,7 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
 
         if (!employee.getPhoneNumber().equals(request.getPhoneNumber())) {
             employeeRepository.findByPhoneNumber(request.getPhoneNumber())
-                    .filter(existingEmployee -> !existingEmployee.getId().equals(employeeId))
+                    .filter(e -> !e.getId().equals(employeeId))
                     .ifPresent(e -> {
                         throw new DataIsNotUniqueException("Phone Number Is Not Available");
                     });
