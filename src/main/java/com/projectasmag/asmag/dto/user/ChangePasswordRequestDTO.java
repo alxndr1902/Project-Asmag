@@ -4,16 +4,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class ChangePasswordRequestDTO {
-    @NotBlank
+    @NotBlank(message = "Old Password Is Required")
     private String oldPassword;
 
-    @NotBlank
+    @NotBlank(message = "New Password Is Required")
     @Size(max = 200)
     private String newPassword;
-
-    @NotBlank
-    @Size(max = 200)
-    private String confirmPassword;
 
     public ChangePasswordRequestDTO() {
     }
@@ -32,13 +28,5 @@ public class ChangePasswordRequestDTO {
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
-    }
-
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
     }
 }

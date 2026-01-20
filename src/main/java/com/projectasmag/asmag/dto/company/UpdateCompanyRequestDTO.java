@@ -1,20 +1,20 @@
 package com.projectasmag.asmag.dto.company;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class UpdateCompanyRequestDTO {
-    @Size(max = 100)
+    @NotBlank(message = "Name Is Required")
+    @Size(max = 100, message = "Name Maximum Length Is 100 Characters")
     private String name;
 
-    @Size(max = 20)
+    @NotBlank(message = "Phone Number Is Required")
+    @Size(max = 20, message = "Phone Number Maximum Length Is 20 Characters")
     private String phoneNumber;
 
-    @NotNull
+    @NotNull(message = "Please Refresh The Page")
     private Integer version;
-
-    public UpdateCompanyRequestDTO() {
-    }
 
     public String getName() {
         return name;

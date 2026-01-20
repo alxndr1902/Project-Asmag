@@ -1,6 +1,7 @@
 package com.projectasmag.asmag.dto.loan;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.util.List;
@@ -15,11 +16,9 @@ public class CreateLoanRequestDTO {
     @Size(max = 36)
     private String employeeTargetId;
 
-    @NotEmpty
+    @NotNull(message = "Asset To Be Loaned Cannot Be Empty")
+    @NotEmpty(message = "Asset To Be Loaned Cannot Be Empty")
     private List<String> assetIdList;
-
-    public CreateLoanRequestDTO() {
-    }
 
     public String getAssetTargetId() {
         return assetTargetId;

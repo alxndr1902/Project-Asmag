@@ -4,16 +4,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class CreateCompanyRequestDTO {
-    @NotBlank
-    @Size(max = 100)
+    @NotBlank(message = "Name Is Required")
+    @Size(max = 100, message = "Name Maximum Length Is 100 Characters")
     private String name;
 
-    @NotBlank
-    @Size(max = 20)
+    @NotBlank(message = "Phone Number Is Required")
+    @Size(max = 20, message = "Phone Number Maximum Length Is 20 Characters")
     private String phoneNumber;
-
-    public CreateCompanyRequestDTO() {
-    }
 
     public String getName() {
         return name;

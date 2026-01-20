@@ -1,0 +1,115 @@
+package com.projectasmag.asmag.service.impl;
+
+import com.projectasmag.asmag.constant.Message;
+import com.projectasmag.asmag.dto.CreateResponseDTO;
+import com.projectasmag.asmag.dto.DeleteResponseDTO;
+import com.projectasmag.asmag.dto.UpdateResponseDTO;
+import com.projectasmag.asmag.dto.employee.CreateEmployeeRequestDTO;
+import com.projectasmag.asmag.dto.employee.EmployeeResponseDTO;
+import com.projectasmag.asmag.dto.employee.UpdateEmployeeRequestDTO;
+import com.projectasmag.asmag.exceptiohandler.exception.DataIntegrationException;
+import com.projectasmag.asmag.exceptiohandler.exception.DuplicateException;
+import com.projectasmag.asmag.exceptiohandler.exception.NotFoundException;
+import com.projectasmag.asmag.model.company.Company;
+import com.projectasmag.asmag.model.company.Employee;
+import com.projectasmag.asmag.repository.CompanyRepository;
+import com.projectasmag.asmag.repository.EmployeeRepository;
+import com.projectasmag.asmag.service.BaseService;
+import com.projectasmag.asmag.service.EmployeeService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
+
+@Service
+public class EmployeeServiceImpl extends BaseService implements EmployeeService {
+    private final EmployeeRepository employeeRepository;
+    private final CompanyRepository companyRepository;
+
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, CompanyRepository companyRepository) {
+        this.employeeRepository = employeeRepository;
+        this.companyRepository = companyRepository;
+    }
+
+
+    @Override
+    public List<EmployeeResponseDTO> getEmployees() {
+        List<Employee> employees = employeeRepository.findAll();
+        List<EmployeeResponseDTO> responseDTOs = employees.stream()
+                .map(this::mapToEmployeeResponseDTO)
+                .toList();
+        return responseDTOs;
+    }
+
+    @Override
+    public EmployeeResponseDTO getEmployee(String id) {
+        UUID employeeId = UUID.fromString(id);
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new NotFoundException("Employee Is Not Found"));
+        return mapToEmployeeResponseDTO(employee);
+    }
+
+    @Override
+    public CreateResponseDTO createEmployee(CreateEmployeeRequestDTO request) {
+        UUID companyId = UUID.fromString(request.getCompanyId());
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new NotFoundException("Company Is Not Found"));
+
+        if (!employeeRepository.existsByPhoneNumber(request.getPhoneNumber())) {
+            throw new DuplicateException("Phone Number Is Not Available");
+        }
+
+        if (!employeeRepository.existsByIdentificationNumber(request.getIdentificationNumber())) {
+            throw new DuplicateException("ID Is Not Available");
+        }
+
+        Employee employee = new Employee();
+        employee.setFullName(request.getFullName());
+        employee.setCompany(company);
+        employee.setPhoneNumber(request.getPhoneNumber());
+        employee.setIdentificationNumber(request.getIdentificationNumber());
+
+        Employee savedEmployee = employeeRepository.save(prepareCreate(employee));
+        return new CreateResponseDTO(savedEmployee.getId(), Message.CREATED.name());
+    }
+
+    @Override
+    public UpdateResponseDTO updateEmployee(String id, UpdateEmployeeRequestDTO request) {
+        UUID employeeId = UUID.fromString(id);
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new NotFoundException("Employee Is Not Found"));
+
+        if (!employee.getVersion().equals(request.getVersion())) {
+            throw new DataIntegrationException("Please Refresh The Page");
+        }
+
+        if (!employee.getPhoneNumber().equals(request.getPhoneNumber())) {
+            employeeRepository.findByPhoneNumber(request.getPhoneNumber())
+                    .filter(e -> !e.getId().equals(employeeId))
+                    .ifPresent(e -> {
+                        throw new DuplicateException("Phone Number Is Not Available");
+                    });
+        }
+
+        employee.setFullName(request.getFullName());
+        employee.setPhoneNumber(request.getPhoneNumber());
+        Employee updatedEmployee = employeeRepository.saveAndFlush(prepareUpdate(employee));
+        return new UpdateResponseDTO(updatedEmployee.getVersion(), Message.UPDATED.name());
+    }
+
+    @Override
+    public DeleteResponseDTO deleteEmployee(String id) {
+        UUID employeeId = getId(id);
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new NotFoundException("Employee Is Not Found"));
+        employeeRepository.deleteById(employee.getId());
+        return new DeleteResponseDTO(Message.DELETED.name());
+    }
+
+    private EmployeeResponseDTO mapToEmployeeResponseDTO(Employee employee) {
+        EmployeeResponseDTO responseDTO = new EmployeeResponseDTO(
+                employee.getId(), employee.getFullName(), employee.getPhoneNumber(),
+                employee.getIdentificationNumber(), employee.getVersion());
+        return responseDTO;
+    }
+}

@@ -7,6 +7,7 @@ import com.projectasmag.asmag.dto.location.LocationResponseDTO;
 import com.projectasmag.asmag.dto.location.CreateLocationRequestDTO;
 import com.projectasmag.asmag.dto.location.UpdateLocationRequestDTO;
 import com.projectasmag.asmag.service.LocationService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,14 +36,14 @@ public class LocationController {
     }
 
     @PostMapping
-    public ResponseEntity<CreateResponseDTO> createLocation(@RequestBody CreateLocationRequestDTO request) {
+    public ResponseEntity<CreateResponseDTO> createLocation(@RequestBody @Valid CreateLocationRequestDTO request) {
         CreateResponseDTO response = locationService.createLocation(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
     public ResponseEntity<UpdateResponseDTO> updateLocation(@PathVariable String id,
-                                            @RequestBody UpdateLocationRequestDTO request) {
+                                            @RequestBody @Valid UpdateLocationRequestDTO request) {
         UpdateResponseDTO response = locationService.updateLocation(id, request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

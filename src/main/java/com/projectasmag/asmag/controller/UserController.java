@@ -8,6 +8,7 @@ import com.projectasmag.asmag.dto.user.ChangePasswordRequestDTO;
 import com.projectasmag.asmag.dto.user.UpdateUserRequestDTO;
 import com.projectasmag.asmag.dto.user.UserResponseDTO;
 import com.projectasmag.asmag.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,13 +38,13 @@ public class UserController {
 
     @PutMapping("{id}")
     public ResponseEntity<UpdateResponseDTO> updateUser(@PathVariable String id,
-                                        @RequestBody UpdateUserRequestDTO updateUserRequest) {
+                                        @RequestBody @Valid UpdateUserRequestDTO updateUserRequest) {
         UpdateResponseDTO response = userService.updateUser(id, updateUserRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("register")
-    public ResponseEntity<CreateResponseDTO> register(@RequestBody RegisterRequestDTO request) {
+    public ResponseEntity<CreateResponseDTO> register(@RequestBody @Valid RegisterRequestDTO request) {
         CreateResponseDTO response = userService.register(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -55,7 +56,7 @@ public class UserController {
     }
 
     @PatchMapping("change-password")
-    public UpdateResponseDTO changePassword(@RequestBody ChangePasswordRequestDTO changePasswordRequest) {
+    public UpdateResponseDTO changePassword(@RequestBody @Valid ChangePasswordRequestDTO changePasswordRequest) {
         return null;
     }
 }

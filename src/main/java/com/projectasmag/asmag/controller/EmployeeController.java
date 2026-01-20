@@ -7,6 +7,7 @@ import com.projectasmag.asmag.dto.employee.CreateEmployeeRequestDTO;
 import com.projectasmag.asmag.dto.employee.EmployeeResponseDTO;
 import com.projectasmag.asmag.dto.employee.UpdateEmployeeRequestDTO;
 import com.projectasmag.asmag.service.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,14 +36,14 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<CreateResponseDTO> createEmployee(@RequestBody CreateEmployeeRequestDTO request) {
+    public ResponseEntity<CreateResponseDTO> createEmployee(@RequestBody @Valid CreateEmployeeRequestDTO request) {
         CreateResponseDTO response = employeeService.createEmployee(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
     public ResponseEntity<UpdateResponseDTO> updateEmployee(@PathVariable String id,
-                                                            @RequestBody UpdateEmployeeRequestDTO updateEmployeeRequest) {
+                                                            @RequestBody @Valid UpdateEmployeeRequestDTO updateEmployeeRequest) {
         UpdateResponseDTO response = employeeService.updateEmployee(id, updateEmployeeRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

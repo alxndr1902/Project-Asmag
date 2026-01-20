@@ -1,20 +1,20 @@
 package com.projectasmag.asmag.dto.asset;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class UpdateAssetRequestDTO {
-    @Size(max = 10)
+    @NotBlank(message = "Code Is Required")
+    @Size(max = 10, message = "Code Maximum Length Is 10 Characters")
     private String code;
 
-    @Size(max = 100)
+    @NotBlank(message = "Name Is Required")
+    @Size(max = 100, message = "Name Maximum Length Is 100 Characters")
     private String name;
 
-    @NotNull
+    @NotNull(message = "Please Refresh The Page")
     private Integer version;
-
-    public UpdateAssetRequestDTO() {
-    }
 
     public String getCode() {
         return code;
