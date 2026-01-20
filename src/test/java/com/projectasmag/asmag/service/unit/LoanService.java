@@ -1,9 +1,7 @@
 package com.projectasmag.asmag.service.unit;
 
 import com.projectasmag.asmag.dto.loan.CreateLoanRequestDTO;
-import com.projectasmag.asmag.dto.loan.LoanDetailResponseDTO;
 import com.projectasmag.asmag.model.asset.Asset;
-import com.projectasmag.asmag.model.company.Employee;
 import com.projectasmag.asmag.model.company.Location;
 import com.projectasmag.asmag.model.loan.Loan;
 import com.projectasmag.asmag.model.loan.LoanDetail;
@@ -16,7 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.util.Assert;
 
 import java.util.*;
 
@@ -33,9 +30,6 @@ public class LoanService {
 
     @Mock
     private LocationRepository locationRepository;
-
-    @Mock
-    private EmployeeRepository employeeRepository;
 
     @InjectMocks
     private LoanServiceImpl loanService;
