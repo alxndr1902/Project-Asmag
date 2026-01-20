@@ -140,14 +140,16 @@ public class LoanServiceImpl extends BaseService implements LoanService {
     }
 
     private LoanResponseDTO mapToLoanResponseDTO(Loan loan) {
-        return new LoanResponseDTO(
-                loan.getId(), loan.getCode(), getTargetName(loan), loan.getVersion()
-        );
+        LoanResponseDTO response = new LoanResponseDTO(loan.getId(), loan.getCode(),
+                getTargetName(loan), loan.getVersion());
+        return response;
     }
 
     private LoanDetailResponseDTO mapToLoanDetailsResponseDto(LoanDetail loanDetail) {
-        return new LoanDetailResponseDTO(loanDetail.getId(), loanDetail.getAsset().getName(), loanDetail.getReturnDate(),
+        LoanDetailResponseDTO response = new LoanDetailResponseDTO(loanDetail.getId(),
+                loanDetail.getAsset().getName(), loanDetail.getReturnDate(),
                 loanDetail.getVersion());
+        return response;
     }
 
     private String getTargetName(Loan loan) {
@@ -174,7 +176,7 @@ public class LoanServiceImpl extends BaseService implements LoanService {
         return result.toString();
     }
 
-    private boolean hasSingleTarget(CreateLoanRequestDTO request) {
+    private Boolean hasSingleTarget(CreateLoanRequestDTO request) {
         int filledCount = 0;
         if (request.getAssetTargetId() != null) filledCount++;
         if (request.getEmployeeTargetId() != null) filledCount++;

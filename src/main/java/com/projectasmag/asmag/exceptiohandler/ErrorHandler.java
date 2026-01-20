@@ -54,8 +54,8 @@ public class ErrorHandler {
         return new ResponseEntity<>(new ErrorResponseDTO<>(errors), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(UUIDNotValidException.class)
-    public ResponseEntity<?> handleUUIDNotValidException(UUIDNotValidException e) {
+    @ExceptionHandler(InvalidUUIDException.class)
+    public ResponseEntity<?> handleUUIDNotValidException(InvalidUUIDException e) {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
          var errorMessage = e.getMessage();
 
@@ -63,7 +63,7 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler(DuplicateException.class)
-    public ResponseEntity<?> handleDataIsNotUniqueException(UUIDNotValidException e) {
+    public ResponseEntity<?> handleDuplicateException(DuplicateException e) {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         var errorMessage = e.getMessage();
 

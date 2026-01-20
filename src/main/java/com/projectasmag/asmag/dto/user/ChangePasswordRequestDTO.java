@@ -11,10 +11,6 @@ public class ChangePasswordRequestDTO {
     @Size(max = 200)
     private String newPassword;
 
-    @NotBlank(message = "Confirm Password Is Required")
-    @Size(max = 200)
-    private String confirmPassword;
-
     public ChangePasswordRequestDTO() {
     }
 
@@ -32,13 +28,5 @@ public class ChangePasswordRequestDTO {
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
-    }
-
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
     }
 }

@@ -1,12 +1,12 @@
 package com.projectasmag.asmag.service;
 
-import com.fasterxml.jackson.databind.exc.MismatchedInputException;
-import com.projectasmag.asmag.exceptiohandler.exception.UUIDNotValidException;
+import com.projectasmag.asmag.exceptiohandler.exception.InvalidUUIDException;
 import com.projectasmag.asmag.model.BaseModel;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 public abstract class BaseService {
@@ -30,7 +30,17 @@ public abstract class BaseService {
         try {
             return UUID.fromString(request);
         } catch (IllegalArgumentException e) {
-            throw new UUIDNotValidException("Invalid UUID");
+            throw new InvalidUUIDException("Invalid UUID");
+        }
+    }
+
+    protected LocalDateTime getDate(String request) {
+        try {
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            LocalDateTime result = LocalDateTime.parse(request, format);
+            return result;
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid Format");
         }
     }
 }

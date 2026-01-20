@@ -19,10 +19,6 @@ public class RegisterRequestDTO {
     @Size(max = 200)
     private String password;
 
-    @NotBlank(message = "Please Confirm Password First")
-    @Size(max = 200)
-    private String confirmPassword;
-
     @NotBlank(message = "Role Is Required")
     @Size(max = 36)
     private String roleId;
@@ -49,14 +45,6 @@ public class RegisterRequestDTO {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
     }
 
     public String getRoleId() {

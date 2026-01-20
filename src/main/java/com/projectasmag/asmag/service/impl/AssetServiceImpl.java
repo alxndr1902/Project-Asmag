@@ -22,6 +22,7 @@ import com.projectasmag.asmag.service.AssetService;
 import com.projectasmag.asmag.service.BaseService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -84,16 +85,16 @@ public class AssetServiceImpl extends BaseService implements AssetService {
         Asset asset = assetRepository.findById(assetId)
                 .orElseThrow(() -> new NotFoundException("Asset Is Not Found"));
 
+        if (!asset.getVersion().equals(request.getVersion())) {
+            throw new DataIntegrationException("Please Refresh The Page");
+        }
+
         if (!asset.getCode().equals(request.getCode())) {
             assetRepository.findByCode(request.getCode())
                     .filter(a -> !a.getId().equals(assetId))
                     .ifPresent(a -> {
                         throw new DuplicateException("Code Is Not Available");
                     });
-        }
-
-        if (!asset.getVersion().equals(request.getVersion())) {
-            throw new DataIntegrationException("Please Refresh The Page");
         }
 
         asset.setCode(request.getCode());
@@ -130,6 +131,10 @@ public class AssetServiceImpl extends BaseService implements AssetService {
         asset.setCompany(company);
         asset.setCode(request.getCode());
         asset.setName(request.getName());
+        if (!request.getExpiredDate().isEmpty()) {
+            LocalDateTime expiredDate = getDate(request.getExpiredDate());
+            asset.setExpiredDate(expiredDate);
+        }
         return asset;
     }
 }

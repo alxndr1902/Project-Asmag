@@ -70,6 +70,10 @@ public class Asset extends BaseModel {
         this.company = company;
     }
 
+    public void setExpiredDate(LocalDateTime expiredDate) {
+        this.expiredDate = expiredDate;
+    }
+
     public LocalDateTime getExpiredDate() {
         return expiredDate;
     }
