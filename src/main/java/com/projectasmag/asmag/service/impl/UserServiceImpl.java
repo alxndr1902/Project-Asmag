@@ -73,9 +73,8 @@ public class UserServiceImpl extends BaseService implements UserService{
         }
 
         user.setEmail(request.getEmail());
-        prepareUpdate(user);
-        userRepository.saveAndFlush(user);
-        return new UpdateResponseDTO(user.getVersion(), Message.UPDATED.getName());
+        User updatedUser = userRepository.saveAndFlush(prepareUpdate(user));
+        return new UpdateResponseDTO(updatedUser.getVersion(), Message.UPDATED.getName());
     }
 
     @Override
@@ -93,9 +92,8 @@ public class UserServiceImpl extends BaseService implements UserService{
         }
 
         User user = mapToUser(request, employee, role);
-        prepareCreate(user);
-        userRepository.save(user);
-        return new CreateResponseDTO(user.getId(), Message.CREATED.getName());
+        User savedUser = userRepository.save(prepareCreate(user));
+        return new CreateResponseDTO(savedUser.getId(), Message.CREATED.getName());
     }
 
     @Override

@@ -7,11 +7,12 @@ import com.projectasmag.asmag.dto.loan.LoanDetailResponseDTO;
 import com.projectasmag.asmag.dto.loan.LoanResponseDTO;
 
 import java.util.List;
+import java.util.Set;
 
 public interface LoanService {
     List<LoanResponseDTO> getLoans();
 
-    List<LoanDetailResponseDTO> getLoanById(String id);
+    Set<LoanDetailResponseDTO> getLoanById(String id);
 
     CreateLoanResponseDTO createLoan(CreateLoanRequestDTO request);
 

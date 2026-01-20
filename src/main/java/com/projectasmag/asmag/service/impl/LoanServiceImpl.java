@@ -51,14 +51,14 @@ public class LoanServiceImpl extends BaseService implements LoanService {
     }
 
     @Override
-    public List<LoanDetailResponseDTO> getLoanById(String id) {
+    public Set<LoanDetailResponseDTO> getLoanById(String id) {
         UUID loanId = getId(id);
         Loan loan = loanRepository.findById(getId(id))
                 .orElseThrow(() -> new NotFoundException("Loan Is Not Found"));
 
-        List<LoanDetailResponseDTO> responseList = loan.getLoanDetails().stream()
+        Set<LoanDetailResponseDTO> responseList = loan.getLoanDetails().stream()
                 .map(this::mapToLoanDetailsResponseDto)
-                .toList();
+                .collect(Collectors.toSet());
 
         return responseList;
     }
@@ -73,14 +73,15 @@ public class LoanServiceImpl extends BaseService implements LoanService {
         Loan loan = new Loan();
         loan.setLoanDate(LocalDateTime.now());
         loan.setCode(generateRandomAlphaNumeric());
-        prepareCreate(setTarget(request, loan));
+        Loan filledLoan = setTarget(request, loan);
+        prepareCreate(filledLoan);
 
-        Set<LoanDetail> loanDetails = createLoanDetails(request, loan);
+        List<LoanDetail> loanDetails = createLoanDetails(request, loan);
 
-        loanRepository.save(loan);
+        Loan savedLoan = loanRepository.save(loan);
         loanDetailRepository.saveAll(loanDetails);
 
-        return new CreateLoanResponseDTO(loan.getId(), loan.getCode(), Message.CREATED.getName());
+        return new CreateLoanResponseDTO(savedLoan.getId(), savedLoan.getCode(), Message.CREATED.getName());
     }
 
     @Override
@@ -112,9 +113,9 @@ public class LoanServiceImpl extends BaseService implements LoanService {
             loanDetail.setReturnDate(now);
             prepareUpdate(loanDetail);
         }
-        loanRepository.save(loan);
+        Loan updatedLoan = loanRepository.save(loan);
         loanDetailRepository.saveAll(existingLoanDetails);
-        return new UpdateResponseDTO(loan.getVersion(), Message.UPDATED.name());
+        return new UpdateResponseDTO(updatedLoan.getVersion(), Message.UPDATED.name());
     }
 
     private Set<UUID> getNotFoundLoanDetailIds(List<LoanDetail> existingLoanDetails,
@@ -211,8 +212,8 @@ public class LoanServiceImpl extends BaseService implements LoanService {
         return loan;
     }
 
-    private Set<LoanDetail> createLoanDetails(CreateLoanRequestDTO request, Loan loan) {
-        loan.setLoanDetails(new HashSet<>());
+    private List<LoanDetail> createLoanDetails(CreateLoanRequestDTO request, Loan loan) {
+        loan.setLoanDetails(new ArrayList<>());
         for (String id : request.getAssetIdList()) {
             Asset asset = assetRepository.findById(getId(id)).orElseThrow(
                     () -> new NotFoundException("Asset Is Not Found")

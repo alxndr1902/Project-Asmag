@@ -75,8 +75,8 @@ public class AssetServiceImpl extends BaseService implements AssetService {
         }
 
         Asset asset = mapToAsset(request, assetType, assetStatus, company);
-        assetRepository.save(prepareCreate(asset));
-        return new CreateResponseDTO(asset.getId(), Message.CREATED.getName());
+        Asset savedAsset = assetRepository.save(prepareCreate(asset));
+        return new CreateResponseDTO(savedAsset.getId(), Message.CREATED.getName());
     }
 
     @Override
@@ -99,9 +99,8 @@ public class AssetServiceImpl extends BaseService implements AssetService {
 
         asset.setCode(request.getCode());
         asset.setName(request.getName());
-        prepareUpdate(asset);
-        assetRepository.saveAndFlush(asset);
-        return new UpdateResponseDTO(asset.getVersion(), Message.UPDATED.getName());
+        Asset updatedAsset = assetRepository.saveAndFlush(prepareUpdate(asset));
+        return new UpdateResponseDTO(updatedAsset.getVersion(), Message.UPDATED.getName());
     }
 
     @Override

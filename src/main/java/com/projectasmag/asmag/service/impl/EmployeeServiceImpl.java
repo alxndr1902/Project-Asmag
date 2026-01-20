@@ -68,10 +68,9 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
         employee.setCompany(company);
         employee.setPhoneNumber(request.getPhoneNumber());
         employee.setIdentificationNumber(request.getIdentificationNumber());
-        prepareCreate(employee);
 
-        employeeRepository.save(employee);
-        return new CreateResponseDTO(employee.getId(), Message.CREATED.name());
+        Employee savedEmployee = employeeRepository.save(prepareCreate(employee));
+        return new CreateResponseDTO(savedEmployee.getId(), Message.CREATED.name());
     }
 
     @Override
@@ -94,9 +93,8 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
 
         employee.setFullName(request.getFullName());
         employee.setPhoneNumber(request.getPhoneNumber());
-        prepareUpdate(employee);
-        employeeRepository.saveAndFlush(employee);
-        return new UpdateResponseDTO(employee.getVersion(), Message.UPDATED.name());
+        Employee updatedEmployee = employeeRepository.saveAndFlush(prepareUpdate(employee));
+        return new UpdateResponseDTO(updatedEmployee.getVersion(), Message.UPDATED.name());
     }
 
     @Override

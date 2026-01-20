@@ -56,9 +56,8 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
         Company company =  new Company();
         company.setName(request.getName());
         company.setPhoneNumber(request.getPhoneNumber());
-        prepareCreate(company);
-        companyRepository.save(company);
-        return new CreateResponseDTO(company.getId(), Message.CREATED.getName());
+        Company savedCompany = companyRepository.save(prepareCreate(company));
+        return new CreateResponseDTO(savedCompany.getId(), Message.CREATED.getName());
     }
 
     @Override
@@ -89,9 +88,8 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
 
         company.setName(request.getName());
         company.setPhoneNumber(request.getPhoneNumber());
-        prepareUpdate(company);
-        companyRepository.saveAndFlush(company);
-        return new UpdateResponseDTO(company.getVersion(), Message.UPDATED.getName());
+        Company updatedCompany = companyRepository.saveAndFlush(prepareUpdate(company));
+        return new UpdateResponseDTO(updatedCompany.getVersion(), Message.UPDATED.getName());
     }
 
     private CompanyResponseDTO mapToCompanyResponseDTO(Company company) {

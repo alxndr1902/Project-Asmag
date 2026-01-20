@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("api/loans")
@@ -29,8 +30,8 @@ public class LoanController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<List<LoanDetailResponseDTO>> getLoanById(@PathVariable String id) {
-        List<LoanDetailResponseDTO> response = loanService.getLoanById(id);
+    public ResponseEntity<Set<LoanDetailResponseDTO>> getLoanById(@PathVariable String id) {
+        Set<LoanDetailResponseDTO> response = loanService.getLoanById(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

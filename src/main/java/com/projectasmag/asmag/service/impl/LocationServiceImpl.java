@@ -61,9 +61,8 @@ public class LocationServiceImpl extends BaseService implements LocationService 
         Location location = new Location();
         location.setName(request.getName());
         location.setCompany(company);
-        prepareCreate(location);
-        locationRepository.save(location);
-        return new CreateResponseDTO(company.getId(), Message.CREATED.getName());
+        Location savedLocation = locationRepository.save(prepareCreate(location));
+        return new CreateResponseDTO(savedLocation.getId(), Message.CREATED.getName());
     }
 
     @Override
@@ -77,9 +76,8 @@ public class LocationServiceImpl extends BaseService implements LocationService 
         }
 
         location.setName(request.getName());
-        prepareUpdate(location);
-        locationRepository.saveAndFlush(location);
-        return new UpdateResponseDTO(location.getVersion(), Message.CREATED.getName());
+        Location updatedLocation = locationRepository.saveAndFlush(prepareUpdate(location));
+        return new UpdateResponseDTO(updatedLocation.getVersion(), Message.CREATED.getName());
     }
 
     @Override
