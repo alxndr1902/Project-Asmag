@@ -16,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.util.Assert;
 
 import java.util.*;
 
@@ -59,16 +60,29 @@ public class LoanService {
     @Test
     public void shouldReturnData_whenIdValid() {
         var loanId = UUID.randomUUID();
-        List<LoanDetail> loanDetails = new ArrayList<>();
+        var loanDetailId = UUID.randomUUID();
+
+        var asset = new Asset();
+        asset.setName("Pena");
+
+        LoanDetail loanDetail = new LoanDetail();
+        loanDetail.setId(loanDetailId);
+        loanDetail.setAsset(asset);
+        List<LoanDetail> loanDetails = List.of(loanDetail);
+
         var savedLoan = new Loan();
         savedLoan.setId(loanId);
         savedLoan.setLoanDetails(loanDetails);
 
         Mockito.when(loanRepository.findById(loanId)).thenReturn(Optional.of(savedLoan));
 
-        Set<LoanDetailResponseDTO> result = loanService.getLoanById(loanId.toString());
+        var result = loanService.getLoanById(loanId.toString());
 
         Assertions.assertEquals(savedLoan.getLoanDetails().size(), result.size());
+        Assertions.assertEquals(savedLoan.getLoanDetails().get(0).getId(),
+                result.get(0).id());
+
+        Mockito.verify(loanRepository, Mockito.times(1)).findById(Mockito.any());
     }
 
     @Test

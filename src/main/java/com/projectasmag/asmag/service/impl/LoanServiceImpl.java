@@ -51,14 +51,14 @@ public class LoanServiceImpl extends BaseService implements LoanService {
     }
 
     @Override
-    public Set<LoanDetailResponseDTO> getLoanById(String id) {
+    public List<LoanDetailResponseDTO> getLoanById(String id) {
         UUID loanId = getId(id);
-        Loan loan = loanRepository.findById(getId(id))
+        Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new NotFoundException("Loan Is Not Found"));
 
-        Set<LoanDetailResponseDTO> responseList = loan.getLoanDetails().stream()
+        List<LoanDetailResponseDTO> responseList = loan.getLoanDetails().stream()
                 .map(this::mapToLoanDetailsResponseDto)
-                .collect(Collectors.toSet());
+                .toList();
 
         return responseList;
     }
