@@ -6,29 +6,26 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class RegisterRequestDTO {
-    @NotBlank
+    @NotBlank(message = "ID Employee Is Required")
     @Size(max = 36)
     private String employeeId;
 
-    @Email
-    @NotBlank
-    @Size(max = 50)
+    @Email(message = "Invalid Email Format")
+    @NotBlank(message = "Email Is Required")
+    @Size(max = 50, message = "Email Maximum Length Is 50 Characters")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "Password Is Required")
     @Size(max = 200)
     private String password;
 
-    @NotBlank
+    @NotBlank(message = "Please Confirm Password First")
     @Size(max = 200)
     private String confirmPassword;
 
-    @NotBlank
+    @NotBlank(message = "Role Is Required")
     @Size(max = 36)
     private String roleId;
-
-    public RegisterRequestDTO() {
-    }
 
     public String getEmployeeId() {
         return employeeId;

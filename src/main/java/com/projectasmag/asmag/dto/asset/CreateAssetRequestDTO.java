@@ -5,11 +5,11 @@ import jakarta.validation.constraints.Size;
 
 public class CreateAssetRequestDTO {
     @NotBlank(message = "Code Is Required")
-    @Size(max = 10)
+    @Size(max = 10, message = "Code Maximum Length is 10 Characters")
     private String code;
 
     @NotBlank(message = "Name Is Required")
-    @Size(max = 100)
+    @Size(max = 100, message = "Name Maximum Length is 100 Characters")
     private String name;
 
     @NotBlank(message = "Asset Type Is Required")
@@ -23,11 +23,8 @@ public class CreateAssetRequestDTO {
     @NotBlank(message = "Asset Company Is Required")
     @Size(max = 36)
     private String companyId;
-    @Size(max = 36)
-    private String expiredDate;
 
-    public CreateAssetRequestDTO() {
-    }
+    private String expiredDate;
 
     public String getCode() {
         return code;

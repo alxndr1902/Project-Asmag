@@ -8,8 +8,8 @@ import com.projectasmag.asmag.dto.employee.CreateEmployeeRequestDTO;
 import com.projectasmag.asmag.dto.employee.EmployeeResponseDTO;
 import com.projectasmag.asmag.dto.employee.UpdateEmployeeRequestDTO;
 import com.projectasmag.asmag.exceptiohandler.exception.DataIntegrationException;
-import com.projectasmag.asmag.exceptiohandler.exception.DataIsNotUniqueException;
-import com.projectasmag.asmag.exceptiohandler.exception.DataNotFoundException;
+import com.projectasmag.asmag.exceptiohandler.exception.DuplicateException;
+import com.projectasmag.asmag.exceptiohandler.exception.NotFoundException;
 import com.projectasmag.asmag.model.company.Company;
 import com.projectasmag.asmag.model.company.Employee;
 import com.projectasmag.asmag.repository.CompanyRepository;
@@ -45,7 +45,7 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
     public EmployeeResponseDTO getEmployee(String id) {
         UUID employeeId = UUID.fromString(id);
         Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new DataNotFoundException("Employee Is Not Found"));
+                .orElseThrow(() -> new NotFoundException("Employee Is Not Found"));
         return mapToEmployeeResponseDTO(employee);
     }
 
@@ -53,14 +53,14 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
     public CreateResponseDTO createEmployee(CreateEmployeeRequestDTO request) {
         UUID companyId = UUID.fromString(request.getCompanyId());
         Company company = companyRepository.findById(companyId)
-                .orElseThrow(() -> new DataNotFoundException("Company Is Not Found"));
+                .orElseThrow(() -> new NotFoundException("Company Is Not Found"));
 
         if (!employeeRepository.existsByPhoneNumber(request.getPhoneNumber())) {
-            throw new DataIsNotUniqueException("Phone Number Is Not Available");
+            throw new DuplicateException("Phone Number Is Not Available");
         }
 
         if (!employeeRepository.existsByIdentificationNumber(request.getIdentificationNumber())) {
-            throw new DataIsNotUniqueException("ID Is Not Available");
+            throw new DuplicateException("ID Is Not Available");
         }
 
         Employee employee = new Employee();
@@ -78,7 +78,7 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
     public UpdateResponseDTO updateEmployee(String id, UpdateEmployeeRequestDTO request) {
         UUID employeeId = UUID.fromString(id);
         Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new DataNotFoundException("Employee Is Not Found"));
+                .orElseThrow(() -> new NotFoundException("Employee Is Not Found"));
 
         if (!employee.getVersion().equals(request.getVersion())) {
             throw new DataIntegrationException("Please Refresh The Page");
@@ -88,7 +88,7 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
             employeeRepository.findByPhoneNumber(request.getPhoneNumber())
                     .filter(e -> !e.getId().equals(employeeId))
                     .ifPresent(e -> {
-                        throw new DataIsNotUniqueException("Phone Number Is Not Available");
+                        throw new DuplicateException("Phone Number Is Not Available");
                     });
         }
 
@@ -103,7 +103,7 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
     public DeleteResponseDTO deleteEmployee(String id) {
         UUID employeeId = getId(id);
         Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new DataNotFoundException("Employee Is Not Found"));
+                .orElseThrow(() -> new NotFoundException("Employee Is Not Found"));
         employeeRepository.deleteById(employee.getId());
         return new DeleteResponseDTO(Message.DELETED.name());
     }

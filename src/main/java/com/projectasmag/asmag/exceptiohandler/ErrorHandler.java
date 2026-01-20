@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ErrorHandler {
-    @ExceptionHandler(DataNotFoundException.class)
-    public ResponseEntity<?> handleDataNotFoundException(DataNotFoundException e) {
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<?> handleDataNotFoundException(NotFoundException e) {
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
 
         var errorMessage = e.getMessage();
@@ -62,7 +62,7 @@ public class ErrorHandler {
          return new ResponseEntity<>(new ErrorResponseDTO<>(errorMessage),  httpStatus);
     }
 
-    @ExceptionHandler(DataIsNotUniqueException.class)
+    @ExceptionHandler(DuplicateException.class)
     public ResponseEntity<?> handleDataIsNotUniqueException(UUIDNotValidException e) {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         var errorMessage = e.getMessage();

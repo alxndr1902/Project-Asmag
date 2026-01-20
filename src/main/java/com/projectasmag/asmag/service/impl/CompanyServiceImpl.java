@@ -7,8 +7,8 @@ import com.projectasmag.asmag.dto.company.CompanyResponseDTO;
 import com.projectasmag.asmag.dto.company.CreateCompanyRequestDTO;
 import com.projectasmag.asmag.dto.company.UpdateCompanyRequestDTO;
 import com.projectasmag.asmag.exceptiohandler.exception.DataIntegrationException;
-import com.projectasmag.asmag.exceptiohandler.exception.DataIsNotUniqueException;
-import com.projectasmag.asmag.exceptiohandler.exception.DataNotFoundException;
+import com.projectasmag.asmag.exceptiohandler.exception.DuplicateException;
+import com.projectasmag.asmag.exceptiohandler.exception.NotFoundException;
 import com.projectasmag.asmag.model.company.Company;
 import com.projectasmag.asmag.repository.CompanyRepository;
 import com.projectasmag.asmag.service.BaseService;
@@ -39,18 +39,18 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
     public CompanyResponseDTO getCompany(String id) {
         UUID companyId = getId(id);
         Company company = companyRepository.findById(companyId)
-                .orElseThrow(() -> new DataNotFoundException("Company Is Not Found"));
+                .orElseThrow(() -> new NotFoundException("Company Is Not Found"));
         return mapToCompanyResponseDTO(company);
     }
 
     @Override
     public CreateResponseDTO createCompany(CreateCompanyRequestDTO request) {
         if (companyRepository.existsByName(request.getName())) {
-            throw new DataIsNotUniqueException("Company Name Already Exists");
+            throw new DuplicateException("Company Name Already Exists");
         }
 
         if (companyRepository.existsByPhoneNumber(request.getPhoneNumber())) {
-            throw new DataIsNotUniqueException("Company Phone Number Already Exists");
+            throw new DuplicateException("Company Phone Number Already Exists");
         }
 
         Company company =  new Company();
@@ -65,7 +65,7 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
     public UpdateResponseDTO updateCompany(String id, UpdateCompanyRequestDTO request) {
         UUID companyId = getId(id);
         Company company = companyRepository.findById(companyId)
-                .orElseThrow(() -> new DataNotFoundException("Company Is Not found"));
+                .orElseThrow(() -> new NotFoundException("Company Is Not found"));
 
         if (!company.getVersion().equals(request.getVersion())) {
             throw new DataIntegrationException("Please Refresh The Page");
@@ -75,7 +75,7 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
             companyRepository.findByName(request.getName())
                     .filter(c -> !c.getId().equals(companyId))
                     .ifPresent(c -> {
-                        throw new DataIsNotUniqueException("Name Is Not Available");
+                        throw new DuplicateException("Name Is Not Available");
                     });
         }
 

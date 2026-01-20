@@ -8,8 +8,8 @@ import com.projectasmag.asmag.dto.location.CreateLocationRequestDTO;
 import com.projectasmag.asmag.dto.location.LocationResponseDTO;
 import com.projectasmag.asmag.dto.location.UpdateLocationRequestDTO;
 import com.projectasmag.asmag.exceptiohandler.exception.DataIntegrationException;
-import com.projectasmag.asmag.exceptiohandler.exception.DataIsNotUniqueException;
-import com.projectasmag.asmag.exceptiohandler.exception.DataNotFoundException;
+import com.projectasmag.asmag.exceptiohandler.exception.DuplicateException;
+import com.projectasmag.asmag.exceptiohandler.exception.NotFoundException;
 import com.projectasmag.asmag.model.company.Company;
 import com.projectasmag.asmag.model.company.Location;
 import com.projectasmag.asmag.repository.CompanyRepository;
@@ -19,7 +19,6 @@ import com.projectasmag.asmag.service.LocationService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -45,7 +44,7 @@ public class LocationServiceImpl extends BaseService implements LocationService 
     public LocationResponseDTO getLocation(String id) {
         UUID locationId = getId(id);
         Location location = locationRepository.findById(locationId)
-                .orElseThrow(() -> new DataNotFoundException("Location Is Not Found"));
+                .orElseThrow(() -> new NotFoundException("Location Is Not Found"));
         return mapToLocationResponseDTO(location);
     }
 
@@ -53,10 +52,10 @@ public class LocationServiceImpl extends BaseService implements LocationService 
     public CreateResponseDTO createLocation(CreateLocationRequestDTO request) {
         UUID companyId = getId(request.getCompanyId());
         Company company = companyRepository.findById(companyId)
-                .orElseThrow(() -> new DataNotFoundException("Company Is Not Found"));
+                .orElseThrow(() -> new NotFoundException("Company Is Not Found"));
 
         if (locationRepository.existsByNameAndCompany(request.getName(), company)) {
-            throw new DataIsNotUniqueException("Location Already Exists");
+            throw new DuplicateException("Location Already Exists");
         }
 
         Location location = new Location();
@@ -71,7 +70,7 @@ public class LocationServiceImpl extends BaseService implements LocationService 
     public UpdateResponseDTO updateLocation(String id, UpdateLocationRequestDTO request) {
         UUID locationId = getId(id);
         Location location = locationRepository.findById(locationId)
-                .orElseThrow(() -> new DataNotFoundException("Location Is Not Found"));
+                .orElseThrow(() -> new NotFoundException("Location Is Not Found"));
 
         if (!location.getVersion().equals(request.getVersion())) {
             throw new DataIntegrationException("Version Does Not Match");
@@ -87,7 +86,7 @@ public class LocationServiceImpl extends BaseService implements LocationService 
     public DeleteResponseDTO deleteLocation(String id) {
         UUID locationId = getId(id);
         Location location = locationRepository.findById(locationId)
-                .orElseThrow(() -> new DataNotFoundException("Location Is Not Found"));
+                .orElseThrow(() -> new NotFoundException("Location Is Not Found"));
 
         locationRepository.deleteById(location.getId());
         return new DeleteResponseDTO(Message.DELETED.getName());

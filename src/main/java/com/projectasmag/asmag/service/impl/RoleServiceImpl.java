@@ -1,7 +1,7 @@
 package com.projectasmag.asmag.service.impl;
 
 import com.projectasmag.asmag.dto.role.RoleResponseDTO;
-import com.projectasmag.asmag.exceptiohandler.exception.DataNotFoundException;
+import com.projectasmag.asmag.exceptiohandler.exception.NotFoundException;
 import com.projectasmag.asmag.model.company.Role;
 import com.projectasmag.asmag.repository.RoleRepository;
 import com.projectasmag.asmag.service.RoleService;
@@ -31,7 +31,7 @@ public class RoleServiceImpl implements RoleService {
     public RoleResponseDTO getRole(String id) {
         UUID roleId = UUID.fromString(id);
         Role role = roleRepository.findById(roleId)
-                .orElseThrow(() -> new DataNotFoundException("Role Is Not Found"));
+                .orElseThrow(() -> new NotFoundException("Role Is Not Found"));
         return mapToRoleResponseDTO(role);
     }
 

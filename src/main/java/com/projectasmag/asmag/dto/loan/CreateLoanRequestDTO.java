@@ -15,11 +15,8 @@ public class CreateLoanRequestDTO {
     @Size(max = 36)
     private String employeeTargetId;
 
-    @NotEmpty
+    @NotEmpty(message = "Asset To Be Loaned Cannot Be Empty")
     private List<String> assetIdList;
-
-    public CreateLoanRequestDTO() {
-    }
 
     public String getAssetTargetId() {
         return assetTargetId;

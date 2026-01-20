@@ -1,7 +1,7 @@
 package com.projectasmag.asmag.service.impl;
 
 import com.projectasmag.asmag.dto.asset.AssetTypeResponseDTO;
-import com.projectasmag.asmag.exceptiohandler.exception.DataNotFoundException;
+import com.projectasmag.asmag.exceptiohandler.exception.NotFoundException;
 import com.projectasmag.asmag.model.asset.AssetType;
 import com.projectasmag.asmag.repository.AssetTypeRepository;
 import com.projectasmag.asmag.service.AssetTypeService;
@@ -33,7 +33,7 @@ public class AssetTypeServiceImpl extends BaseService implements AssetTypeServic
     public AssetTypeResponseDTO getAssetStatus(String id) {
         UUID assetTypeId = getId(id);
         AssetType assetType = assetTypeRepository.findById(assetTypeId)
-                .orElseThrow(() -> new DataNotFoundException("Asset Type Is Not Found"));
+                .orElseThrow(() -> new NotFoundException("Asset Type Is Not Found"));
         return mapToAssetTypeResponseDTO(assetType);
     }
 

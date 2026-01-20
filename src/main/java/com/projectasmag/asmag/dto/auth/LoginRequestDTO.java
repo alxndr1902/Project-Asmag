@@ -1,16 +1,15 @@
 package com.projectasmag.asmag.dto.auth;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public class LoginRequestDTO {
     @NotBlank(message = "Email Is Required")
+    @Size(max = 50, message = "Email Maximum Length Is 50 Characters")
     private String email;
 
     @NotBlank(message = "Password Is Required")
     private String password;
-
-    public LoginRequestDTO() {
-    }
 
     public String getEmail() {
         return email;

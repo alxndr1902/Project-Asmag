@@ -8,8 +8,8 @@ import com.projectasmag.asmag.dto.asset.AssetResponseDTO;
 import com.projectasmag.asmag.dto.asset.CreateAssetRequestDTO;
 import com.projectasmag.asmag.dto.asset.UpdateAssetRequestDTO;
 import com.projectasmag.asmag.exceptiohandler.exception.DataIntegrationException;
-import com.projectasmag.asmag.exceptiohandler.exception.DataIsNotUniqueException;
-import com.projectasmag.asmag.exceptiohandler.exception.DataNotFoundException;
+import com.projectasmag.asmag.exceptiohandler.exception.DuplicateException;
+import com.projectasmag.asmag.exceptiohandler.exception.NotFoundException;
 import com.projectasmag.asmag.model.asset.Asset;
 import com.projectasmag.asmag.model.asset.AssetStatus;
 import com.projectasmag.asmag.model.asset.AssetType;
@@ -51,7 +51,7 @@ public class AssetServiceImpl extends BaseService implements AssetService {
     public AssetResponseDTO getAsset(String id) {
         UUID assetId = getId(id);
         Asset asset = assetRepository.findById(assetId)
-                .orElseThrow(() -> new DataNotFoundException("Asset Is Not Found"));
+                .orElseThrow(() -> new NotFoundException("Asset Is Not Found"));
         return mapToAssetResponseDTO(asset);
     }
 
@@ -59,18 +59,18 @@ public class AssetServiceImpl extends BaseService implements AssetService {
     public CreateResponseDTO createAsset(CreateAssetRequestDTO request) {
         UUID assetTypeId = getId(request.getTypeId());
         AssetType assetType = assetTypeRepository.findById(assetTypeId)
-                .orElseThrow(() -> new DataNotFoundException("Asset Type Is Not Found"));
+                .orElseThrow(() -> new NotFoundException("Asset Type Is Not Found"));
 
         UUID assetStatusId = getId(request.getStatusId());
         AssetStatus assetStatus = assetStatusRepository.findById(assetStatusId)
-                .orElseThrow(() -> new DataNotFoundException("Asset Status Is Not Found"));
+                .orElseThrow(() -> new NotFoundException("Asset Status Is Not Found"));
 
         UUID companyId = getId(request.getCompanyId());
         Company company = companyRepository.findById(companyId)
-                .orElseThrow(() -> new DataNotFoundException("Company Is Not Found"));
+                .orElseThrow(() -> new NotFoundException("Company Is Not Found"));
 
         if (!assetRepository.existsByCode(request.getCode())) {
-            throw new DataIsNotUniqueException("Code Is Not Available");
+            throw new DuplicateException("Code Is Not Available");
         }
 
         Asset asset = mapToAsset(request, assetType, assetStatus, company);
@@ -82,13 +82,13 @@ public class AssetServiceImpl extends BaseService implements AssetService {
     public UpdateResponseDTO updateAsset(String id, UpdateAssetRequestDTO request) {
         UUID assetId = getId(id);
         Asset asset = assetRepository.findById(assetId)
-                .orElseThrow(() -> new DataNotFoundException("Asset Is Not Found"));
+                .orElseThrow(() -> new NotFoundException("Asset Is Not Found"));
 
         if (!asset.getCode().equals(request.getCode())) {
             assetRepository.findByCode(request.getCode())
                     .filter(a -> !a.getId().equals(assetId))
                     .ifPresent(a -> {
-                        throw new DataIsNotUniqueException("Code Is Not Available");
+                        throw new DuplicateException("Code Is Not Available");
                     });
         }
 
@@ -107,7 +107,7 @@ public class AssetServiceImpl extends BaseService implements AssetService {
     public DeleteResponseDTO deleteAsset(String id) {
         UUID assetId = getId(id);
         Asset asset = assetRepository.findById(assetId)
-                .orElseThrow(() -> new DataNotFoundException("Asset Is Not Found"));
+                .orElseThrow(() -> new NotFoundException("Asset Is Not Found"));
 
         assetRepository.deleteById(asset.getId());
         return new DeleteResponseDTO(Message.DELETED.name());

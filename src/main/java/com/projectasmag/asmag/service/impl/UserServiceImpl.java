@@ -9,8 +9,8 @@ import com.projectasmag.asmag.dto.user.ChangePasswordRequestDTO;
 import com.projectasmag.asmag.dto.user.UpdateUserRequestDTO;
 import com.projectasmag.asmag.dto.user.UserResponseDTO;
 import com.projectasmag.asmag.exceptiohandler.exception.DataIntegrationException;
-import com.projectasmag.asmag.exceptiohandler.exception.DataIsNotUniqueException;
-import com.projectasmag.asmag.exceptiohandler.exception.DataNotFoundException;
+import com.projectasmag.asmag.exceptiohandler.exception.DuplicateException;
+import com.projectasmag.asmag.exceptiohandler.exception.NotFoundException;
 import com.projectasmag.asmag.model.company.Employee;
 import com.projectasmag.asmag.model.company.Role;
 import com.projectasmag.asmag.model.company.User;
@@ -50,7 +50,7 @@ public class UserServiceImpl extends BaseService implements UserService{
     public UserResponseDTO getUser(String id) {
         UUID userId = getId(id);
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new DataNotFoundException("User Is Not Found"));
+                .orElseThrow(() -> new NotFoundException("User Is Not Found"));
         return mapToUserResponseDto(user);
     }
 
@@ -58,7 +58,7 @@ public class UserServiceImpl extends BaseService implements UserService{
     public UpdateResponseDTO updateUser(String id, UpdateUserRequestDTO request) {
         UUID userId = getId(id);
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new DataNotFoundException("User Is Not Found"));
+                .orElseThrow(() -> new NotFoundException("User Is Not Found"));
 
         if (!user.getVersion().equals(request.getVersion())) {
             throw new DataIntegrationException("Please Refresh The Page");
@@ -68,7 +68,7 @@ public class UserServiceImpl extends BaseService implements UserService{
             userRepository.findByEmail(request.getEmail())
                     .filter(u -> !u.getId().equals(userId))
                     .ifPresent(c -> {
-                        throw new DataIsNotUniqueException("Email Is Not Available");
+                        throw new DuplicateException("Email Is Not Available");
                     });
         }
 
@@ -82,14 +82,14 @@ public class UserServiceImpl extends BaseService implements UserService{
     public CreateResponseDTO register(RegisterRequestDTO request) {
         UUID employeeId = getId(request.getEmployeeId());
         Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new DataNotFoundException("Employee Is Not Found"));
+                .orElseThrow(() -> new NotFoundException("Employee Is Not Found"));
 
         UUID roleId = getId(request.getRoleId());
         Role role = roleRepository.findById(roleId)
-                .orElseThrow(() -> new DataNotFoundException("Role Is Not Found"));
+                .orElseThrow(() -> new NotFoundException("Role Is Not Found"));
 
         if (!userRepository.existsByEmail(request.getEmail())) {
-            throw new DataIsNotUniqueException("Email Is Not Available");
+            throw new DuplicateException("Email Is Not Available");
         }
 
         User user = mapToUser(request, employee, role);
@@ -107,7 +107,7 @@ public class UserServiceImpl extends BaseService implements UserService{
     public DeleteResponseDTO deleteUser(String id) {
         UUID userId = getId(id);
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new DataNotFoundException("User Is Not Found"));
+                .orElseThrow(() -> new NotFoundException("User Is Not Found"));
         userRepository.deleteById(user.getId());
         return new DeleteResponseDTO("deleted");
     }
