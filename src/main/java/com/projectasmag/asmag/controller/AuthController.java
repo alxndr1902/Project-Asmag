@@ -2,6 +2,7 @@ package com.projectasmag.asmag.controller;
 
 import com.projectasmag.asmag.dto.auth.LoginRequestDTO;
 import com.projectasmag.asmag.dto.auth.LoginResponseDTO;
+import com.projectasmag.asmag.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("auth")
 public class AuthController {
+    private final AuthService authService;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
+
     @PostMapping("login")
     public LoginResponseDTO login(@RequestBody @Valid LoginRequestDTO request) {
         return null;

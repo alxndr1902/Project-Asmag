@@ -1,17 +1,21 @@
 package com.projectasmag.asmag.service;
 
-import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.projectasmag.asmag.exceptiohandler.exception.UUIDNotValidException;
 import com.projectasmag.asmag.model.BaseModel;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailSendException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public abstract class BaseService {
-    @PersistenceContext
-    protected EntityManager em;
+    private final JavaMailSender mailSender;
+
+    protected BaseService(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
 
     protected <T extends BaseModel> T prepareCreate(T model) {
         model.setId(UUID.randomUUID());
@@ -31,6 +35,20 @@ public abstract class BaseService {
             return UUID.fromString(request);
         } catch (IllegalArgumentException e) {
             throw new UUIDNotValidException("Invalid UUID");
+        }
+    }
+
+    protected void sendEmail(String to, String subject, String body) {
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setTo(to);
+        message.setFrom("romian37@gmail.com");
+        message.setSubject(subject);
+        message.setText(body);
+        try {
+            mailSender.send(message);
+        } catch (MailException e) {
+            throw new MailSendException("Error Sending Email");
         }
     }
 }
