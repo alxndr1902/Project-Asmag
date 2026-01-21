@@ -16,6 +16,7 @@ import com.projectasmag.asmag.repository.CompanyRepository;
 import com.projectasmag.asmag.repository.LocationRepository;
 import com.projectasmag.asmag.service.BaseService;
 import com.projectasmag.asmag.service.LocationService;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +27,8 @@ public class LocationServiceImpl extends BaseService implements LocationService 
     private final LocationRepository locationRepository;
     private final CompanyRepository companyRepository;
 
-    public LocationServiceImpl(LocationRepository locationRepository, CompanyRepository companyRepository) {
+    protected LocationServiceImpl(JavaMailSender mailSender, LocationRepository locationRepository, CompanyRepository companyRepository) {
+        super(mailSender);
         this.locationRepository = locationRepository;
         this.companyRepository = companyRepository;
     }

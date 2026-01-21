@@ -16,6 +16,7 @@ import com.projectasmag.asmag.repository.CompanyRepository;
 import com.projectasmag.asmag.repository.EmployeeRepository;
 import com.projectasmag.asmag.service.BaseService;
 import com.projectasmag.asmag.service.EmployeeService;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +27,8 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
     private final EmployeeRepository employeeRepository;
     private final CompanyRepository companyRepository;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, CompanyRepository companyRepository) {
+    protected EmployeeServiceImpl(JavaMailSender mailSender, EmployeeRepository employeeRepository, CompanyRepository companyRepository) {
+        super(mailSender);
         this.employeeRepository = employeeRepository;
         this.companyRepository = companyRepository;
     }

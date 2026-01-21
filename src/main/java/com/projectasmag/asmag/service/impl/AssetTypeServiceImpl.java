@@ -6,6 +6,7 @@ import com.projectasmag.asmag.model.asset.AssetType;
 import com.projectasmag.asmag.repository.AssetTypeRepository;
 import com.projectasmag.asmag.service.AssetTypeService;
 import com.projectasmag.asmag.service.BaseService;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +16,8 @@ import java.util.UUID;
 public class AssetTypeServiceImpl extends BaseService implements AssetTypeService {
     private final AssetTypeRepository assetTypeRepository;
 
-    public AssetTypeServiceImpl(AssetTypeRepository assetTypeRepository) {
+    protected AssetTypeServiceImpl(JavaMailSender mailSender, AssetTypeRepository assetTypeRepository) {
+        super(mailSender);
         this.assetTypeRepository = assetTypeRepository;
     }
 

@@ -13,6 +13,7 @@ import com.projectasmag.asmag.model.company.Company;
 import com.projectasmag.asmag.repository.CompanyRepository;
 import com.projectasmag.asmag.service.BaseService;
 import com.projectasmag.asmag.service.CompanyService;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +23,8 @@ import java.util.UUID;
 public class CompanyServiceImpl extends BaseService implements CompanyService {
     private final CompanyRepository companyRepository;
 
-    public CompanyServiceImpl(CompanyRepository companyRepository) {
+    protected CompanyServiceImpl(JavaMailSender mailSender, CompanyRepository companyRepository) {
+        super(mailSender);
         this.companyRepository = companyRepository;
     }
 

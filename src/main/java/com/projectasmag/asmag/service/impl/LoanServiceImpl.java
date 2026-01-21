@@ -19,6 +19,7 @@ import com.projectasmag.asmag.repository.*;
 import com.projectasmag.asmag.service.BaseService;
 import com.projectasmag.asmag.service.LoanService;
 import jakarta.transaction.Transactional;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,7 +34,8 @@ public class LoanServiceImpl extends BaseService implements LoanService {
     private final LocationRepository locationRepository;
     private final EmployeeRepository employeeRepository;
 
-    public LoanServiceImpl(LoanRepository loanRepository, LoanDetailRepository loanDetailRepository, AssetRepository assetRepository, LocationRepository locationRepository, EmployeeRepository employeeRepository) {
+    protected LoanServiceImpl(JavaMailSender mailSender, LoanRepository loanRepository, LoanDetailRepository loanDetailRepository, AssetRepository assetRepository, LocationRepository locationRepository, EmployeeRepository employeeRepository) {
+        super(mailSender);
         this.loanRepository = loanRepository;
         this.loanDetailRepository = loanDetailRepository;
         this.assetRepository = assetRepository;
@@ -75,11 +77,13 @@ public class LoanServiceImpl extends BaseService implements LoanService {
         loan.setCode(generateRandomAlphaNumeric());
         Loan filledLoan = setTarget(request, loan);
         prepareCreate(filledLoan);
+        Loan savedLoan = loanRepository.save(loan);
 
         List<LoanDetail> loanDetails = createLoanDetails(request, loan);
 
-        Loan savedLoan = loanRepository.save(loan);
         loanDetailRepository.saveAll(loanDetails);
+
+        sendEmail("", "test email subject", "test email body");
 
         return new CreateLoanResponseDTO(savedLoan.getId(), savedLoan.getCode(), Message.CREATED.getName());
     }

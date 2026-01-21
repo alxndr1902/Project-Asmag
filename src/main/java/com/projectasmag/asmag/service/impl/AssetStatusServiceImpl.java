@@ -6,6 +6,7 @@ import com.projectasmag.asmag.model.asset.AssetStatus;
 import com.projectasmag.asmag.repository.AssetStatusRepository;
 import com.projectasmag.asmag.service.AssetStatusService;
 import com.projectasmag.asmag.service.BaseService;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,9 +16,11 @@ import java.util.UUID;
 public class AssetStatusServiceImpl extends BaseService implements AssetStatusService {
     private final AssetStatusRepository assetStatusRepository;
 
-    public AssetStatusServiceImpl(AssetStatusRepository assetStatusRepository) {
+    protected AssetStatusServiceImpl(JavaMailSender mailSender, AssetStatusRepository assetStatusRepository) {
+        super(mailSender);
         this.assetStatusRepository = assetStatusRepository;
     }
+
 
     @Override
     public List<AssetStatusResponseDTO> getAssetStatus() {

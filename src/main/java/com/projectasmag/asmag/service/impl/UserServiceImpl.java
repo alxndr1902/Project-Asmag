@@ -19,6 +19,7 @@ import com.projectasmag.asmag.repository.RoleRepository;
 import com.projectasmag.asmag.repository.UserRepository;
 import com.projectasmag.asmag.service.BaseService;
 import com.projectasmag.asmag.service.UserService;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,8 +31,8 @@ public class UserServiceImpl extends BaseService implements UserService{
     private final EmployeeRepository employeeRepository;
     private final RoleRepository roleRepository;
 
-    public UserServiceImpl(UserRepository userRepository,
-                           EmployeeRepository employeeRepository, RoleRepository roleRepository) {
+    protected UserServiceImpl(JavaMailSender mailSender, UserRepository userRepository, EmployeeRepository employeeRepository, RoleRepository roleRepository) {
+        super(mailSender);
         this.userRepository = userRepository;
         this.employeeRepository = employeeRepository;
         this.roleRepository = roleRepository;

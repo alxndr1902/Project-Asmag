@@ -20,6 +20,7 @@ import com.projectasmag.asmag.repository.AssetTypeRepository;
 import com.projectasmag.asmag.repository.CompanyRepository;
 import com.projectasmag.asmag.service.AssetService;
 import com.projectasmag.asmag.service.BaseService;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,7 +34,8 @@ public class AssetServiceImpl extends BaseService implements AssetService {
     private final AssetStatusRepository assetStatusRepository;
     private final CompanyRepository companyRepository;
 
-    public AssetServiceImpl(AssetRepository assetRepository, AssetTypeRepository assetTypeRepository, AssetStatusRepository assetStatusRepository, CompanyRepository companyRepository) {
+    protected AssetServiceImpl(JavaMailSender mailSender, AssetRepository assetRepository, AssetTypeRepository assetTypeRepository, AssetStatusRepository assetStatusRepository, CompanyRepository companyRepository) {
+        super(mailSender);
         this.assetRepository = assetRepository;
         this.assetTypeRepository = assetTypeRepository;
         this.assetStatusRepository = assetStatusRepository;
