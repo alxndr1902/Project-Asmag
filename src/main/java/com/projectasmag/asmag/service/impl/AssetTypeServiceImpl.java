@@ -16,8 +16,7 @@ import java.util.UUID;
 public class AssetTypeServiceImpl extends BaseService implements AssetTypeService {
     private final AssetTypeRepository assetTypeRepository;
 
-    protected AssetTypeServiceImpl(JavaMailSender mailSender, AssetTypeRepository assetTypeRepository) {
-        super(mailSender);
+    protected AssetTypeServiceImpl(AssetTypeRepository assetTypeRepository) {
         this.assetTypeRepository = assetTypeRepository;
     }
 

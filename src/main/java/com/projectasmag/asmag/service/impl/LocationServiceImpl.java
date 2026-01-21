@@ -27,8 +27,8 @@ public class LocationServiceImpl extends BaseService implements LocationService 
     private final LocationRepository locationRepository;
     private final CompanyRepository companyRepository;
 
-    protected LocationServiceImpl(JavaMailSender mailSender, LocationRepository locationRepository, CompanyRepository companyRepository) {
-        super(mailSender);
+    protected LocationServiceImpl(LocationRepository locationRepository,
+                                  CompanyRepository companyRepository) {
         this.locationRepository = locationRepository;
         this.companyRepository = companyRepository;
     }

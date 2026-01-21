@@ -20,8 +20,12 @@ import com.projectasmag.asmag.repository.UserRepository;
 import com.projectasmag.asmag.service.BaseService;
 import com.projectasmag.asmag.service.UserService;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,12 +34,14 @@ public class UserServiceImpl extends BaseService implements UserService{
     private final UserRepository userRepository;
     private final EmployeeRepository employeeRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    protected UserServiceImpl(JavaMailSender mailSender, UserRepository userRepository, EmployeeRepository employeeRepository, RoleRepository roleRepository) {
-        super(mailSender);
+    protected UserServiceImpl(UserRepository userRepository,
+                              EmployeeRepository employeeRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.employeeRepository = employeeRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -88,7 +94,7 @@ public class UserServiceImpl extends BaseService implements UserService{
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new NotFoundException("Role Is Not Found"));
 
-        if (!userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new DuplicateException("Email Is Not Available");
         }
 
@@ -111,6 +117,12 @@ public class UserServiceImpl extends BaseService implements UserService{
         return new DeleteResponseDTO("deleted");
     }
 
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User Not Found"));
+    }
+
     private UserResponseDTO mapToUserResponseDto(User user) {
         UserResponseDTO response = new UserResponseDTO(user.getId(),
                 user.getEmail(),
@@ -123,10 +135,19 @@ public class UserServiceImpl extends BaseService implements UserService{
     private User mapToUser(RegisterRequestDTO request, Employee employee, Role role) {
         User user = new User();
         user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
+
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setEmployee(employee);
         user.setRole(role);
 
         return user;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        var user = userRepository.findByEmail(email).
+                orElseThrow(() -> new UsernameNotFoundException(email));
+        return new org.springframework.security.core.userdetails.User(
+                email, user.getPassword(), new ArrayList<>());
     }
 }

@@ -34,8 +34,8 @@ public class AssetServiceImpl extends BaseService implements AssetService {
     private final AssetStatusRepository assetStatusRepository;
     private final CompanyRepository companyRepository;
 
-    protected AssetServiceImpl(JavaMailSender mailSender, AssetRepository assetRepository, AssetTypeRepository assetTypeRepository, AssetStatusRepository assetStatusRepository, CompanyRepository companyRepository) {
-        super(mailSender);
+    protected AssetServiceImpl(AssetRepository assetRepository, AssetTypeRepository assetTypeRepository,
+                               AssetStatusRepository assetStatusRepository, CompanyRepository companyRepository) {
         this.assetRepository = assetRepository;
         this.assetTypeRepository = assetTypeRepository;
         this.assetStatusRepository = assetStatusRepository;

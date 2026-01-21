@@ -69,7 +69,7 @@ public class EmployeeService {
 
         var result = employeeService.getEmployee(id.toString());
 
-        Assertions.assertEquals("John Doe", result.fullName());
+        Assertions.assertEquals("John Doe", result.getFullName());
         Mockito.verify(employeeRepository, Mockito.atLeast(1))
                 .findById(Mockito.any());
     }
@@ -96,7 +96,7 @@ public class EmployeeService {
 
         var result =  employeeService.updateEmployee(id.toString(), employeeDTO);
 
-        Assertions.assertEquals(1, result.version());
+        Assertions.assertEquals(1, result.getVersion());
 
 
         Mockito.verify(employeeRepository, Mockito.atLeast(1))
