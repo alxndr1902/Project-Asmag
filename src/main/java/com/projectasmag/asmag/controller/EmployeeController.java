@@ -8,6 +8,8 @@ import com.projectasmag.asmag.dto.employee.EmployeeResponseDTO;
 import com.projectasmag.asmag.dto.employee.UpdateEmployeeRequestDTO;
 import com.projectasmag.asmag.service.EmployeeService;
 import jakarta.validation.Valid;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

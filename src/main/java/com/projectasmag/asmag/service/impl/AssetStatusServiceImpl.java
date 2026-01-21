@@ -6,8 +6,11 @@ import com.projectasmag.asmag.model.asset.AssetStatus;
 import com.projectasmag.asmag.repository.AssetStatusRepository;
 import com.projectasmag.asmag.service.AssetStatusService;
 import com.projectasmag.asmag.service.BaseService;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,17 +18,18 @@ import java.util.UUID;
 public class AssetStatusServiceImpl extends BaseService implements AssetStatusService {
     private final AssetStatusRepository assetStatusRepository;
 
-    public AssetStatusServiceImpl(AssetStatusRepository assetStatusRepository) {
+    protected AssetStatusServiceImpl(AssetStatusRepository assetStatusRepository) {
         this.assetStatusRepository = assetStatusRepository;
     }
 
     @Override
     public List<AssetStatusResponseDTO> getAssetStatus() {
         List<AssetStatus> assetStatuses = assetStatusRepository.findAll();
-        List<AssetStatusResponseDTO> responses = assetStatuses.stream()
-                .map(this::mapToAssetStatusResponseDTO)
-                .toList();
-        return responses;
+        List<AssetStatusResponseDTO> assetStatusResponseDTOList = new ArrayList<>();
+        for (AssetStatus assetStatus : assetStatuses) {
+            assetStatusResponseDTOList.add(mapToAssetStatusResponseDTO(assetStatus));
+        }
+        return assetStatusResponseDTOList;
     }
 
     @Override

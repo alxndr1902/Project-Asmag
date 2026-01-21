@@ -1,6 +1,8 @@
 package com.projectasmag.asmag.service.impl;
 
+import com.projectasmag.asmag.config.RabbitMQConfig;
 import com.projectasmag.asmag.constant.Message;
+import com.projectasmag.asmag.constant.RoleCode;
 import com.projectasmag.asmag.dto.UpdateResponseDTO;
 import com.projectasmag.asmag.dto.loan.CreateLoanRequestDTO;
 import com.projectasmag.asmag.dto.loan.CreateLoanResponseDTO;
@@ -13,12 +15,18 @@ import com.projectasmag.asmag.exceptiohandler.exception.MultipleLoanTargetExcept
 import com.projectasmag.asmag.model.asset.Asset;
 import com.projectasmag.asmag.model.company.Employee;
 import com.projectasmag.asmag.model.company.Location;
+import com.projectasmag.asmag.model.company.User;
 import com.projectasmag.asmag.model.loan.Loan;
 import com.projectasmag.asmag.model.loan.LoanDetail;
+import com.projectasmag.asmag.pojo.MailPojo;
 import com.projectasmag.asmag.repository.*;
 import com.projectasmag.asmag.service.BaseService;
 import com.projectasmag.asmag.service.LoanService;
+import com.projectasmag.asmag.util.EmailUtil;
 import jakarta.transaction.Transactional;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -32,13 +40,21 @@ public class LoanServiceImpl extends BaseService implements LoanService {
     private final AssetRepository assetRepository;
     private final LocationRepository locationRepository;
     private final EmployeeRepository employeeRepository;
+    private final RabbitTemplate rabbitTemplate;
+    private final EmailUtil emailUtil;
+    private final UserRepository userRepository;
 
-    public LoanServiceImpl(LoanRepository loanRepository, LoanDetailRepository loanDetailRepository, AssetRepository assetRepository, LocationRepository locationRepository, EmployeeRepository employeeRepository) {
+    protected LoanServiceImpl(LoanRepository loanRepository,
+                              LoanDetailRepository loanDetailRepository,
+                              AssetRepository assetRepository, LocationRepository locationRepository, EmployeeRepository employeeRepository, RabbitTemplate rabbitTemplate, EmailUtil emailUtil, UserRepository userRepository) {
         this.loanRepository = loanRepository;
         this.loanDetailRepository = loanDetailRepository;
         this.assetRepository = assetRepository;
         this.locationRepository = locationRepository;
         this.employeeRepository = employeeRepository;
+        this.rabbitTemplate = rabbitTemplate;
+        this.emailUtil = emailUtil;
+        this.userRepository = userRepository;
     }
 
 
@@ -75,13 +91,24 @@ public class LoanServiceImpl extends BaseService implements LoanService {
         loan.setCode(generateRandomAlphaNumeric());
         Loan filledLoan = setTarget(request, loan);
         prepareCreate(filledLoan);
+        Loan savedLoan = loanRepository.save(loan);
 
         List<LoanDetail> loanDetails = createLoanDetails(request, loan);
 
-        Loan savedLoan = loanRepository.save(loan);
-        loanDetailRepository.saveAll(loanDetails);
+        sendEmail(RabbitMQConfig.EMAIL_QUEUE_CO, RabbitMQConfig.EMAIL_ROUTING_KEY_CO, loan.getCode());
 
+        loanDetailRepository.saveAll(loanDetails);
         return new CreateLoanResponseDTO(savedLoan.getId(), savedLoan.getCode(), Message.CREATED.getName());
+    }
+
+    private void sendEmail(String exchange, String key, String code) {
+        User superAdmin = userRepository.findByRoleCode(RoleCode.SA.name())
+                .orElseThrow(() -> new NotFoundException("User Is Not Found"));
+        MailPojo mailPojo = new MailPojo(superAdmin.getEmail(), code);
+        rabbitTemplate.convertAndSend(
+                exchange,
+                key,
+                mailPojo);
     }
 
     @Override
@@ -113,6 +140,8 @@ public class LoanServiceImpl extends BaseService implements LoanService {
             loanDetail.setReturnDate(now);
             prepareUpdate(loanDetail);
         }
+
+        sendEmail(RabbitMQConfig.EMAIL_EX_CI, RabbitMQConfig.EMAIL_ROUTING_KEY_CI, loan.getCode());
         Loan updatedLoan = loanRepository.save(loan);
         loanDetailRepository.saveAll(existingLoanDetails);
         return new UpdateResponseDTO(updatedLoan.getVersion(), Message.UPDATED.name());
@@ -230,5 +259,19 @@ public class LoanServiceImpl extends BaseService implements LoanService {
             loan.getLoanDetails().add(loanDetail);
         }
         return loan.getLoanDetails();
+    }
+
+    @RabbitListener(queues = RabbitMQConfig.EMAIL_QUEUE_CO)
+    public void receiveEmailNotificationCO(MailPojo data) {
+        emailUtil.sendEmail(data.getEmail(),
+                "Loan Created",
+                "Loan Has Been Created " + data.getLoanCode());
+    }
+
+    @RabbitListener(queues = RabbitMQConfig.EMAIL_QUEUE_CI)
+    public void receiveEmailNotificationCI(MailPojo data) {
+        emailUtil.sendEmail(data.getEmail(),
+                "Loan Returned",
+                "Loan Has Been Returned " + data.getLoanCode());
     }
 }

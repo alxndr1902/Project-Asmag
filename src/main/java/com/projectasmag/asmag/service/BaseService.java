@@ -2,27 +2,26 @@ package com.projectasmag.asmag.service;
 
 import com.projectasmag.asmag.exceptiohandler.exception.InvalidUUIDException;
 import com.projectasmag.asmag.model.BaseModel;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 public abstract class BaseService {
-    @PersistenceContext
-    protected EntityManager em;
+
+    protected PrincipalService principalService;
 
     protected <T extends BaseModel> T prepareCreate(T model) {
         model.setId(UUID.randomUUID());
         model.setCreatedAt(LocalDateTime.now());
-        model.setCreatedBy(UUID.randomUUID());
+        model.setCreatedBy(UUID.fromString(principalService.getPrincipal().getId()));
         return model;
     }
 
     protected <T extends BaseModel> T prepareUpdate(T model) {
         model.setUpdatedAt(LocalDateTime.now());
-        model.setUpdatedBy(UUID.randomUUID());
+        model.setUpdatedBy(UUID.fromString(principalService.getPrincipal().getId()));
         return model;
     }
 
@@ -42,5 +41,10 @@ public abstract class BaseService {
         } catch (Exception e) {
             throw new RuntimeException("Invalid Format");
         }
+    }
+
+    @Autowired
+    private void setPrincipal(PrincipalService principalService) {
+        this.principalService = principalService;
     }
 }
