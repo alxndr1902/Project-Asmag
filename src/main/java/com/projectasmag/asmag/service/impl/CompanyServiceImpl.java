@@ -13,9 +13,12 @@ import com.projectasmag.asmag.model.company.Company;
 import com.projectasmag.asmag.repository.CompanyRepository;
 import com.projectasmag.asmag.service.BaseService;
 import com.projectasmag.asmag.service.CompanyService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,18 +26,20 @@ import java.util.UUID;
 public class CompanyServiceImpl extends BaseService implements CompanyService {
     private final CompanyRepository companyRepository;
 
-    protected CompanyServiceImpl(JavaMailSender mailSender, CompanyRepository companyRepository) {
-        super(mailSender);
+    protected CompanyServiceImpl(CompanyRepository companyRepository) {
         this.companyRepository = companyRepository;
     }
 
+    @Cacheable(value = "company", key = "'all'")
     @Override
     public List<CompanyResponseDTO> getCompanies() {
         List<Company> companies = companyRepository.findAll();
-        List<CompanyResponseDTO> responseDTOs = companies.stream()
-                .map(this::mapToCompanyResponseDTO)
-                .toList();
-        return responseDTOs;
+        List<CompanyResponseDTO> companyResponseDTOS = new ArrayList<>();
+        for (Company company : companies) {
+            CompanyResponseDTO response = mapToCompanyResponseDTO(company);
+            companyResponseDTOS.add(response);
+        }
+        return companyResponseDTOS;
     }
 
     @Override
@@ -62,6 +67,7 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
         return new CreateResponseDTO(savedCompany.getId(), Message.CREATED.getName());
     }
 
+    @CacheEvict(value = "company", allEntries = true)
     @Override
     public UpdateResponseDTO updateCompany(String id, UpdateCompanyRequestDTO request) {
         UUID companyId = getId(id);

@@ -16,9 +16,12 @@ import com.projectasmag.asmag.repository.CompanyRepository;
 import com.projectasmag.asmag.repository.EmployeeRepository;
 import com.projectasmag.asmag.service.BaseService;
 import com.projectasmag.asmag.service.EmployeeService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,20 +30,23 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
     private final EmployeeRepository employeeRepository;
     private final CompanyRepository companyRepository;
 
-    protected EmployeeServiceImpl(JavaMailSender mailSender, EmployeeRepository employeeRepository, CompanyRepository companyRepository) {
-        super(mailSender);
+    protected EmployeeServiceImpl(EmployeeRepository employeeRepository, CompanyRepository companyRepository) {
         this.employeeRepository = employeeRepository;
         this.companyRepository = companyRepository;
     }
 
 
+
     @Override
     public List<EmployeeResponseDTO> getEmployees() {
         List<Employee> employees = employeeRepository.findAll();
-        List<EmployeeResponseDTO> responseDTOs = employees.stream()
-                .map(this::mapToEmployeeResponseDTO)
-                .toList();
-        return responseDTOs;
+        List<EmployeeResponseDTO> employeeResponseDTOList = new ArrayList<>();
+
+        for (Employee employee : employees) {
+            mapToEmployeeResponseDTO(employee);
+            employeeResponseDTOList.add(mapToEmployeeResponseDTO(employee));
+        }
+        return employeeResponseDTOList;
     }
 
     @Override
@@ -57,11 +63,11 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new NotFoundException("Company Is Not Found"));
 
-        if (!employeeRepository.existsByPhoneNumber(request.getPhoneNumber())) {
+        if (employeeRepository.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new DuplicateException("Phone Number Is Not Available");
         }
 
-        if (!employeeRepository.existsByIdentificationNumber(request.getIdentificationNumber())) {
+        if (employeeRepository.existsByIdentificationNumber(request.getIdentificationNumber())) {
             throw new DuplicateException("ID Is Not Available");
         }
 
@@ -99,13 +105,14 @@ public class EmployeeServiceImpl extends BaseService implements EmployeeService 
         return new UpdateResponseDTO(updatedEmployee.getVersion(), Message.UPDATED.name());
     }
 
+
     @Override
     public DeleteResponseDTO deleteEmployee(String id) {
         UUID employeeId = getId(id);
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new NotFoundException("Employee Is Not Found"));
         employeeRepository.deleteById(employee.getId());
-        return new DeleteResponseDTO(Message.DELETED.name());
+        return new DeleteResponseDTO(Message.DELETED.getName());
     }
 
     private EmployeeResponseDTO mapToEmployeeResponseDTO(Employee employee) {

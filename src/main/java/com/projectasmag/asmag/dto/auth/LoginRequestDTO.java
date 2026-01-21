@@ -8,6 +8,7 @@ public class LoginRequestDTO {
     @Size(max = 50, message = "Email Maximum Length Is 50 Characters")
     private String email;
 
+    @Size(max = 200, message = "Password Maximum Length Is 200 Characters")
     @NotBlank(message = "Password Is Required")
     private String password;
 
